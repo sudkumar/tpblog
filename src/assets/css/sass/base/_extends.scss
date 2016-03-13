@@ -1,0 +1,5 @@
+// extendable properties
+
+%clearfix{
+  @include clearfix();
+}

@@ -1,0 +1,8 @@
+// transition with vendor prifixes
+
+@mixin transition($transition-property, $transitions) {
+  -webkit-#{$transition-property}: $transitions;
+     -moz-#{$transition-property}: $transitions;
+       -o-#{$transition-property}: $transitions;
+          #{$transition-property}: $transitions;
+}

@@ -1,0 +1,21 @@
+<u><b>New blog Post</b></u>
+<section>
+  <form action="">
+    <div>
+      <label for="newPostTitle">Title:</label>
+      <input type="text" name="newPostTitle" id="newPostTitle" data-ng-model="posts.newPost.title">
+    </div>
+    <div>
+      <label for="newPostInfo">Short Description:</label>
+      <input type="text" name="newPostInfo" id="newPostInfo" data-ng-model="posts.newPost.info">
+    </div>
+
+    <div>
+      <label for="newPostContent">Title</label>
+      <textarea style="display: block;" name="newPostContent" id="newPostContent" rows="8" cols="40" data-ng-model="posts.newPost.content"></textarea>
+    </div>
+    <div>
+      <input type="submit" value="Submit">
+    </div>
+  </form>
+</section>

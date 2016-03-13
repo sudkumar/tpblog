@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html data-ng-app="TourepediaBlog">
+  <head>
+    <meta charset="utf-8">
+    <title>Tourepedia Blog</title>
+  </head>
+  <body>
+    <div id="mainNav">
+      <blog-navbar></blog-navbar>
+      <a ui-sref="home">Home</a>
+      <a ui-sref="about">about</a>
+    </div>
+
+    <div id="appView">
+        <ui-view name="homeView" id="homeView"></ui-view>
+        <ui-view name="postView" id="postView"></ui-view>
+        <ui-view name="authorView" id="authorView"></ui-view>
+        <ui-view name="aboutView" id="aboutView"></ui-view>
+    </div>
+
+    <div id="mainFooter">
+      <blog-footer></blog-footer>
+    </div>
+
+    <div id="modalsContainer">
+      <blog-auth></blog-auth>
+      <blog-subscribe></blog-subscribe>
+    </div>
+
+    <script type="text/javascript" src="./assets/js/app.js"> </script>
+  </body>
+</html>
