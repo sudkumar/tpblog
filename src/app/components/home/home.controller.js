@@ -1,6 +1,11 @@
 export default class HomeController{
-  constructor(){
-    this.message= "Hello bro";
+  constructor(db){
+    this._db = db;
+    this.posts = db.posts;
   }
   
 }
+
+
+
+HomeController.$inject = ["DB"];

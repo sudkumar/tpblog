@@ -58,17 +58,30 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _templates = __webpack_require__(5);
+	var _shared = __webpack_require__(5);
+
+	var _shared2 = _interopRequireDefault(_shared);
+
+	var _templates = __webpack_require__(12);
 
 	var _templates2 = _interopRequireDefault(_templates);
 
-	var _components = __webpack_require__(9);
+	var _components = __webpack_require__(23);
 
 	var _components2 = _interopRequireDefault(_components);
 
+	var _db = __webpack_require__(53);
+
+	var _db2 = _interopRequireDefault(_db);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	_angular2.default.module("TourepediaBlog", [_angularUiRouter2.default, _templates2.default, _components2.default]).config(_app2.default);
+	// import all the modules
+
+
+	_angular2.default.module("TourepediaBlog", [_angularUiRouter2.default, _templates2.default, _shared2.default, _components2.default, _db2.default]).config(_app2.default);
+
+	// import the configuration
 
 /***/ },
 /* 1 */
@@ -35078,23 +35091,160 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _angular = __webpack_require__(1);
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _footer = __webpack_require__(6);
+	var _postcard = __webpack_require__(6);
 
-	var _footer2 = _interopRequireDefault(_footer);
+	var _postcard2 = _interopRequireDefault(_postcard);
+
+	var _authorinfo = __webpack_require__(9);
+
+	var _authorinfo2 = _interopRequireDefault(_authorinfo);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _angular2.default.module("TourepediaBlog.Templates", [_footer2.default]).name;
+	// export the complete shared module
+
+
+	// import the shared modules
+	exports.default = _angular2.default.module("TourepediaBlog.Shared", [_postcard2.default, _authorinfo2.default]).name;
 
 /***/ },
 /* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _postcard = __webpack_require__(7);
+
+	var _postcard2 = _interopRequireDefault(_postcard);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _angular2.default.module("Shared.Postcard", []).directive("tpPostcard", _postcard2.default).name;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = postcardDirective;
+	function postcardDirective() {
+	    return {
+	        restrict: "E",
+	        scope: {
+	            // get the post from the parent
+	            post: "="
+	        },
+	        template: __webpack_require__(8),
+	        link: function link(scope, elem, attrs) {}
+	    };
+	}
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"card card--post\">\n    <h2 class=\"card__title\">Title: {{post.title}}</h2>\n    <div class=\"card__meta\"> <tp-authorinfo author=\"{'name': post.authorName, 'publishedDate': post.publishedDate}\"></tp-authorinfo>\n     </div>\n    <div class=\"card__content\">\n        <div class=\"card__img\">\n            <img src=\"src\" alt=\"Blog Image\">\n        </div>\n        <p class=\"card__info\">Info: {{post.info}}</p>\n    </div>\n    <div class=\"card__footer\">\n        <a ui-sref=\"post({'postId': post.handle})\">Read</a>\n        <button>Like</button>\n        <button>Share</button>\n    </div>\n    \n    \n</div>"
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _authorinfo = __webpack_require__(10);
+
+	var _authorinfo2 = _interopRequireDefault(_authorinfo);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _angular2.default.module("Shared.Authorinfo", []).directive("tpAuthorinfo", _authorinfo2.default).name;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = authorinfoDirective;
+	function authorinfoDirective() {
+	    return {
+	        restrict: "E",
+	        scope: {
+	            // get the author
+	            author: "="
+	        },
+	        template: __webpack_require__(11)
+	    };
+	}
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"authorinfo\">\n    <img src=\"img\" alt=\"author image\">\n    <p>Author Name: {{author.name}}</p>\n    <p>Date: {{author.publisedDate}}</p>\n</div>"
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _footer = __webpack_require__(13);
+
+	var _footer2 = _interopRequireDefault(_footer);
+
+	var _menu = __webpack_require__(16);
+
+	var _menu2 = _interopRequireDefault(_menu);
+
+	var _subscribe = __webpack_require__(19);
+
+	var _subscribe2 = _interopRequireDefault(_subscribe);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _angular2.default.module("TourepediaBlog.Templates", [_footer2.default, _menu2.default, _subscribe2.default]).name;
+
+/***/ },
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35107,7 +35257,7 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _footer = __webpack_require__(7);
+	var _footer = __webpack_require__(14);
 
 	var _footer2 = _interopRequireDefault(_footer);
 
@@ -35116,7 +35266,7 @@
 	exports.default = _angular2.default.module("Templates.Footer", []).directive("blogFooter", _footer2.default).name;
 
 /***/ },
-/* 7 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35136,18 +35286,163 @@
 	  return {
 	    restrict: "E",
 	    scopr: {},
-	    template: __webpack_require__(8)
+	    template: __webpack_require__(15)
 	  };
 	}
 
 /***/ },
-/* 8 */
+/* 15 */
 /***/ function(module, exports) {
 
-	module.exports = "<footer id=\"main-footer\">I am the main footer.</footer>\r\n"
+	module.exports = "<footer id=\"main-footer\">I am the main footer.</footer>\n"
 
 /***/ },
-/* 9 */
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _menu = __webpack_require__(17);
+
+	var _menu2 = _interopRequireDefault(_menu);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _angular2.default.module("Templates.Menu", []).directive("blogMenu", _menu2.default).name;
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = menuDirective;
+	function menuDirective() {
+	    return {
+	        restrict: "E",
+	        scope: {},
+	        template: __webpack_require__(18)
+	    };
+	}
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports = "<nav>\n    <a ui-sref=\"home\">Home</a>\n    <a ui-sref=\"about\">about</a> \n</nav>"
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _subscribe = __webpack_require__(20);
+
+	var _subscribe2 = _interopRequireDefault(_subscribe);
+
+	var _subscribe3 = __webpack_require__(21);
+
+	var _subscribe4 = _interopRequireDefault(_subscribe3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _angular2.default.module("Template.Subscribe", []).directive("blog-subscribe", _subscribe4.default).service("SubscribeService", _subscribe2.default).name;
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var SubscribeService = function () {
+	    function SubscribeService(http) {
+	        _classCallCheck(this, SubscribeService);
+
+	        this._http = http;
+	    }
+
+	    // subscribe service
+
+
+	    _createClass(SubscribeService, [{
+	        key: "subscribe",
+	        value: function subscribe(name, email) {
+	            console.log("Subscribe with:", name, email);
+	        }
+	    }]);
+
+	    return SubscribeService;
+	}();
+
+	exports.default = SubscribeService;
+
+
+	SubscribeService.$inject = ["$http"];
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = subscribeDirective;
+
+	subscribeDirective.$inject = ["SubscribeService"];
+
+	function subscribeDirective(subscribeService) {
+	    return {
+	        restrict: "E",
+	        scope: {},
+	        template: __webpack_require__(22),
+	        link: function link(scope, elem, attrs) {
+	            scope.user = { name: "", email: "" };
+	            scope.subscribe = function subscribe() {
+	                // subscribe for blog
+	                subscribeService.subscribe(scope.user.name, scope.user.email);
+	            };
+	        }
+	    };
+	}
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"subscribe\">\n    <h2>Get notified right inside the inbox</h2>\n    <form name=\"subscribeForm\" data-ng-submit=\"subscribe()\" novalidate>\n        <input type=\"text\" placeholder=\"Your Name\" data-ng-model=\"user.name\" required >\n        <input type=\"email\" placeholder=\"Your Email...\" data-ng-model=\"user.email\" required>\n        <button >Submit</button>\n    </form>\n</div>"
+
+/***/ },
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35160,19 +35455,19 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _home = __webpack_require__(10);
+	var _home = __webpack_require__(24);
 
 	var _home2 = _interopRequireDefault(_home);
 
-	var _about = __webpack_require__(14);
+	var _about = __webpack_require__(28);
 
 	var _about2 = _interopRequireDefault(_about);
 
-	var _author = __webpack_require__(17);
+	var _author = __webpack_require__(31);
 
 	var _author2 = _interopRequireDefault(_author);
 
-	var _post = __webpack_require__(34);
+	var _post = __webpack_require__(48);
 
 	var _post2 = _interopRequireDefault(_post);
 
@@ -35182,7 +35477,7 @@
 	exports.default = _angular2.default.module("TourepediaBlog.Components", [_home2.default, _about2.default, _author2.default, _post2.default]).name;
 
 /***/ },
-/* 10 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35199,11 +35494,11 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _home = __webpack_require__(11);
+	var _home = __webpack_require__(25);
 
 	var _home2 = _interopRequireDefault(_home);
 
-	var _home3 = __webpack_require__(12);
+	var _home3 = __webpack_require__(26);
 
 	var _home4 = _interopRequireDefault(_home3);
 
@@ -35212,7 +35507,7 @@
 	exports.default = _angular2.default.module("Components.Home", [_angularUiRouter2.default]).config(_home4.default).controller("HomeController", _home2.default).name;
 
 /***/ },
-/* 11 */
+/* 25 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35223,16 +35518,20 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var HomeController = function HomeController() {
+	var HomeController = function HomeController(db) {
 	  _classCallCheck(this, HomeController);
 
-	  this.message = "Hello bro";
+	  this._db = db;
+	  this.posts = db.posts;
 	};
 
 	exports.default = HomeController;
 
+
+	HomeController.$inject = ["DB"];
+
 /***/ },
-/* 12 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35248,7 +35547,7 @@
 	    url: "/",
 	    views: {
 	      "homeView": {
-	        template: __webpack_require__(13),
+	        template: __webpack_require__(27),
 	        controller: "HomeController",
 	        controllerAs: "home"
 	      }
@@ -35257,13 +35556,13 @@
 	}
 
 /***/ },
-/* 13 */
+/* 27 */
 /***/ function(module, exports) {
 
-	module.exports = "<h1>Home view for Tourepedia. {{home.message}}</h1>\r\n<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, veniam corporis quae, tempore minima delectus eveniet temporibus optio cupiditate dignissimos aliquam. Asperiores, laborum in excepturi, eius natus nesciunt eaque impedit!</p>\r\n<ul>\r\n  <li>\r\n    <h1>Blog 1</h1>\r\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores natus sapiente enim praesentium alias dolores tempora earum quisquam adipisci ab aliquam dignissimos tenetur beatae voluptatibus rerum, sint molestiae. Necessitatibus, atque!</p>\r\n    <a ui-sref=\"post({'postId': 'A-Thing-which-matter'})\">Read</a>\r\n    <a ui-sref=\"author({'authorId': 'sudkumar'})\">Sudhir@Author</a>\r\n  </li>\r\n  <li>\r\n    <h1>Blog 2</h1>\r\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores natus sapiente enim praesentium alias dolores tempora earum quisquam adipisci ab aliquam dignissimos tenetur beatae voluptatibus rerum, sint molestiae. Necessitatibus, atque!</p>\r\n    <a ui-sref=\"post({'postId': 'Another-Thing-which-matter'})\">Read</a>\r\n    <a ui-sref=\"author({'authorId': 'anandss'})\">Anand@Author</a>\r\n  </li>\r\n</ul>\r\n"
+	module.exports = "<h1>Home view for Tourepedia.</h1>\n<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, veniam corporis quae, tempore minima delectus eveniet temporibus optio cupiditate dignissimos aliquam. Asperiores, laborum in excepturi, eius natus nesciunt eaque impedit!</p>\n<ul>\n    <tp-postcard data-ng-repeat=\"post in home.posts\" post=\"post\"><tp-postcard>\n</ul>\n"
 
 /***/ },
-/* 14 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35280,7 +35579,7 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _about = __webpack_require__(15);
+	var _about = __webpack_require__(29);
 
 	var _about2 = _interopRequireDefault(_about);
 
@@ -35289,7 +35588,7 @@
 	exports.default = _angular2.default.module("Components.About", [_angularUiRouter2.default]).config(_about2.default).name;
 
 /***/ },
-/* 15 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35305,20 +35604,20 @@
 	    url: "/about",
 	    views: {
 	      "aboutView": {
-	        template: __webpack_require__(16)
+	        template: __webpack_require__(30)
 	      }
 	    }
 	  });
 	};
 
 /***/ },
-/* 16 */
+/* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "<h1>About Page for our application.</h1>\r\n<p>This is something about out company. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, nam ducimus sit similique recusandae, nulla, quaerat consectetur exercitationem repellat earum sint qui explicabo voluptates ad neque! Pariatur soluta omnis atque.</p>\r\n"
+	module.exports = "<h1>About Page for our application.</h1>\n<p>This is something about out company. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, nam ducimus sit similique recusandae, nulla, quaerat consectetur exercitationem repellat earum sint qui explicabo voluptates ad neque! Pariatur soluta omnis atque.</p>\n"
 
 /***/ },
-/* 17 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35335,19 +35634,19 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _author = __webpack_require__(18);
+	var _author = __webpack_require__(32);
 
 	var _author2 = _interopRequireDefault(_author);
 
-	var _profile = __webpack_require__(22);
+	var _profile = __webpack_require__(36);
 
 	var _profile2 = _interopRequireDefault(_profile);
 
-	var _posts = __webpack_require__(27);
+	var _posts = __webpack_require__(41);
 
 	var _posts2 = _interopRequireDefault(_posts);
 
-	var _author3 = __webpack_require__(33);
+	var _author3 = __webpack_require__(47);
 
 	var _author4 = _interopRequireDefault(_author3);
 
@@ -35360,7 +35659,7 @@
 	.name;
 
 /***/ },
-/* 18 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35376,17 +35675,17 @@
 	    url: "/author/{authorId}",
 	    views: {
 	      "authorView": {
-	        template: __webpack_require__(19),
+	        template: __webpack_require__(33),
 	        controller: "AuthorController",
 	        controllerAs: "author"
 	      },
 	      "authorProfileView@author": {
-	        template: __webpack_require__(20),
+	        template: __webpack_require__(34),
 	        controller: "AuthorProfileController",
 	        controllerAs: "profile"
 	      },
 	      "authorPostsView@author": {
-	        template: __webpack_require__(21),
+	        template: __webpack_require__(35),
 	        controller: "AuthorPostsController",
 	        controllerAs: "posts"
 	      }
@@ -35395,25 +35694,25 @@
 	}
 
 /***/ },
-/* 19 */
+/* 33 */
 /***/ function(module, exports) {
 
-	module.exports = "<u><b>author view</b></u>\r\n<section>\r\n  <ui-view name=\"authorProfileView\" id=\"authorProfileView\"></ui-view>\r\n  <ui-view name=\"authorPostsView\" id=\"authorPostsView\"></ui-view>\r\n</section>\r\n"
+	module.exports = "<u><b>author view</b></u>\n<section>\n  <ui-view name=\"authorProfileView\" id=\"authorProfileView\"></ui-view>\n  <ui-view name=\"authorPostsView\" id=\"authorPostsView\"></ui-view>\n</section>\n"
 
 /***/ },
-/* 20 */
+/* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "<section>\r\n  <b><u>Profile view of author</u></b>\r\n  <h2>{{profile.author.name}}</h2>\r\n  <a ui-sref=\".editProfile\">Edit</a>\r\n  <p>{{profile.author.bio}}</p>\r\n  <p><a href=\"{{profile.author.fb}}\">fb</a></p>\r\n</section>\r\n"
+	module.exports = "<section>\n  <b><u>Profile view of author</u></b>\n  <h2>{{profile.author.name}}</h2>\n  <a ui-sref=\".editProfile\">Edit</a>\n  <p>{{profile.author.bio}}</p>\n  <p><a href=\"{{profile.author.fb}}\">fb</a></p>\n</section>\n"
 
 /***/ },
-/* 21 */
+/* 35 */
 /***/ function(module, exports) {
 
-	module.exports = "<b><u>A posts under author</u></b>\r\n\r\n<a ui-sref=\".posts.new\">New Blog</a>\r\n<b>{{posts.message}}</b>\r\n<div >\r\n  <ui-view name=\"authorPostsNewView\" id=\"authorPostsNewView\"></ui-view>\r\n  <ui-view name=\"authorPostsEditView\" id=\"authorPostsNewView\"></ui-view>\r\n</div>\r\n\r\n<ul>\r\n  <li>\r\n    <h2>This is the title of the post.</h2>\r\n    <a ui-sref=\".posts.edit({'postId': 1})\">edit</a> <buttom>Delete</button>\r\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>\r\n  </li>\r\n  <li>\r\n    <h2>This is the title of the post.</h2>\r\n    <a ui-sref=\".posts.edit({'postId': 2})\">edit</a> <buttom>Delete</button>\r\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>\r\n  </li>\r\n  <li>\r\n    <h2>This is the title of the post.</h2>\r\n    <a ui-sref=\".posts.edit({'postId': 3})\">edit</a> <buttom>Delete</button>\r\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>\r\n  </li>\r\n</ul>\r\n"
+	module.exports = "<b><u>A posts under author</u></b>\n\n<a ui-sref=\".posts.new\">New Blog</a>\n<b>{{posts.message}}</b>\n<div >\n  <ui-view name=\"authorPostsNewView\" id=\"authorPostsNewView\"></ui-view>\n  <ui-view name=\"authorPostsEditView\" id=\"authorPostsNewView\"></ui-view>\n</div>\n\n<ul>\n  <li>\n    <h2>This is the title of the post.</h2>\n    <a ui-sref=\".posts.edit({'postId': 1})\">edit</a> <buttom>Delete</button>\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>\n  </li>\n  <li>\n    <h2>This is the title of the post.</h2>\n    <a ui-sref=\".posts.edit({'postId': 2})\">edit</a> <buttom>Delete</button>\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>\n  </li>\n  <li>\n    <h2>This is the title of the post.</h2>\n    <a ui-sref=\".posts.edit({'postId': 3})\">edit</a> <buttom>Delete</button>\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>\n  </li>\n</ul>\n"
 
 /***/ },
-/* 22 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35430,15 +35729,15 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _authorProfile = __webpack_require__(23);
+	var _authorProfile = __webpack_require__(37);
 
 	var _authorProfile2 = _interopRequireDefault(_authorProfile);
 
-	var _authorProfile3 = __webpack_require__(25);
+	var _authorProfile3 = __webpack_require__(39);
 
 	var _authorProfile4 = _interopRequireDefault(_authorProfile3);
 
-	var _authorProfile5 = __webpack_require__(26);
+	var _authorProfile5 = __webpack_require__(40);
 
 	var _authorProfile6 = _interopRequireDefault(_authorProfile5);
 
@@ -35447,7 +35746,7 @@
 	exports.default = _angular2.default.module("Author.Profile", [_angularUiRouter2.default]).config(_authorProfile2.default).controller("AuthorProfileController", _authorProfile4.default).service("AuthorProfileService", _authorProfile6.default).name;
 
 /***/ },
-/* 23 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35463,7 +35762,7 @@
 	    url: "/editProfile",
 	    views: {
 	      "authorProfileView": {
-	        template: __webpack_require__(24),
+	        template: __webpack_require__(38),
 	        constructor: "AuthorProfileController",
 	        controllerAs: "profile"
 	      }
@@ -35472,13 +35771,13 @@
 	}
 
 /***/ },
-/* 24 */
+/* 38 */
 /***/ function(module, exports) {
 
-	module.exports = "<section>\r\n  <b><u>Profile Edit view</u></b>\r\n  <label for=\"authorName\">Name:</label>\r\n  <input type=\"text\" id=\"authoName\" data-ng-model=\"profile.author.name\">\r\n  <buttom data-ng-click=\"profile.update()\">Update</button>\r\n</section>\r\n"
+	module.exports = "<section>\n  <b><u>Profile Edit view</u></b>\n  <label for=\"authorName\">Name:</label>\n  <input type=\"text\" id=\"authoName\" data-ng-model=\"profile.author.name\">\n  <buttom data-ng-click=\"profile.update()\">Update</button>\n</section>\n"
 
 /***/ },
-/* 25 */
+/* 39 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35519,7 +35818,7 @@
 	AuthorProfileController.$inject = ["AuthorProfileService"];
 
 /***/ },
-/* 26 */
+/* 40 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35559,7 +35858,7 @@
 	exports.default = AuthorProfileService;
 
 /***/ },
-/* 27 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35576,15 +35875,15 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _authorPosts = __webpack_require__(28);
+	var _authorPosts = __webpack_require__(42);
 
 	var _authorPosts2 = _interopRequireDefault(_authorPosts);
 
-	var _authorPosts3 = __webpack_require__(31);
+	var _authorPosts3 = __webpack_require__(45);
 
 	var _authorPosts4 = _interopRequireDefault(_authorPosts3);
 
-	var _authorPosts5 = __webpack_require__(32);
+	var _authorPosts5 = __webpack_require__(46);
 
 	var _authorPosts6 = _interopRequireDefault(_authorPosts5);
 
@@ -35593,7 +35892,7 @@
 	exports.default = _angular2.default.module("Author.Posts", [_angularUiRouter2.default]).config(_authorPosts2.default).controller("AuthorPostsController", _authorPosts4.default).service("AuthorPostsService", _authorPosts6.default).name;
 
 /***/ },
-/* 28 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35615,33 +35914,33 @@
 	    url: "/new",
 	    views: {
 	      "authorPostsNewView@author": {
-	        template: __webpack_require__(29)
+	        template: __webpack_require__(43)
 	      }
 	    }
 	  }).state("author.posts.edit", {
 	    url: "/edit/{postId}",
 	    views: {
 	      "authorPostsEditView": {
-	        template: __webpack_require__(30)
+	        template: __webpack_require__(44)
 	      }
 	    }
 	  });
 	}
 
 /***/ },
-/* 29 */
+/* 43 */
 /***/ function(module, exports) {
 
-	module.exports = "<u><b>New blog Post</b></u>\r\n<section>\r\n  <form action=\"\">\r\n    <div>\r\n      <label for=\"newPostTitle\">Title:</label>\r\n      <input type=\"text\" name=\"newPostTitle\" id=\"newPostTitle\" data-ng-model=\"posts.newPost.title\">\r\n    </div>\r\n    <div>\r\n      <label for=\"newPostInfo\">Short Description:</label>\r\n      <input type=\"text\" name=\"newPostInfo\" id=\"newPostInfo\" data-ng-model=\"posts.newPost.info\">\r\n    </div>\r\n\r\n    <div>\r\n      <label for=\"newPostContent\">Title</label>\r\n      <textarea style=\"display: block;\" name=\"newPostContent\" id=\"newPostContent\" rows=\"8\" cols=\"40\" data-ng-model=\"posts.newPost.content\"></textarea>\r\n    </div>\r\n    <div>\r\n      <input type=\"submit\" value=\"Submit\">\r\n    </div>\r\n  </form>\r\n</section>\r\n"
+	module.exports = "<u><b>New blog Post</b></u>\n<section>\n  <form action=\"\">\n    <div>\n      <label for=\"newPostTitle\">Title:</label>\n      <input type=\"text\" name=\"newPostTitle\" id=\"newPostTitle\" data-ng-model=\"posts.newPost.title\">\n    </div>\n    <div>\n      <label for=\"newPostInfo\">Short Description:</label>\n      <input type=\"text\" name=\"newPostInfo\" id=\"newPostInfo\" data-ng-model=\"posts.newPost.info\">\n    </div>\n\n    <div>\n      <label for=\"newPostContent\">Title</label>\n      <textarea style=\"display: block;\" name=\"newPostContent\" id=\"newPostContent\" rows=\"8\" cols=\"40\" data-ng-model=\"posts.newPost.content\"></textarea>\n    </div>\n    <div>\n      <input type=\"submit\" value=\"Submit\">\n    </div>\n  </form>\n</section>\n"
 
 /***/ },
-/* 30 */
+/* 44 */
 /***/ function(module, exports) {
 
-	module.exports = "<u><b>New blog Post</b></u>\r\n<section>\r\n  <form action=\"\">\r\n    <div>\r\n      <label for=\"newPostTitle\">Title:</label>\r\n      <input type=\"text\" name=\"newPostTitle\" id=\"newPostTitle\" data-ng-model=\"posts.post.title\">\r\n    </div>\r\n    <div>\r\n      <label for=\"newPostInfo\">Short Description:</label>\r\n      <input type=\"text\" name=\"newPostInfo\" id=\"newPostInfo\" data-ng-model=\"posts.post.info\">\r\n    </div>\r\n\r\n    <div>\r\n      <label for=\"newPostContent\">Title</label>\r\n      <textarea style=\"display: block;\" name=\"newPostContent\" id=\"newPostContent\" rows=\"8\" cols=\"40\" data-ng-model=\"posts.post.content\"></textarea>\r\n    </div>\r\n    <div>\r\n      <input type=\"submit\" value=\"Submit\">\r\n    </div>\r\n  </form>\r\n</section>\r\n"
+	module.exports = "<u><b>New blog Post</b></u>\n<section>\n  <form action=\"\">\n    <div>\n      <label for=\"newPostTitle\">Title:</label>\n      <input type=\"text\" name=\"newPostTitle\" id=\"newPostTitle\" data-ng-model=\"posts.post.title\">\n    </div>\n    <div>\n      <label for=\"newPostInfo\">Short Description:</label>\n      <input type=\"text\" name=\"newPostInfo\" id=\"newPostInfo\" data-ng-model=\"posts.post.info\">\n    </div>\n\n    <div>\n      <label for=\"newPostContent\">Title</label>\n      <textarea style=\"display: block;\" name=\"newPostContent\" id=\"newPostContent\" rows=\"8\" cols=\"40\" data-ng-model=\"posts.post.content\"></textarea>\n    </div>\n    <div>\n      <input type=\"submit\" value=\"Submit\">\n    </div>\n  </form>\n</section>\n"
 
 /***/ },
-/* 31 */
+/* 45 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35708,7 +36007,7 @@
 	AuthorPostsController.$inject = ["AuthorPostsService", "$stateParams"];
 
 /***/ },
-/* 32 */
+/* 46 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35769,7 +36068,7 @@
 	exports.default = AuthorPostsService;
 
 /***/ },
-/* 33 */
+/* 47 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35789,7 +36088,7 @@
 	exports.default = AuthorController;
 
 /***/ },
-/* 34 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35806,20 +36105,24 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _post = __webpack_require__(35);
+	var _post = __webpack_require__(49);
 
 	var _post2 = _interopRequireDefault(_post);
 
-	var _post3 = __webpack_require__(37);
+	var _post3 = __webpack_require__(51);
 
 	var _post4 = _interopRequireDefault(_post3);
 
+	var _post5 = __webpack_require__(52);
+
+	var _post6 = _interopRequireDefault(_post5);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _angular2.default.module("Components.Post", [_angularUiRouter2.default]).config(_post2.default).controller("PostController", _post4.default).name;
+	exports.default = _angular2.default.module("Components.Post", [_angularUiRouter2.default]).config(_post2.default).controller("PostController", _post4.default).service("PostService", _post6.default).name;
 
 /***/ },
-/* 35 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35835,7 +36138,7 @@
 	    url: "/{postId}",
 	    views: {
 	      "postView": {
-	        template: __webpack_require__(36),
+	        template: __webpack_require__(50),
 	        controller: "PostController",
 	        controllerAs: "post"
 	      }
@@ -35844,13 +36147,13 @@
 	}
 
 /***/ },
-/* 36 */
+/* 50 */
 /***/ function(module, exports) {
 
-	module.exports = "<section>\r\n  <b><u>{{post.message}}</u></b>\r\n  <h1>Title of the post</h1>\r\n  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas deleniti odit, quidem cupiditate, animi est omnis debitis voluptate rerum vel et dignissimos necessitatibus, laudantium provident minima obcaecati. Alias, voluptas, aliquam!</p>\r\n</section>\r\n"
+	module.exports = "<section>\n  <h1>{{post.post.title}}</h1>\n  <p>{{post.post.authorName}} <br> {{post.post.publishedDate}} </p>\n  <p>{{post.post.info}}</p>\n</section>\n"
 
 /***/ },
-/* 37 */
+/* 51 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35859,16 +36162,227 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var PostController = function PostController() {
-	  _classCallCheck(this, PostController);
+	var PostController = function () {
+	  function PostController(postService, stateParams) {
+	    _classCallCheck(this, PostController);
 
-	  this.message = "This is the main view of a post.";
-	};
+	    this._postService = postService;
+	    this._stateParams = stateParams;
+	    this.post = this._postService.get(this._stateParams.postId);
+	  }
+
+	  // like the post
+
+
+	  _createClass(PostController, [{
+	    key: "like",
+	    value: function like() {
+	      this._postService.like(this.post);
+	    }
+
+	    // share the post
+
+	  }, {
+	    key: "share",
+	    value: function share() {
+	      this._postService.share(this.post);
+	    }
+	  }]);
+
+	  return PostController;
+	}();
 
 	exports.default = PostController;
 	;
+
+	PostController.$inject = ["PostService", "$stateParams"];
+
+/***/ },
+/* 52 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var PostService = function () {
+	    function PostService(http, db) {
+	        _classCallCheck(this, PostService);
+
+	        this._http = http;
+	        this._posts = db.posts;
+	    }
+
+	    // get a blog
+
+
+	    _createClass(PostService, [{
+	        key: "get",
+	        value: function get(postHandle) {
+	            console.log("Get post with handle:", postHandle);
+	            var post;
+	            for (var i = this._posts.length - 1; i >= 0; i--) {
+	                post = this._posts[i];
+	                if (post.handle == postHandle) {
+	                    return post;
+	                }
+	            }
+	        }
+
+	        // like
+
+	    }, {
+	        key: "like",
+	        value: function like(post) {
+	            console.log("Like this post:", post);
+	        }
+
+	        // share
+
+	    }, {
+	        key: "share",
+	        value: function share(post) {
+	            console.log("Share this post:", post);
+	        }
+	    }]);
+
+	    return PostService;
+	}();
+
+	exports.default = PostService;
+
+
+	PostService.$inject = ["$http", "DB"];
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _posts = __webpack_require__(54);
+
+	var _posts2 = _interopRequireDefault(_posts);
+
+	var _authors = __webpack_require__(55);
+
+	var _authors2 = _interopRequireDefault(_authors);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _angular2.default.module("Tourepedia.DB", []).constant("DB", { posts: _posts2.default, authors: _authors2.default }).name;
+
+/***/ },
+/* 54 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = [{
+	    id: 1,
+	    postId: "834jabfaifakdnfad2874rjahdfkafki234wykafkadfadaf",
+	    title: "This is the title",
+	    handle: "This-is-the-title",
+	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, beatae.",
+	    img: "blog_img1.jpg",
+	    authorId: 1,
+	    authorName: "Sudhir",
+	    publishedDate: "2016-06-01",
+	    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus nisi non ducimus facilis fuga veritatis vel ea sed perspiciatis, quidem nobis molestias mollitia nihil neque nemo consequuntur soluta, eius culpa in saepe? Vero quia nisi, assumenda, recusandae reiciendis aut totam, accusantium eveniet provident placeat beatae necessitatibus soluta error, ratione nulla hic quos laboriosam velit officiis voluptates. Magnam quibusdam dolores at repudiandae odit consequuntur debitis illum. Officiis ab cum molestias totam fugiat laboriosam, perferendis corporis alias numquam sint pariatur at ullam itaque! Reiciendis eveniet laudantium esse minus iste quasi architecto distinctio itaque ipsa quisquam voluptatibus commodi expedita, culpa, accusamus cumque nobis voluptate neque et deleniti nulla, ratione delectus iusto tempora! Cumque ullam porro adipisci consequatur et facere quaerat debitis asperiores atque, excepturi nemo consequuntur, voluptates molestias aperiam omnis corporis earum, dolores laudantium. Ducimus placeat, in. Doloribus laborum illum libero voluptatum nobis porro laboriosam hic quae cupiditate, eius culpa, maxime voluptatibus, accusamus perspiciatis quam tenetur atque. Eaque aliquam in cupiditate dolorem suscipit dicta, adipisci autem tempora! Inventore, illum placeat? Atque nostrum reiciendis praesentium sequi! Illo ducimus nihil cumque beatae quod, aspernatur sit fuga temporibus, eius perferendis, omnis labore necessitatibus voluptatibus, unde saepe. Quaerat sint optio, obcaecati vel cupiditate iure culpa. Mollitia reiciendis deserunt animi. Totam, quam, voluptatibus. Repellendus tenetur, ratione hic, temporibus libero praesentium deserunt ipsa laborum iure sit ex dolorem voluptatum doloremque nulla mollitia, atque eligendi deleniti? Excepturi deserunt nemo pariatur consequatur debitis recusandae esse, vel ducimus quod qui consequuntur eveniet dolorum tempora officia ex dolor, alias cumque harum optio maiores delectus laboriosam aliquam vero. Veritatis delectus iusto tempora, cupiditate quae nobis eum reprehenderit provident perferendis nihil, aperiam, commodi ullam recusandae molestias. Alias omnis, eligendi architecto fuga non. Architecto quae sit quod tempora excepturi explicabo porro, velit repellendus ut. Error similique tempora ratione officiis reprehenderit. Quis magnam impedit sequi possimus nostrum laboriosam, obcaecati facere dicta atque itaque esse eum necessitatibus harum ut error odit velit, officia repellendus architecto molestias soluta ratione. Fugiat reprehenderit, est quaerat excepturi, officia repellat, accusantium architecto cumque adipisci quis quibusdam aut. Molestiae praesentium veritatis, quod at, illo fuga ratione nobis inventore accusamus similique! Perferendis at autem vel recusandae illum dolore aliquam facilis magni in unde. Eaque maiores magni architecto molestiae. Eius autem porro quasi rerum aperiam? Et nam odio esse. Deleniti magni expedita fugit quod, optio asperiores? Unde minima dolore quia porro molestias ex, cumque cum incidunt repellat, et adipisci explicabo. Ullam nemo, doloribus maxime totam asperiores eaque illo vitae. Vero harum cumque, consequatur dolor dolorum. Quisquam velit omnis perspiciatis, delectus at quaerat placeat. Officia et quis laboriosam porro reiciendis eligendi nisi, voluptas nemo. Saepe totam odit, libero dolore tempora. Architecto eaque ipsa molestias velit sapiente voluptatem distinctio vero, natus error aliquid ut cupiditate consectetur magni commodi quasi dolorem placeat, veniam ratione nulla dolores a? Dolor ex deleniti necessitatibus tenetur dolorem, natus est molestias, voluptatibus, culpa exercitationem, animi perferendis hic. Obcaecati provident, alias expedita consequuntur velit ea repellendus. Quas dolorum debitis molestias, quos, dicta in ullam quaerat voluptatem, minus repudiandae tempore assumenda repellat dolorem aperiam, libero. Blanditiis.",
+	    likes: 1000,
+	    shares: 10
+	}, {
+	    id: 2,
+	    postId: "aa2487addfadifakdnfad2874rjahdfkafki234wykafkadfadaf",
+	    title: "Another title of the title",
+	    handle: "Another-title-of-the-title",
+	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore nulla, iste porro praesentium natus et..",
+	    img: "blog_img1.jpg",
+	    authorId: 2,
+	    authorName: "Anand",
+	    publishedDate: "2015-06-01",
+	    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus nisi non ducimus facilis fuga veritatis vel ea sed perspiciatis, quidem nobis molestias mollitia nihil neque nemo consequuntur soluta, eius culpa in saepe? Vero quia nisi, assumenda, recusandae reiciendis aut totam, accusantium eveniet provident placeat beatae necessitatibus soluta error, ratione nulla hic quos laboriosam velit officiis voluptates. Magnam quibusdam dolores at repudiandae odit consequuntur debitis illum. Officiis ab cum molestias totam fugiat laboriosam, perferendis corporis alias numquam sint pariatur at ullam itaque! Reiciendis eveniet laudantium esse minus iste quasi architecto distinctio itaque ipsa quisquam voluptatibus commodi expedita, culpa, accusamus cumque nobis voluptate neque et deleniti nulla, ratione delectus iusto tempora! Cumque ullam porro adipisci consequatur et facere quaerat debitis asperiores atque, excepturi nemo consequuntur, voluptates molestias aperiam omnis corporis earum, dolores laudantium. Ducimus placeat, in. Doloribus laborum illum libero voluptatum nobis porro laboriosam hic quae cupiditate, eius culpa, maxime voluptatibus, accusamus perspiciatis quam tenetur atque. Eaque aliquam in cupiditate dolorem suscipit dicta, adipisci autem tempora! Inventore, illum placeat? Atque nostrum reiciendis praesentium sequi! Illo ducimus nihil cumque beatae quod, aspernatur sit fuga temporibus, eius perferendis, omnis labore necessitatibus voluptatibus, unde saepe. Quaerat sint optio, obcaecati vel cupiditate iure culpa. Mollitia reiciendis deserunt animi. Totam, quam, voluptatibus. Repellendus tenetur, ratione hic, temporibus libero praesentium deserunt ipsa laborum iure sit ex dolorem voluptatum doloremque nulla mollitia, atque eligendi deleniti? Excepturi deserunt nemo pariatur consequatur debitis recusandae esse, vel ducimus quod qui consequuntur eveniet dolorum tempora officia ex dolor, alias cumque harum optio maiores delectus laboriosam aliquam vero. Veritatis delectus iusto tempora, cupiditate quae nobis eum reprehenderit provident perferendis nihil, aperiam, commodi ullam recusandae molestias. Alias omnis, eligendi architecto fuga non. Architecto quae sit quod tempora excepturi explicabo porro, velit repellendus ut. Error similique tempora ratione officiis reprehenderit. Quis magnam impedit sequi possimus nostrum laboriosam, obcaecati facere dicta atque itaque esse eum necessitatibus harum ut error odit velit, officia repellendus architecto molestias soluta ratione. Fugiat reprehenderit, est quaerat excepturi, officia repellat, accusantium architecto cumque adipisci quis quibusdam aut. Molestiae praesentium veritatis, quod at, illo fuga ratione nobis inventore accusamus similique! Perferendis at autem vel recusandae illum dolore aliquam facilis magni in unde. Eaque maiores magni architecto molestiae. Eius autem porro quasi rerum aperiam? Et nam odio esse. Deleniti magni expedita fugit quod, optio asperiores? Unde minima dolore quia porro molestias ex, cumque cum incidunt repellat, et adipisci explicabo. Ullam nemo, doloribus maxime totam asperiores eaque illo vitae. Vero harum cumque, consequatur dolor dolorum. Quisquam velit omnis perspiciatis, delectus at quaerat placeat. Officia et quis laboriosam porro reiciendis eligendi nisi, voluptas nemo. Saepe totam odit, libero dolore tempora. Architecto eaque ipsa molestias velit sapiente voluptatem distinctio vero, natus error aliquid ut cupiditate consectetur magni commodi quasi dolorem placeat, veniam ratione nulla dolores a? Dolor ex deleniti necessitatibus tenetur dolorem, natus est molestias, voluptatibus, culpa exercitationem, animi perferendis hic. Obcaecati provident, alias expedita consequuntur velit ea repellendus. Quas dolorum debitis molestias, quos, dicta in ullam quaerat voluptatem, minus repudiandae tempore assumenda repellat dolorem aperiam, libero. Blanditiis.",
+	    likes: 100,
+	    shares: 10
+	}, {
+	    id: 3,
+	    postId: "akfh29472398478dfjadfkafki234wykafkadfadaf",
+	    title: "This is one the title",
+	    handle: "This-is-one-the-title",
+	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, beatae.",
+	    img: "blog_img1.jpg",
+	    authorId: 1,
+	    authorName: "Sudhir",
+	    publishedDate: "2014-06-01",
+	    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus nisi non ducimus facilis fuga veritatis vel ea sed perspiciatis, quidem nobis molestias mollitia nihil neque nemo consequuntur soluta, eius culpa in saepe? Vero quia nisi, assumenda, recusandae reiciendis aut totam, accusantium eveniet provident placeat beatae necessitatibus soluta error, ratione nulla hic quos laboriosam velit officiis voluptates. Magnam quibusdam dolores at repudiandae odit consequuntur debitis illum. Officiis ab cum molestias totam fugiat laboriosam, perferendis corporis alias numquam sint pariatur at ullam itaque! Reiciendis eveniet laudantium esse minus iste quasi architecto distinctio itaque ipsa quisquam voluptatibus commodi expedita, culpa, accusamus cumque nobis voluptate neque et deleniti nulla, ratione delectus iusto tempora! Cumque ullam porro adipisci consequatur et facere quaerat debitis asperiores atque, excepturi nemo consequuntur, voluptates molestias aperiam omnis corporis earum, dolores laudantium. Ducimus placeat, in. Doloribus laborum illum libero voluptatum nobis porro laboriosam hic quae cupiditate, eius culpa, maxime voluptatibus, accusamus perspiciatis quam tenetur atque. Eaque aliquam in cupiditate dolorem suscipit dicta, adipisci autem tempora! Inventore, illum placeat? Atque nostrum reiciendis praesentium sequi! Illo ducimus nihil cumque beatae quod, aspernatur sit fuga temporibus, eius perferendis, omnis labore necessitatibus voluptatibus, unde saepe. Quaerat sint optio, obcaecati vel cupiditate iure culpa. Mollitia reiciendis deserunt animi. Totam, quam, voluptatibus. Repellendus tenetur, ratione hic, temporibus libero praesentium deserunt ipsa laborum iure sit ex dolorem voluptatum doloremque nulla mollitia, atque eligendi deleniti? Excepturi deserunt nemo pariatur consequatur debitis recusandae esse, vel ducimus quod qui consequuntur eveniet dolorum tempora officia ex dolor, alias cumque harum optio maiores delectus laboriosam aliquam vero. Veritatis delectus iusto tempora, cupiditate quae nobis eum reprehenderit provident perferendis nihil, aperiam, commodi ullam recusandae molestias. Alias omnis, eligendi architecto fuga non. Architecto quae sit quod tempora excepturi explicabo porro, velit repellendus ut. Error similique tempora ratione officiis reprehenderit. Quis magnam impedit sequi possimus nostrum laboriosam, obcaecati facere dicta atque itaque esse eum necessitatibus harum ut error odit velit, officia repellendus architecto molestias soluta ratione. Fugiat reprehenderit, est quaerat excepturi, officia repellat, accusantium architecto cumque adipisci quis quibusdam aut. Molestiae praesentium veritatis, quod at, illo fuga ratione nobis inventore accusamus similique! Perferendis at autem vel recusandae illum dolore aliquam facilis magni in unde. Eaque maiores magni architecto molestiae. Eius autem porro quasi rerum aperiam? Et nam odio esse. Deleniti magni expedita fugit quod, optio asperiores? Unde minima dolore quia porro molestias ex, cumque cum incidunt repellat, et adipisci explicabo. Ullam nemo, doloribus maxime totam asperiores eaque illo vitae. Vero harum cumque, consequatur dolor dolorum. Quisquam velit omnis perspiciatis, delectus at quaerat placeat. Officia et quis laboriosam porro reiciendis eligendi nisi, voluptas nemo. Saepe totam odit, libero dolore tempora. Architecto eaque ipsa molestias velit sapiente voluptatem distinctio vero, natus error aliquid ut cupiditate consectetur magni commodi quasi dolorem placeat, veniam ratione nulla dolores a? Dolor ex deleniti necessitatibus tenetur dolorem, natus est molestias, voluptatibus, culpa exercitationem, animi perferendis hic. Obcaecati provident, alias expedita consequuntur velit ea repellendus. Quas dolorum debitis molestias, quos, dicta in ullam quaerat voluptatem, minus repudiandae tempore assumenda repellat dolorem aperiam, libero. Blanditiis.",
+	    likes: 1000,
+	    shares: 10
+	}, {
+	    id: 4,
+	    postId: "kafda223askfhadfadkhawfpadhdfkafki234wykafkadfadaf",
+	    title: "Mama blog is here",
+	    handle: "Mama-blog-is-here",
+	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore nulla, iste porro praesentium natus et..",
+	    img: "blog_img1.jpg",
+	    authorId: 2,
+	    authorName: "Anand",
+	    publishedDate: "2015-05-10",
+	    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus nisi non ducimus facilis fuga veritatis vel ea sed perspiciatis, quidem nobis molestias mollitia nihil neque nemo consequuntur soluta, eius culpa in saepe? Vero quia nisi, assumenda, recusandae reiciendis aut totam, accusantium eveniet provident placeat beatae necessitatibus soluta error, ratione nulla hic quos laboriosam velit officiis voluptates. Magnam quibusdam dolores at repudiandae odit consequuntur debitis illum. Officiis ab cum molestias totam fugiat laboriosam, perferendis corporis alias numquam sint pariatur at ullam itaque! Reiciendis eveniet laudantium esse minus iste quasi architecto distinctio itaque ipsa quisquam voluptatibus commodi expedita, culpa, accusamus cumque nobis voluptate neque et deleniti nulla, ratione delectus iusto tempora! Cumque ullam porro adipisci consequatur et facere quaerat debitis asperiores atque, excepturi nemo consequuntur, voluptates molestias aperiam omnis corporis earum, dolores laudantium. Ducimus placeat, in. Doloribus laborum illum libero voluptatum nobis porro laboriosam hic quae cupiditate, eius culpa, maxime voluptatibus, accusamus perspiciatis quam tenetur atque. Eaque aliquam in cupiditate dolorem suscipit dicta, adipisci autem tempora! Inventore, illum placeat? Atque nostrum reiciendis praesentium sequi! Illo ducimus nihil cumque beatae quod, aspernatur sit fuga temporibus, eius perferendis, omnis labore necessitatibus voluptatibus, unde saepe. Quaerat sint optio, obcaecati vel cupiditate iure culpa. Mollitia reiciendis deserunt animi. Totam, quam, voluptatibus. Repellendus tenetur, ratione hic, temporibus libero praesentium deserunt ipsa laborum iure sit ex dolorem voluptatum doloremque nulla mollitia, atque eligendi deleniti? Excepturi deserunt nemo pariatur consequatur debitis recusandae esse, vel ducimus quod qui consequuntur eveniet dolorum tempora officia ex dolor, alias cumque harum optio maiores delectus laboriosam aliquam vero. Veritatis delectus iusto tempora, cupiditate quae nobis eum reprehenderit provident perferendis nihil, aperiam, commodi ullam recusandae molestias. Alias omnis, eligendi architecto fuga non. Architecto quae sit quod tempora excepturi explicabo porro, velit repellendus ut. Error similique tempora ratione officiis reprehenderit. Quis magnam impedit sequi possimus nostrum laboriosam, obcaecati facere dicta atque itaque esse eum necessitatibus harum ut error odit velit, officia repellendus architecto molestias soluta ratione. Fugiat reprehenderit, est quaerat excepturi, officia repellat, accusantium architecto cumque adipisci quis quibusdam aut. Molestiae praesentium veritatis, quod at, illo fuga ratione nobis inventore accusamus similique! Perferendis at autem vel recusandae illum dolore aliquam facilis magni in unde. Eaque maiores magni architecto molestiae. Eius autem porro quasi rerum aperiam? Et nam odio esse. Deleniti magni expedita fugit quod, optio asperiores? Unde minima dolore quia porro molestias ex, cumque cum incidunt repellat, et adipisci explicabo. Ullam nemo, doloribus maxime totam asperiores eaque illo vitae. Vero harum cumque, consequatur dolor dolorum. Quisquam velit omnis perspiciatis, delectus at quaerat placeat. Officia et quis laboriosam porro reiciendis eligendi nisi, voluptas nemo. Saepe totam odit, libero dolore tempora. Architecto eaque ipsa molestias velit sapiente voluptatem distinctio vero, natus error aliquid ut cupiditate consectetur magni commodi quasi dolorem placeat, veniam ratione nulla dolores a? Dolor ex deleniti necessitatibus tenetur dolorem, natus est molestias, voluptatibus, culpa exercitationem, animi perferendis hic. Obcaecati provident, alias expedita consequuntur velit ea repellendus. Quas dolorum debitis molestias, quos, dicta in ullam quaerat voluptatem, minus repudiandae tempore assumenda repellat dolorem aperiam, libero. Blanditiis.",
+	    likes: 100,
+	    shares: 10
+	}];
+
+/***/ },
+/* 55 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = [{
+	    id: 1,
+	    username: "sudkumar",
+	    name: "Sudhir Mitharwal",
+	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate, veniam nisi, ex sed velit distinctio."
+	}, {
+	    id: 2,
+	    username: "mama",
+	    name: "Anand Singh",
+	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, unde!"
+	}, {
+	    id: 3,
+	    username: "rmoria",
+	    name: "Rohit Moriya",
+	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit iste sed doloremque, magni ad quam impedit voluptatibus. Quae blanditiis, accusamus."
+	}, {
+	    id: 4,
+	    username: "rjsharma",
+	    name: "Rajat Sharma",
+	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, similique?"
+	}];
 
 /***/ }
 /******/ ]);

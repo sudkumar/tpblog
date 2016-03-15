@@ -3,7 +3,7 @@ export default function authorinfoDirective(){
         restrict: "E",
         scope: {
             // get the author
-            author: "@"
+            author: "="
         },
         template: require("./authorinfo.view.html")
     };

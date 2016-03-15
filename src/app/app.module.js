@@ -9,7 +9,9 @@ import shared from "./shared";
 import templates from "./templates";
 import components from "./components";
 
+import db from "./db";
+
 
 angular.module("TourepediaBlog", 
-    [uirouter, templates, shared, components]).
+    [uirouter, templates, shared, components, db]).
     config(config);

@@ -3,11 +3,11 @@ export default function postcardDirective(){
         restrict: "E",
         scope:{
             // get the post from the parent
-            post: "@"
+            post: "="
         },
         template: require("./postcard.view.html"),
         link: function(scope, elem, attrs){
-            
+
         }
     };
 }
