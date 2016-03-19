@@ -1,0 +1,41 @@
+@at-root .menu{
+    background: whitesmoke;
+    height: 70px;
+    line-height: 70px;
+    @include clearfix();
+    &__logo{
+        float: left;
+        height: 100%;
+        max-height: 100%;
+        a{
+            display: inline-block;
+            height:100%;
+            width: 100%;
+        }
+        img{
+            height: 100%;
+            max-height: 100%;
+            width: auto;
+        }
+    }
+
+    &__items{
+        float: right;
+    }
+
+    &__item{
+        background: transparent;
+        border: none;
+        color: black;
+        display: inline-block;
+        font-size: 1em;
+        height:100%;
+        outline: none;
+        text-decoration: none;
+        margin-right: 10px;
+        padding: 0;
+        &.active{
+            color: pink;
+        }
+    }
+} 

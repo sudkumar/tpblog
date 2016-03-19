@@ -1,8 +1,9 @@
 <div class="subscribe">
-    <h2>Get notified right inside the inbox</h2>
-    <form name="subscribeForm" data-ng-submit="subscribe()" novalidate>
+    <h1 class="subscribe__title">Subscribe</h1>
+    <p class="subscribe__description">Get notified on every new blog upload, right into your inbox.</p>
+    <form class="subscribe__form" name="subscribeForm" data-ng-submit="subscribe()" novalidate>
         <input type="text" placeholder="Your Name" data-ng-model="user.name" required >
         <input type="email" placeholder="Your Email..." data-ng-model="user.email" required>
-        <button >Submit</button>
+        <button class="subscribe__btn" >Notify Me</button>
     </form>
 </div>

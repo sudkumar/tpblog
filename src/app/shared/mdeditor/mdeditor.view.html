@@ -1,0 +1,36 @@
+<div class="mdeditor">
+    <div class="mdeditor__md">
+        
+        <div class="mdeditor__specs">
+            <div class="mdeditor__specs__group">
+                <button class="mdeditor__spec mdeditor__spec--bold fa fa-bold" title="Bold"></button>
+                <button class="mdeditor__spec mdeditor__spec--italic fa fa-italic" title="Italic"></button>
+            </div>
+            <div class="mdeditor__specs__group">
+                
+                <button class="mdeditor__spec fa fa-link" title="Web Link"></button>
+                <button class="mdeditor__spec fa fa-image" title="Image"></button>
+            </div>
+            <div class="mdeditor__specs__group">
+                <button class="mdeditor__spec fa fa-quote-left" title="Quote"></button>
+                <button class="mdeditor__spec fa fa-code" title="Code"></button>            
+            </div>
+            <div class="mdeditor__specs__group">
+                <button class="mdeditor__spec fa fa-list-ol" title="Ordered List"></button>
+                <button class="mdeditor__spec fa fa-list-ul" title="Unordered List"></button>
+            </div>
+            <div class="mdeditor__specs__group">
+                <button class="mdeditor__spec fa fa-header" title="Headings"></button>
+                <button class="mdeditor__spec fa fa-paragraph" title="Paragraph"></button>
+            </div>
+            <div class="mdeditor__specs__group">
+                <button class="mdeditor__spec fa fa-minus" title="horizontal line"></button>
+            </div>
+        </div>
+        <textarea name="mdeditorMD" data-ng-model="md" data-ng-change="preview()" class="mdeditor__input" cols="30" rows="10">
+            **Your post content**
+        </textarea>
+    </div>
+    <div class="mdeditor__html main-post__content" data-ng-bind-html="html">
+    </div>
+</div>

@@ -1,7 +1,12 @@
-
 export default class AuthorPostsNewController{
-    constructor(){
-        this.post = {}
+    constructor(postsService){
+        this._postsService = postsService;
+        this.post = {};
     }
 
-}
+    new(){
+        console.log("something");
+    }
+};
+
+AuthorPostsNewController.$inject = ["AuthorPostsService"];

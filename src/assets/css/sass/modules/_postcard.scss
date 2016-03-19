@@ -1,0 +1,79 @@
+@at-root .postcards-container{
+    padding: 20px 5px;
+    max-width: 900px;
+    margin: 0px auto;
+}
+
+@at-root .card{
+    
+    background: white;
+    padding: 30px 5px 30px;
+    position: relative;
+    &:after{
+        content: "";
+        width: 200px;
+        height: 1px;
+        background: silver;
+        position: absolute;
+        left: calc(50% - 100px);
+        bottom: 0;
+    }
+    
+    &__title{
+        color: rgba(0,0,0,.84);
+    }
+    &__meta{
+        padding-bottom: 10px;
+        border-bottom: 1px solid whitesmoke;
+        a{
+            text-decoration: none;
+        }
+    }
+    &__content{
+        padding: 10px 0;
+    }
+    &__img{
+        width: 300px;
+        max-width: 300px;
+        height: auto;
+        float: left;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        img{
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    &__info{
+        color: rgba(0,0,0,.54);
+        line-height: 1.7;
+        font-weight: 400;
+    }
+    &__author{
+        text-decoration: none;
+        line-height: 1;
+        color: inherit;
+    }
+    &__footer{
+        clear: both;
+        padding-top: 10px;
+        border-top: 1px solid whitesmoke;
+
+        a, button{
+            display: inline-block;
+            outline: none;
+            background: transparent;
+            border: none;
+            text-decoration: none;
+            color: silver;
+            font-size: 1em;
+            font-weight: normal;
+            padding: 4px 10px;
+
+            &:hover{
+                color: dimgrey;
+            }
+        }
+    }
+}

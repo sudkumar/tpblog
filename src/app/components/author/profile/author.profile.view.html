@@ -1,7 +1,23 @@
-<section>
-  <b><u>Profile view of author</u></b>
-  <h2>{{profile.author.name}}</h2>
-  <a ui-sref=".editProfile">Edit</a>
-  <p>{{profile.author.bio}}</p>
-  <p><a href="{{profile.author.fb}}">fb</a></p>
+<section class="author-profile">
+    <div class="media">
+        <a ui-sref=".editProfile" class="author-profile__edit-btn" >Edit</a>
+        <div class="media__img author-profile__img">
+            <img src="./assets/img/authors/{{profile.author.img}}" alt="Profie Image">
+        </div>
+        <div class="media__content author-profile__content">
+            <h2 class="author-profile__name">{{profile.author.name}}</h2>
+            <p class="author-profile__tagline">A blogger, traveler and nature lover.</p>
+            <p class="author-profile__followers">
+                <span>10 Followers</span>
+                <button>Follow</button>
+            </p>
+            <p class="author-profile__social-links">
+                <a href="{{profile.author.fb}}">fb</a>
+                <a href="{{profile.author.fb}}">g+</a>
+                <a href="{{profile.author.fb}}">in</a>
+                <a href="{{profile.author.fb}}">tr</a>
+            </p>
+        </div>
+    </div>
+    <p class="author-profile__bio">{{profile.author.bio}}</p>
 </section>

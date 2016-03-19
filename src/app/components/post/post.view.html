@@ -1,5 +1,11 @@
-<section>
-  <h1>{{post.post.title}}</h1>
-  <p>{{post.post.authorName}} <br> {{post.post.publishedDate}} </p>
-  <p>{{post.post.info}}</p>
+<section class="main-post">
+    <header class="main-post__header" style=" background-image: url('./assets/img/posts/{{post.post.img}}');">
+        <h1 class="main-post__title">{{post.post.title}}</h1>
+        <a class="main-post__author" ui-sref="author({'authorId': post.post.authorId})">
+            <tpb-authorinfo class="authorinfo--white" author="{'name': post.post.authorName, 'publishedDate': post.post.publishedDate, 'img': post.post.authorImg}"></tpb-authorinfo>
+        </a>
+    </header>
+    <div class="main-post__content" data-ng-bind-html="post.post.html" >
+        
+    </div>
 </section>

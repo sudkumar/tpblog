@@ -1,0 +1,43 @@
+@at-root .subscribe{
+    padding:  20px 10px;
+    text-align: center;
+    background: #5F5390;
+    color: white;
+    &__title{
+        font-size: 2em;
+    }
+
+    &__description{
+        max-width: 500px;
+        margin: 20px auto;
+        line-height: 1.6;
+        font-size: 1.5em;
+    }
+
+    &__form{
+        input{
+            color: white;
+            font-size: 1em;
+            box-sizing: border-box;
+            display: inline-block;
+            width: 320px;
+            padding: 5px 10px;
+            margin: 10px 5px;
+            background:transparent;
+            outline: none;
+            border: none;
+            border-bottom: 1px solid white;
+        }
+    }
+
+    &__btn{
+        display: block;
+        margin: 30px auto;
+        padding: 10px 30px;
+        background: transparent;
+        border: 1px solid white;
+        outline: none;
+        color: white;
+        font-size: 1em;
+    }
+}

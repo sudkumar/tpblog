@@ -1,8 +1,10 @@
 export default class PostController{
-  constructor(postService, stateParams){
+  constructor(postService, stateParams, mdService){
     this._postService = postService;
     this._stateParams = stateParams;
+    this._mdService = mdService; 
     this.post = this._postService.get(this._stateParams.postId);
+    this.post.html = this._mdService.toHTML(this.post.content);
   }
 
   // like the post
@@ -17,4 +19,4 @@ export default class PostController{
 };
 
 
-PostController.$inject = ["PostService", "$stateParams"]
+PostController.$inject = ["PostService", "$stateParams", "MDEditorService"];

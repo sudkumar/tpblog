@@ -1,26 +1,9 @@
-<b><u>A posts under author</u></b>
-
 <a ui-sref=".posts.new">New Blog</a>
-<b>{{posts.message}}</b>
 <div >
   <ui-view name="authorPostsNewView" id="authorPostsNewView"></ui-view>
   <ui-view name="authorPostsEditView" id="authorPostsNewView"></ui-view>
 </div>
 
-<ul>
-  <li>
-    <h2>This is the title of the post.</h2>
-    <a ui-sref=".posts.edit({'postId': 1})">edit</a> <buttom>Delete</button>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>
-  </li>
-  <li>
-    <h2>This is the title of the post.</h2>
-    <a ui-sref=".posts.edit({'postId': 2})">edit</a> <buttom>Delete</button>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>
-  </li>
-  <li>
-    <h2>This is the title of the post.</h2>
-    <a ui-sref=".posts.edit({'postId': 3})">edit</a> <buttom>Delete</button>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>
-  </li>
-</ul>
+<div class="postcards-container">
+    <tpb-postcard data-ng-repeat="post in posts.posts" post="post" can-edit="{{true}}"><tpb-postcard>
+</div>

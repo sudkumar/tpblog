@@ -1,0 +1,12 @@
+@at-root .media{
+    @include clearfix();
+    &__img{
+        display: block;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        float: left;
+    }
+    &__content{
+        overflow: hidden;
+    }
+}

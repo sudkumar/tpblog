@@ -62,15 +62,15 @@
 
 	var _shared2 = _interopRequireDefault(_shared);
 
-	var _templates = __webpack_require__(12);
+	var _templates = __webpack_require__(24);
 
 	var _templates2 = _interopRequireDefault(_templates);
 
-	var _components = __webpack_require__(23);
+	var _components = __webpack_require__(35);
 
 	var _components2 = _interopRequireDefault(_components);
 
-	var _db = __webpack_require__(53);
+	var _db = __webpack_require__(71);
 
 	var _db2 = _interopRequireDefault(_db);
 
@@ -35106,13 +35106,16 @@
 
 	var _authorinfo2 = _interopRequireDefault(_authorinfo);
 
+	var _mdeditor = __webpack_require__(12);
+
+	var _mdeditor2 = _interopRequireDefault(_mdeditor);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// export the complete shared module
-
+	exports.default = _angular2.default.module("TourepediaBlog.Shared", [_postcard2.default, _authorinfo2.default, _mdeditor2.default]).name;
 
 	// import the shared modules
-	exports.default = _angular2.default.module("TourepediaBlog.Shared", [_postcard2.default, _authorinfo2.default]).name;
 
 /***/ },
 /* 6 */
@@ -35134,7 +35137,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _angular2.default.module("Shared.Postcard", []).directive("tpPostcard", _postcard2.default).name;
+	exports.default = _angular2.default.module("Shared.Postcard", []).directive("tpbPostcard", _postcard2.default).name;
 
 /***/ },
 /* 7 */
@@ -35151,10 +35154,13 @@
 	        restrict: "E",
 	        scope: {
 	            // get the post from the parent
-	            post: "="
+	            post: "=",
+	            canEdit: "@"
 	        },
 	        template: __webpack_require__(8),
-	        link: function link(scope, elem, attrs) {}
+	        link: function link(scope, elem, attrs) {
+	            // console.log(scope.canEdit);
+	        }
 	    };
 	}
 
@@ -35162,7 +35168,7 @@
 /* 8 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"card card--post\">\n    <h2 class=\"card__title\">Title: {{post.title}}</h2>\n    <div class=\"card__meta\"> <tp-authorinfo author=\"{'name': post.authorName, 'publishedDate': post.publishedDate}\"></tp-authorinfo>\n     </div>\n    <div class=\"card__content\">\n        <div class=\"card__img\">\n            <img src=\"src\" alt=\"Blog Image\">\n        </div>\n        <p class=\"card__info\">Info: {{post.info}}</p>\n    </div>\n    <div class=\"card__footer\">\n        <a ui-sref=\"post({'postId': post.handle})\">Read</a>\n        <button>Like</button>\n        <button>Share</button>\n    </div>\n    \n    \n</div>"
+	module.exports = "<div class=\"card\">\r\n    <h2 class=\"card__title\">{{post.title}}</h2>\r\n    <div class=\"card__meta\"> \r\n        <a ui-sref=\".posts.edit({'postToken': post.token})\" data-ng-if=\"canEdit == 'true'\">Edit</a>\r\n    </div>\r\n    <div class=\"card__content\">\r\n        <div class=\"card__img\">\r\n            <img data-ng-src=\"./assets/img/posts/{{post.img}}\" alt=\"Blog Image\">\r\n        </div>\r\n        <div class=\"card__info\">\r\n            <a class=\"card__author\" ui-sref=\"author({'authorId': post.authorId})\">\r\n                <tpb-authorinfo author=\"{'name': post.authorName, 'publishedDate': post.publishedDate, 'img': post.authorImg}\"></tpb-authorinfo>\r\n            </a>\r\n            <p>{{post.info}}</p>\r\n        </div>\r\n    </div>\r\n    <div class=\"card__footer\">\r\n        <a ui-sref=\"post({'postId': post.handle})\">Read</a>\r\n        <button>Like</button>\r\n        <button>Share</button>\r\n    </div>\r\n    \r\n</div>"
 
 /***/ },
 /* 9 */
@@ -35184,7 +35190,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _angular2.default.module("Shared.Authorinfo", []).directive("tpAuthorinfo", _authorinfo2.default).name;
+	exports.default = _angular2.default.module("Shared.Authorinfo", []).directive("tpbAuthorinfo", _authorinfo2.default).name;
 
 /***/ },
 /* 10 */
@@ -35211,7 +35217,7 @@
 /* 11 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"authorinfo\">\n    <img src=\"img\" alt=\"author image\">\n    <p>Author Name: {{author.name}}</p>\n    <p>Date: {{author.publisedDate}}</p>\n</div>"
+	module.exports = "<div class=\"authorinfo media\">\r\n    <div class=\"media__img authorinfo__img\">\r\n        <img data-ng-src=\"./assets/img/authors/{{author.img}}\" alt=\"author image\">\r\n    </div>\r\n    <div class=\"media__content authorinfo__content\">\r\n        <p class=\"authorinfo__name\">{{author.name}}</p>\r\n        <p class=\"authorinfo__meta\">{{author.publishedDate}}</p>\r\n    </div>\r\n</div>"
 
 /***/ },
 /* 12 */
@@ -35227,15 +35233,3326 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _footer = __webpack_require__(13);
+	var _angularSanitize = __webpack_require__(13);
+
+	var _angularSanitize2 = _interopRequireDefault(_angularSanitize);
+
+	var _mdeditor = __webpack_require__(15);
+
+	var _mdeditor2 = _interopRequireDefault(_mdeditor);
+
+	var _mdeditor3 = __webpack_require__(17);
+
+	var _mdeditor4 = _interopRequireDefault(_mdeditor3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _angular2.default.module("Shared.Mdeditor", [_angularSanitize2.default]).directive("tpbMdeditor", _mdeditor2.default).service("MDEditorService", _mdeditor4.default).name;
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(14);
+	module.exports = 'ngSanitize';
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	/**
+	 * @license AngularJS v1.5.1
+	 * (c) 2010-2016 Google, Inc. http://angularjs.org
+	 * License: MIT
+	 */
+	(function(window, angular, undefined) {'use strict';
+
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 *     Any commits to this file should be reviewed with security in mind.  *
+	 *   Changes to this file can potentially create security vulnerabilities. *
+	 *          An approval from 2 Core members with history of modifying      *
+	 *                         this file is required.                          *
+	 *                                                                         *
+	 *  Does the change somehow allow for arbitrary javascript to be executed? *
+	 *    Or allows for someone to change the prototype of built-in objects?   *
+	 *     Or gives undesired access to variables likes document or window?    *
+	 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+	var $sanitizeMinErr = angular.$$minErr('$sanitize');
+
+	/**
+	 * @ngdoc module
+	 * @name ngSanitize
+	 * @description
+	 *
+	 * # ngSanitize
+	 *
+	 * The `ngSanitize` module provides functionality to sanitize HTML.
+	 *
+	 *
+	 * <div doc-module-components="ngSanitize"></div>
+	 *
+	 * See {@link ngSanitize.$sanitize `$sanitize`} for usage.
+	 */
+
+	/**
+	 * @ngdoc service
+	 * @name $sanitize
+	 * @kind function
+	 *
+	 * @description
+	 *   Sanitizes an html string by stripping all potentially dangerous tokens.
+	 *
+	 *   The input is sanitized by parsing the HTML into tokens. All safe tokens (from a whitelist) are
+	 *   then serialized back to properly escaped html string. This means that no unsafe input can make
+	 *   it into the returned string.
+	 *
+	 *   The whitelist for URL sanitization of attribute values is configured using the functions
+	 *   `aHrefSanitizationWhitelist` and `imgSrcSanitizationWhitelist` of {@link ng.$compileProvider
+	 *   `$compileProvider`}.
+	 *
+	 *   The input may also contain SVG markup if this is enabled via {@link $sanitizeProvider}.
+	 *
+	 * @param {string} html HTML input.
+	 * @returns {string} Sanitized HTML.
+	 *
+	 * @example
+	   <example module="sanitizeExample" deps="angular-sanitize.js">
+	   <file name="index.html">
+	     <script>
+	         angular.module('sanitizeExample', ['ngSanitize'])
+	           .controller('ExampleController', ['$scope', '$sce', function($scope, $sce) {
+	             $scope.snippet =
+	               '<p style="color:blue">an html\n' +
+	               '<em onmouseover="this.textContent=\'PWN3D!\'">click here</em>\n' +
+	               'snippet</p>';
+	             $scope.deliberatelyTrustDangerousSnippet = function() {
+	               return $sce.trustAsHtml($scope.snippet);
+	             };
+	           }]);
+	     </script>
+	     <div ng-controller="ExampleController">
+	        Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+	       <table>
+	         <tr>
+	           <td>Directive</td>
+	           <td>How</td>
+	           <td>Source</td>
+	           <td>Rendered</td>
+	         </tr>
+	         <tr id="bind-html-with-sanitize">
+	           <td>ng-bind-html</td>
+	           <td>Automatically uses $sanitize</td>
+	           <td><pre>&lt;div ng-bind-html="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind-html="snippet"></div></td>
+	         </tr>
+	         <tr id="bind-html-with-trust">
+	           <td>ng-bind-html</td>
+	           <td>Bypass $sanitize by explicitly trusting the dangerous value</td>
+	           <td>
+	           <pre>&lt;div ng-bind-html="deliberatelyTrustDangerousSnippet()"&gt;
+	&lt;/div&gt;</pre>
+	           </td>
+	           <td><div ng-bind-html="deliberatelyTrustDangerousSnippet()"></div></td>
+	         </tr>
+	         <tr id="bind-default">
+	           <td>ng-bind</td>
+	           <td>Automatically escapes</td>
+	           <td><pre>&lt;div ng-bind="snippet"&gt;<br/>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind="snippet"></div></td>
+	         </tr>
+	       </table>
+	       </div>
+	   </file>
+	   <file name="protractor.js" type="protractor">
+	     it('should sanitize the html snippet by default', function() {
+	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+	         toBe('<p>an html\n<em>click here</em>\nsnippet</p>');
+	     });
+
+	     it('should inline raw snippet if bound to a trusted value', function() {
+	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).
+	         toBe("<p style=\"color:blue\">an html\n" +
+	              "<em onmouseover=\"this.textContent='PWN3D!'\">click here</em>\n" +
+	              "snippet</p>");
+	     });
+
+	     it('should escape snippet without any filter', function() {
+	       expect(element(by.css('#bind-default div')).getInnerHtml()).
+	         toBe("&lt;p style=\"color:blue\"&gt;an html\n" +
+	              "&lt;em onmouseover=\"this.textContent='PWN3D!'\"&gt;click here&lt;/em&gt;\n" +
+	              "snippet&lt;/p&gt;");
+	     });
+
+	     it('should update', function() {
+	       element(by.model('snippet')).clear();
+	       element(by.model('snippet')).sendKeys('new <b onclick="alert(1)">text</b>');
+	       expect(element(by.css('#bind-html-with-sanitize div')).getInnerHtml()).
+	         toBe('new <b>text</b>');
+	       expect(element(by.css('#bind-html-with-trust div')).getInnerHtml()).toBe(
+	         'new <b onclick="alert(1)">text</b>');
+	       expect(element(by.css('#bind-default div')).getInnerHtml()).toBe(
+	         "new &lt;b onclick=\"alert(1)\"&gt;text&lt;/b&gt;");
+	     });
+	   </file>
+	   </example>
+	 */
+
+
+	/**
+	 * @ngdoc provider
+	 * @name $sanitizeProvider
+	 *
+	 * @description
+	 * Creates and configures {@link $sanitize} instance.
+	 */
+	function $SanitizeProvider() {
+	  var svgEnabled = false;
+
+	  this.$get = ['$$sanitizeUri', function($$sanitizeUri) {
+	    if (svgEnabled) {
+	      angular.extend(validElements, svgElements);
+	    }
+	    return function(html) {
+	      var buf = [];
+	      htmlParser(html, htmlSanitizeWriter(buf, function(uri, isImage) {
+	        return !/^unsafe:/.test($$sanitizeUri(uri, isImage));
+	      }));
+	      return buf.join('');
+	    };
+	  }];
+
+
+	  /**
+	   * @ngdoc method
+	   * @name $sanitizeProvider#enableSvg
+	   * @kind function
+	   *
+	   * @description
+	   * Enables a subset of svg to be supported by the sanitizer.
+	   *
+	   * <div class="alert alert-warning">
+	   *   <p>By enabling this setting without taking other precautions, you might expose your
+	   *   application to click-hijacking attacks. In these attacks, sanitized svg elements could be positioned
+	   *   outside of the containing element and be rendered over other elements on the page (e.g. a login
+	   *   link). Such behavior can then result in phishing incidents.</p>
+	   *
+	   *   <p>To protect against these, explicitly setup `overflow: hidden` css rule for all potential svg
+	   *   tags within the sanitized content:</p>
+	   *
+	   *   <br>
+	   *
+	   *   <pre><code>
+	   *   .rootOfTheIncludedContent svg {
+	   *     overflow: hidden !important;
+	   *   }
+	   *   </code></pre>
+	   * </div>
+	   *
+	   * @param {boolean=} regexp New regexp to whitelist urls with.
+	   * @returns {boolean|ng.$sanitizeProvider} Returns the currently configured value if called
+	   *    without an argument or self for chaining otherwise.
+	   */
+	  this.enableSvg = function(enableSvg) {
+	    if (angular.isDefined(enableSvg)) {
+	      svgEnabled = enableSvg;
+	      return this;
+	    } else {
+	      return svgEnabled;
+	    }
+	  };
+	}
+
+	function sanitizeText(chars) {
+	  var buf = [];
+	  var writer = htmlSanitizeWriter(buf, angular.noop);
+	  writer.chars(chars);
+	  return buf.join('');
+	}
+
+
+	// Regular Expressions for parsing tags and attributes
+	var SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+	  // Match everything outside of normal chars and " (quote character)
+	  NON_ALPHANUMERIC_REGEXP = /([^\#-~ |!])/g;
+
+
+	// Good source of info about elements and attributes
+	// http://dev.w3.org/html5/spec/Overview.html#semantics
+	// http://simon.html5.org/html-elements
+
+	// Safe Void Elements - HTML5
+	// http://dev.w3.org/html5/spec/Overview.html#void-elements
+	var voidElements = toMap("area,br,col,hr,img,wbr");
+
+	// Elements that you can, intentionally, leave open (and which close themselves)
+	// http://dev.w3.org/html5/spec/Overview.html#optional-tags
+	var optionalEndTagBlockElements = toMap("colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr"),
+	    optionalEndTagInlineElements = toMap("rp,rt"),
+	    optionalEndTagElements = angular.extend({},
+	                                            optionalEndTagInlineElements,
+	                                            optionalEndTagBlockElements);
+
+	// Safe Block Elements - HTML5
+	var blockElements = angular.extend({}, optionalEndTagBlockElements, toMap("address,article," +
+	        "aside,blockquote,caption,center,del,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5," +
+	        "h6,header,hgroup,hr,ins,map,menu,nav,ol,pre,section,table,ul"));
+
+	// Inline Elements - HTML5
+	var inlineElements = angular.extend({}, optionalEndTagInlineElements, toMap("a,abbr,acronym,b," +
+	        "bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,q,ruby,rp,rt,s," +
+	        "samp,small,span,strike,strong,sub,sup,time,tt,u,var"));
+
+	// SVG Elements
+	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Elements
+	// Note: the elements animate,animateColor,animateMotion,animateTransform,set are intentionally omitted.
+	// They can potentially allow for arbitrary javascript to be executed. See #11290
+	var svgElements = toMap("circle,defs,desc,ellipse,font-face,font-face-name,font-face-src,g,glyph," +
+	        "hkern,image,linearGradient,line,marker,metadata,missing-glyph,mpath,path,polygon,polyline," +
+	        "radialGradient,rect,stop,svg,switch,text,title,tspan");
+
+	// Blocked Elements (will be stripped)
+	var blockedElements = toMap("script,style");
+
+	var validElements = angular.extend({},
+	                                   voidElements,
+	                                   blockElements,
+	                                   inlineElements,
+	                                   optionalEndTagElements);
+
+	//Attributes that have href and hence need to be sanitized
+	var uriAttrs = toMap("background,cite,href,longdesc,src,xlink:href");
+
+	var htmlAttrs = toMap('abbr,align,alt,axis,bgcolor,border,cellpadding,cellspacing,class,clear,' +
+	    'color,cols,colspan,compact,coords,dir,face,headers,height,hreflang,hspace,' +
+	    'ismap,lang,language,nohref,nowrap,rel,rev,rows,rowspan,rules,' +
+	    'scope,scrolling,shape,size,span,start,summary,tabindex,target,title,type,' +
+	    'valign,value,vspace,width');
+
+	// SVG attributes (without "id" and "name" attributes)
+	// https://wiki.whatwg.org/wiki/Sanitization_rules#svg_Attributes
+	var svgAttrs = toMap('accent-height,accumulate,additive,alphabetic,arabic-form,ascent,' +
+	    'baseProfile,bbox,begin,by,calcMode,cap-height,class,color,color-rendering,content,' +
+	    'cx,cy,d,dx,dy,descent,display,dur,end,fill,fill-rule,font-family,font-size,font-stretch,' +
+	    'font-style,font-variant,font-weight,from,fx,fy,g1,g2,glyph-name,gradientUnits,hanging,' +
+	    'height,horiz-adv-x,horiz-origin-x,ideographic,k,keyPoints,keySplines,keyTimes,lang,' +
+	    'marker-end,marker-mid,marker-start,markerHeight,markerUnits,markerWidth,mathematical,' +
+	    'max,min,offset,opacity,orient,origin,overline-position,overline-thickness,panose-1,' +
+	    'path,pathLength,points,preserveAspectRatio,r,refX,refY,repeatCount,repeatDur,' +
+	    'requiredExtensions,requiredFeatures,restart,rotate,rx,ry,slope,stemh,stemv,stop-color,' +
+	    'stop-opacity,strikethrough-position,strikethrough-thickness,stroke,stroke-dasharray,' +
+	    'stroke-dashoffset,stroke-linecap,stroke-linejoin,stroke-miterlimit,stroke-opacity,' +
+	    'stroke-width,systemLanguage,target,text-anchor,to,transform,type,u1,u2,underline-position,' +
+	    'underline-thickness,unicode,unicode-range,units-per-em,values,version,viewBox,visibility,' +
+	    'width,widths,x,x-height,x1,x2,xlink:actuate,xlink:arcrole,xlink:role,xlink:show,xlink:title,' +
+	    'xlink:type,xml:base,xml:lang,xml:space,xmlns,xmlns:xlink,y,y1,y2,zoomAndPan', true);
+
+	var validAttrs = angular.extend({},
+	                                uriAttrs,
+	                                svgAttrs,
+	                                htmlAttrs);
+
+	function toMap(str, lowercaseKeys) {
+	  var obj = {}, items = str.split(','), i;
+	  for (i = 0; i < items.length; i++) {
+	    obj[lowercaseKeys ? angular.lowercase(items[i]) : items[i]] = true;
+	  }
+	  return obj;
+	}
+
+	var inertBodyElement;
+	(function(window) {
+	  var doc;
+	  if (window.document && window.document.implementation) {
+	    doc = window.document.implementation.createHTMLDocument("inert");
+	  } else {
+	    throw $sanitizeMinErr('noinert', "Can't create an inert html document");
+	  }
+	  var docElement = doc.documentElement || doc.getDocumentElement();
+	  var bodyElements = docElement.getElementsByTagName('body');
+
+	  // usually there should be only one body element in the document, but IE doesn't have any, so we need to create one
+	  if (bodyElements.length === 1) {
+	    inertBodyElement = bodyElements[0];
+	  } else {
+	    var html = doc.createElement('html');
+	    inertBodyElement = doc.createElement('body');
+	    html.appendChild(inertBodyElement);
+	    doc.appendChild(html);
+	  }
+	})(window);
+
+	/**
+	 * @example
+	 * htmlParser(htmlString, {
+	 *     start: function(tag, attrs) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * });
+	 *
+	 * @param {string} html string
+	 * @param {object} handler
+	 */
+	function htmlParser(html, handler) {
+	  if (html === null || html === undefined) {
+	    html = '';
+	  } else if (typeof html !== 'string') {
+	    html = '' + html;
+	  }
+	  inertBodyElement.innerHTML = html;
+
+	  //mXSS protection
+	  var mXSSAttempts = 5;
+	  do {
+	    if (mXSSAttempts === 0) {
+	      throw $sanitizeMinErr('uinput', "Failed to sanitize html because the input is unstable");
+	    }
+	    mXSSAttempts--;
+
+	    // strip custom-namespaced attributes on IE<=11
+	    if (document.documentMode <= 11) {
+	      stripCustomNsAttrs(inertBodyElement);
+	    }
+	    html = inertBodyElement.innerHTML; //trigger mXSS
+	    inertBodyElement.innerHTML = html;
+	  } while (html !== inertBodyElement.innerHTML);
+
+	  var node = inertBodyElement.firstChild;
+	  while (node) {
+	    switch (node.nodeType) {
+	      case 1: // ELEMENT_NODE
+	        handler.start(node.nodeName.toLowerCase(), attrToMap(node.attributes));
+	        break;
+	      case 3: // TEXT NODE
+	        handler.chars(node.textContent);
+	        break;
+	    }
+
+	    var nextNode;
+	    if (!(nextNode = node.firstChild)) {
+	      if (node.nodeType == 1) {
+	        handler.end(node.nodeName.toLowerCase());
+	      }
+	      nextNode = node.nextSibling;
+	      if (!nextNode) {
+	        while (nextNode == null) {
+	          node = node.parentNode;
+	          if (node === inertBodyElement) break;
+	          nextNode = node.nextSibling;
+	          if (node.nodeType == 1) {
+	            handler.end(node.nodeName.toLowerCase());
+	          }
+	        }
+	      }
+	    }
+	    node = nextNode;
+	  }
+
+	  while (node = inertBodyElement.firstChild) {
+	    inertBodyElement.removeChild(node);
+	  }
+	}
+
+	function attrToMap(attrs) {
+	  var map = {};
+	  for (var i = 0, ii = attrs.length; i < ii; i++) {
+	    var attr = attrs[i];
+	    map[attr.name] = attr.value;
+	  }
+	  return map;
+	}
+
+
+	/**
+	 * Escapes all potentially dangerous characters, so that the
+	 * resulting string can be safely inserted into attribute or
+	 * element text.
+	 * @param value
+	 * @returns {string} escaped text
+	 */
+	function encodeEntities(value) {
+	  return value.
+	    replace(/&/g, '&amp;').
+	    replace(SURROGATE_PAIR_REGEXP, function(value) {
+	      var hi = value.charCodeAt(0);
+	      var low = value.charCodeAt(1);
+	      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
+	    }).
+	    replace(NON_ALPHANUMERIC_REGEXP, function(value) {
+	      return '&#' + value.charCodeAt(0) + ';';
+	    }).
+	    replace(/</g, '&lt;').
+	    replace(/>/g, '&gt;');
+	}
+
+	/**
+	 * create an HTML/XML writer which writes to buffer
+	 * @param {Array} buf use buf.join('') to get out sanitized html string
+	 * @returns {object} in the form of {
+	 *     start: function(tag, attrs) {},
+	 *     end: function(tag) {},
+	 *     chars: function(text) {},
+	 *     comment: function(text) {}
+	 * }
+	 */
+	function htmlSanitizeWriter(buf, uriValidator) {
+	  var ignoreCurrentElement = false;
+	  var out = angular.bind(buf, buf.push);
+	  return {
+	    start: function(tag, attrs) {
+	      tag = angular.lowercase(tag);
+	      if (!ignoreCurrentElement && blockedElements[tag]) {
+	        ignoreCurrentElement = tag;
+	      }
+	      if (!ignoreCurrentElement && validElements[tag] === true) {
+	        out('<');
+	        out(tag);
+	        angular.forEach(attrs, function(value, key) {
+	          var lkey=angular.lowercase(key);
+	          var isImage = (tag === 'img' && lkey === 'src') || (lkey === 'background');
+	          if (validAttrs[lkey] === true &&
+	            (uriAttrs[lkey] !== true || uriValidator(value, isImage))) {
+	            out(' ');
+	            out(key);
+	            out('="');
+	            out(encodeEntities(value));
+	            out('"');
+	          }
+	        });
+	        out('>');
+	      }
+	    },
+	    end: function(tag) {
+	      tag = angular.lowercase(tag);
+	      if (!ignoreCurrentElement && validElements[tag] === true && voidElements[tag] !== true) {
+	        out('</');
+	        out(tag);
+	        out('>');
+	      }
+	      if (tag == ignoreCurrentElement) {
+	        ignoreCurrentElement = false;
+	      }
+	    },
+	    chars: function(chars) {
+	      if (!ignoreCurrentElement) {
+	        out(encodeEntities(chars));
+	      }
+	    }
+	  };
+	}
+
+
+	/**
+	 * When IE9-11 comes across an unknown namespaced attribute e.g. 'xlink:foo' it adds 'xmlns:ns1' attribute to declare
+	 * ns1 namespace and prefixes the attribute with 'ns1' (e.g. 'ns1:xlink:foo'). This is undesirable since we don't want
+	 * to allow any of these custom attributes. This method strips them all.
+	 *
+	 * @param node Root element to process
+	 */
+	function stripCustomNsAttrs(node) {
+	  if (node.nodeType === Node.ELEMENT_NODE) {
+	    var attrs = node.attributes;
+	    for (var i = 0, l = attrs.length; i < l; i++) {
+	      var attrNode = attrs[i];
+	      var attrName = attrNode.name.toLowerCase();
+	      if (attrName === 'xmlns:ns1' || attrName.indexOf('ns1:') === 0) {
+	        node.removeAttributeNode(attrNode);
+	        i--;
+	        l--;
+	      }
+	    }
+	  }
+
+	  var nextNode = node.firstChild;
+	  if (nextNode) {
+	    stripCustomNsAttrs(nextNode);
+	  }
+
+	  nextNode = node.nextSibling;
+	  if (nextNode) {
+	    stripCustomNsAttrs(nextNode);
+	  }
+	}
+
+
+
+	// define ngSanitize module and register $sanitize service
+	angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
+
+	/* global sanitizeText: false */
+
+	/**
+	 * @ngdoc filter
+	 * @name linky
+	 * @kind function
+	 *
+	 * @description
+	 * Finds links in text input and turns them into html links. Supports `http/https/ftp/mailto` and
+	 * plain email address links.
+	 *
+	 * Requires the {@link ngSanitize `ngSanitize`} module to be installed.
+	 *
+	 * @param {string} text Input text.
+	 * @param {string} target Window (`_blank|_self|_parent|_top`) or named frame to open links in.
+	 * @param {object|function(url)} [attributes] Add custom attributes to the link element.
+	 *
+	 *    Can be one of:
+	 *
+	 *    - `object`: A map of attributes
+	 *    - `function`: Takes the url as a parameter and returns a map of attributes
+	 *
+	 *    If the map of attributes contains a value for `target`, it overrides the value of
+	 *    the target parameter.
+	 *
+	 *
+	 * @returns {string} Html-linkified and {@link $sanitize sanitized} text.
+	 *
+	 * @usage
+	   <span ng-bind-html="linky_expression | linky"></span>
+	 *
+	 * @example
+	   <example module="linkyExample" deps="angular-sanitize.js">
+	     <file name="index.html">
+	       <div ng-controller="ExampleController">
+	       Snippet: <textarea ng-model="snippet" cols="60" rows="3"></textarea>
+	       <table>
+	         <tr>
+	           <th>Filter</th>
+	           <th>Source</th>
+	           <th>Rendered</th>
+	         </tr>
+	         <tr id="linky-filter">
+	           <td>linky filter</td>
+	           <td>
+	             <pre>&lt;div ng-bind-html="snippet | linky"&gt;<br>&lt;/div&gt;</pre>
+	           </td>
+	           <td>
+	             <div ng-bind-html="snippet | linky"></div>
+	           </td>
+	         </tr>
+	         <tr id="linky-target">
+	          <td>linky target</td>
+	          <td>
+	            <pre>&lt;div ng-bind-html="snippetWithSingleURL | linky:'_blank'"&gt;<br>&lt;/div&gt;</pre>
+	          </td>
+	          <td>
+	            <div ng-bind-html="snippetWithSingleURL | linky:'_blank'"></div>
+	          </td>
+	         </tr>
+	         <tr id="linky-custom-attributes">
+	          <td>linky custom attributes</td>
+	          <td>
+	            <pre>&lt;div ng-bind-html="snippetWithSingleURL | linky:'_self':{rel: 'nofollow'}"&gt;<br>&lt;/div&gt;</pre>
+	          </td>
+	          <td>
+	            <div ng-bind-html="snippetWithSingleURL | linky:'_self':{rel: 'nofollow'}"></div>
+	          </td>
+	         </tr>
+	         <tr id="escaped-html">
+	           <td>no filter</td>
+	           <td><pre>&lt;div ng-bind="snippet"&gt;<br>&lt;/div&gt;</pre></td>
+	           <td><div ng-bind="snippet"></div></td>
+	         </tr>
+	       </table>
+	     </file>
+	     <file name="script.js">
+	       angular.module('linkyExample', ['ngSanitize'])
+	         .controller('ExampleController', ['$scope', function($scope) {
+	           $scope.snippet =
+	             'Pretty text with some links:\n'+
+	             'http://angularjs.org/,\n'+
+	             'mailto:us@somewhere.org,\n'+
+	             'another@somewhere.org,\n'+
+	             'and one more: ftp://127.0.0.1/.';
+	           $scope.snippetWithSingleURL = 'http://angularjs.org/';
+	         }]);
+	     </file>
+	     <file name="protractor.js" type="protractor">
+	       it('should linkify the snippet with urls', function() {
+	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+	             toBe('Pretty text with some links: http://angularjs.org/, us@somewhere.org, ' +
+	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(4);
+	       });
+
+	       it('should not linkify snippet without the linky filter', function() {
+	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText()).
+	             toBe('Pretty text with some links: http://angularjs.org/, mailto:us@somewhere.org, ' +
+	                  'another@somewhere.org, and one more: ftp://127.0.0.1/.');
+	         expect(element.all(by.css('#escaped-html a')).count()).toEqual(0);
+	       });
+
+	       it('should update', function() {
+	         element(by.model('snippet')).clear();
+	         element(by.model('snippet')).sendKeys('new http://link.');
+	         expect(element(by.id('linky-filter')).element(by.binding('snippet | linky')).getText()).
+	             toBe('new http://link.');
+	         expect(element.all(by.css('#linky-filter a')).count()).toEqual(1);
+	         expect(element(by.id('escaped-html')).element(by.binding('snippet')).getText())
+	             .toBe('new http://link.');
+	       });
+
+	       it('should work with the target property', function() {
+	        expect(element(by.id('linky-target')).
+	            element(by.binding("snippetWithSingleURL | linky:'_blank'")).getText()).
+	            toBe('http://angularjs.org/');
+	        expect(element(by.css('#linky-target a')).getAttribute('target')).toEqual('_blank');
+	       });
+
+	       it('should optionally add custom attributes', function() {
+	        expect(element(by.id('linky-custom-attributes')).
+	            element(by.binding("snippetWithSingleURL | linky:'_self':{rel: 'nofollow'}")).getText()).
+	            toBe('http://angularjs.org/');
+	        expect(element(by.css('#linky-custom-attributes a')).getAttribute('rel')).toEqual('nofollow');
+	       });
+	     </file>
+	   </example>
+	 */
+	angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
+	  var LINKY_URL_REGEXP =
+	        /((ftp|https?):\/\/|(www\.)|(mailto:)?[A-Za-z0-9._%+-]+@)\S*[^\s.;,(){}<>"\u201d\u2019]/i,
+	      MAILTO_REGEXP = /^mailto:/i;
+
+	  var linkyMinErr = angular.$$minErr('linky');
+	  var isString = angular.isString;
+
+	  return function(text, target, attributes) {
+	    if (text == null || text === '') return text;
+	    if (!isString(text)) throw linkyMinErr('notstring', 'Expected string but received: {0}', text);
+
+	    var match;
+	    var raw = text;
+	    var html = [];
+	    var url;
+	    var i;
+	    while ((match = raw.match(LINKY_URL_REGEXP))) {
+	      // We can not end in these as they are sometimes found at the end of the sentence
+	      url = match[0];
+	      // if we did not match ftp/http/www/mailto then assume mailto
+	      if (!match[2] && !match[4]) {
+	        url = (match[3] ? 'http://' : 'mailto:') + url;
+	      }
+	      i = match.index;
+	      addText(raw.substr(0, i));
+	      addLink(url, match[0].replace(MAILTO_REGEXP, ''));
+	      raw = raw.substring(i + match[0].length);
+	    }
+	    addText(raw);
+	    return $sanitize(html.join(''));
+
+	    function addText(text) {
+	      if (!text) {
+	        return;
+	      }
+	      html.push(sanitizeText(text));
+	    }
+
+	    function addLink(url, text) {
+	      var key;
+	      html.push('<a ');
+	      if (angular.isFunction(attributes)) {
+	        attributes = attributes(url);
+	      }
+	      if (angular.isObject(attributes)) {
+	        for (key in attributes) {
+	          html.push(key + '="' + attributes[key] + '" ');
+	        }
+	      } else {
+	        attributes = {};
+	      }
+	      if (angular.isDefined(target) && !('target' in attributes)) {
+	        html.push('target="',
+	                  target,
+	                  '" ');
+	      }
+	      html.push('href="',
+	                url.replace(/"/g, '&quot;'),
+	                '">');
+	      addText(text);
+	      html.push('</a>');
+	    }
+	  };
+	}]);
+
+
+	})(window, window.angular);
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = mdeditorDirective;
+	mdeditorDirective.$inject = ["MDEditorService"];
+
+	function mdeditorDirective(mdService) {
+	    return {
+	        restrict: "AE",
+	        scope: {
+	            md: "="
+	        },
+	        template: __webpack_require__(16),
+	        link: function link(scope, elems, attrs) {
+	            // get the markdown instance
+
+	            scope.md = scope.md || "";
+	            scope.html = "";
+
+	            scope.preview = function () {
+	                scope.html = mdService.toHTML(scope.md);
+	            };
+	            if (scope.md) {
+	                scope.preview();
+	            }
+	        }
+	    };
+	}
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"mdeditor\">\r\n    <div class=\"mdeditor__md\">\r\n        \r\n        <div class=\"mdeditor__specs\">\r\n            <div class=\"mdeditor__specs__group\">\r\n                <button class=\"mdeditor__spec mdeditor__spec--bold fa fa-bold\" title=\"Bold\"></button>\r\n                <button class=\"mdeditor__spec mdeditor__spec--italic fa fa-italic\" title=\"Italic\"></button>\r\n            </div>\r\n            <div class=\"mdeditor__specs__group\">\r\n                \r\n                <button class=\"mdeditor__spec fa fa-link\" title=\"Web Link\"></button>\r\n                <button class=\"mdeditor__spec fa fa-image\" title=\"Image\"></button>\r\n            </div>\r\n            <div class=\"mdeditor__specs__group\">\r\n                <button class=\"mdeditor__spec fa fa-quote-left\" title=\"Quote\"></button>\r\n                <button class=\"mdeditor__spec fa fa-code\" title=\"Code\"></button>            \r\n            </div>\r\n            <div class=\"mdeditor__specs__group\">\r\n                <button class=\"mdeditor__spec fa fa-list-ol\" title=\"Ordered List\"></button>\r\n                <button class=\"mdeditor__spec fa fa-list-ul\" title=\"Unordered List\"></button>\r\n            </div>\r\n            <div class=\"mdeditor__specs__group\">\r\n                <button class=\"mdeditor__spec fa fa-header\" title=\"Headings\"></button>\r\n                <button class=\"mdeditor__spec fa fa-paragraph\" title=\"Paragraph\"></button>\r\n            </div>\r\n            <div class=\"mdeditor__specs__group\">\r\n                <button class=\"mdeditor__spec fa fa-minus\" title=\"horizontal line\"></button>\r\n            </div>\r\n        </div>\r\n        <textarea name=\"mdeditorMD\" data-ng-model=\"md\" data-ng-change=\"preview()\" class=\"mdeditor__input\" cols=\"30\" rows=\"10\">\r\n            **Your post content**\r\n        </textarea>\r\n    </div>\r\n    <div class=\"mdeditor__html main-post__content\" data-ng-bind-html=\"html\">\r\n    </div>\r\n</div>"
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _markdown = __webpack_require__(18);
+
+	var _markdown2 = _interopRequireDefault(_markdown);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var MDEditorService = function () {
+	    function MDEditorService() {
+	        _classCallCheck(this, MDEditorService);
+
+	        this._markdown = _markdown2.default.markdown;
+	    }
+
+	    _createClass(MDEditorService, [{
+	        key: "toHTML",
+	        value: function toHTML(md) {
+	            return this._markdown.toHTML(md);
+	        }
+	    }]);
+
+	    return MDEditorService;
+	}();
+
+	exports.default = MDEditorService;
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// super simple module for the most common nodejs use case.
+	exports.markdown = __webpack_require__(19);
+	exports.parse = exports.markdown.toHTML;
+
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// Released under MIT license
+	// Copyright (c) 2009-2010 Dominic Baggott
+	// Copyright (c) 2009-2010 Ash Berlin
+	// Copyright (c) 2011 Christoph Dorn <christoph@christophdorn.com> (http://www.christophdorn.com)
+
+	/*jshint browser:true, devel:true */
+
+	(function( expose ) {
+
+	/**
+	 *  class Markdown
+	 *
+	 *  Markdown processing in Javascript done right. We have very particular views
+	 *  on what constitutes 'right' which include:
+	 *
+	 *  - produces well-formed HTML (this means that em and strong nesting is
+	 *    important)
+	 *
+	 *  - has an intermediate representation to allow processing of parsed data (We
+	 *    in fact have two, both as [JsonML]: a markdown tree and an HTML tree).
+	 *
+	 *  - is easily extensible to add new dialects without having to rewrite the
+	 *    entire parsing mechanics
+	 *
+	 *  - has a good test suite
+	 *
+	 *  This implementation fulfills all of these (except that the test suite could
+	 *  do with expanding to automatically run all the fixtures from other Markdown
+	 *  implementations.)
+	 *
+	 *  ##### Intermediate Representation
+	 *
+	 *  *TODO* Talk about this :) Its JsonML, but document the node names we use.
+	 *
+	 *  [JsonML]: http://jsonml.org/ "JSON Markup Language"
+	 **/
+	var Markdown = expose.Markdown = function(dialect) {
+	  switch (typeof dialect) {
+	    case "undefined":
+	      this.dialect = Markdown.dialects.Gruber;
+	      break;
+	    case "object":
+	      this.dialect = dialect;
+	      break;
+	    default:
+	      if ( dialect in Markdown.dialects ) {
+	        this.dialect = Markdown.dialects[dialect];
+	      }
+	      else {
+	        throw new Error("Unknown Markdown dialect '" + String(dialect) + "'");
+	      }
+	      break;
+	  }
+	  this.em_state = [];
+	  this.strong_state = [];
+	  this.debug_indent = "";
+	};
+
+	/**
+	 *  parse( markdown, [dialect] ) -> JsonML
+	 *  - markdown (String): markdown string to parse
+	 *  - dialect (String | Dialect): the dialect to use, defaults to gruber
+	 *
+	 *  Parse `markdown` and return a markdown document as a Markdown.JsonML tree.
+	 **/
+	expose.parse = function( source, dialect ) {
+	  // dialect will default if undefined
+	  var md = new Markdown( dialect );
+	  return md.toTree( source );
+	};
+
+	/**
+	 *  toHTML( markdown, [dialect]  ) -> String
+	 *  toHTML( md_tree ) -> String
+	 *  - markdown (String): markdown string to parse
+	 *  - md_tree (Markdown.JsonML): parsed markdown tree
+	 *
+	 *  Take markdown (either as a string or as a JsonML tree) and run it through
+	 *  [[toHTMLTree]] then turn it into a well-formated HTML fragment.
+	 **/
+	expose.toHTML = function toHTML( source , dialect , options ) {
+	  var input = expose.toHTMLTree( source , dialect , options );
+
+	  return expose.renderJsonML( input );
+	};
+
+	/**
+	 *  toHTMLTree( markdown, [dialect] ) -> JsonML
+	 *  toHTMLTree( md_tree ) -> JsonML
+	 *  - markdown (String): markdown string to parse
+	 *  - dialect (String | Dialect): the dialect to use, defaults to gruber
+	 *  - md_tree (Markdown.JsonML): parsed markdown tree
+	 *
+	 *  Turn markdown into HTML, represented as a JsonML tree. If a string is given
+	 *  to this function, it is first parsed into a markdown tree by calling
+	 *  [[parse]].
+	 **/
+	expose.toHTMLTree = function toHTMLTree( input, dialect , options ) {
+	  // convert string input to an MD tree
+	  if ( typeof input ==="string" ) input = this.parse( input, dialect );
+
+	  // Now convert the MD tree to an HTML tree
+
+	  // remove references from the tree
+	  var attrs = extract_attr( input ),
+	      refs = {};
+
+	  if ( attrs && attrs.references ) {
+	    refs = attrs.references;
+	  }
+
+	  var html = convert_tree_to_html( input, refs , options );
+	  merge_text_nodes( html );
+	  return html;
+	};
+
+	// For Spidermonkey based engines
+	function mk_block_toSource() {
+	  return "Markdown.mk_block( " +
+	          uneval(this.toString()) +
+	          ", " +
+	          uneval(this.trailing) +
+	          ", " +
+	          uneval(this.lineNumber) +
+	          " )";
+	}
+
+	// node
+	function mk_block_inspect() {
+	  var util = __webpack_require__(20);
+	  return "Markdown.mk_block( " +
+	          util.inspect(this.toString()) +
+	          ", " +
+	          util.inspect(this.trailing) +
+	          ", " +
+	          util.inspect(this.lineNumber) +
+	          " )";
+
+	}
+
+	var mk_block = Markdown.mk_block = function(block, trail, line) {
+	  // Be helpful for default case in tests.
+	  if ( arguments.length == 1 ) trail = "\n\n";
+
+	  var s = new String(block);
+	  s.trailing = trail;
+	  // To make it clear its not just a string
+	  s.inspect = mk_block_inspect;
+	  s.toSource = mk_block_toSource;
+
+	  if ( line != undefined )
+	    s.lineNumber = line;
+
+	  return s;
+	};
+
+	function count_lines( str ) {
+	  var n = 0, i = -1;
+	  while ( ( i = str.indexOf("\n", i + 1) ) !== -1 ) n++;
+	  return n;
+	}
+
+	// Internal - split source into rough blocks
+	Markdown.prototype.split_blocks = function splitBlocks( input, startLine ) {
+	  input = input.replace(/(\r\n|\n|\r)/g, "\n");
+	  // [\s\S] matches _anything_ (newline or space)
+	  // [^] is equivalent but doesn't work in IEs.
+	  var re = /([\s\S]+?)($|\n#|\n(?:\s*\n|$)+)/g,
+	      blocks = [],
+	      m;
+
+	  var line_no = 1;
+
+	  if ( ( m = /^(\s*\n)/.exec(input) ) != null ) {
+	    // skip (but count) leading blank lines
+	    line_no += count_lines( m[0] );
+	    re.lastIndex = m[0].length;
+	  }
+
+	  while ( ( m = re.exec(input) ) !== null ) {
+	    if (m[2] == "\n#") {
+	      m[2] = "\n";
+	      re.lastIndex--;
+	    }
+	    blocks.push( mk_block( m[1], m[2], line_no ) );
+	    line_no += count_lines( m[0] );
+	  }
+
+	  return blocks;
+	};
+
+	/**
+	 *  Markdown#processBlock( block, next ) -> undefined | [ JsonML, ... ]
+	 *  - block (String): the block to process
+	 *  - next (Array): the following blocks
+	 *
+	 * Process `block` and return an array of JsonML nodes representing `block`.
+	 *
+	 * It does this by asking each block level function in the dialect to process
+	 * the block until one can. Succesful handling is indicated by returning an
+	 * array (with zero or more JsonML nodes), failure by a false value.
+	 *
+	 * Blocks handlers are responsible for calling [[Markdown#processInline]]
+	 * themselves as appropriate.
+	 *
+	 * If the blocks were split incorrectly or adjacent blocks need collapsing you
+	 * can adjust `next` in place using shift/splice etc.
+	 *
+	 * If any of this default behaviour is not right for the dialect, you can
+	 * define a `__call__` method on the dialect that will get invoked to handle
+	 * the block processing.
+	 */
+	Markdown.prototype.processBlock = function processBlock( block, next ) {
+	  var cbs = this.dialect.block,
+	      ord = cbs.__order__;
+
+	  if ( "__call__" in cbs ) {
+	    return cbs.__call__.call(this, block, next);
+	  }
+
+	  for ( var i = 0; i < ord.length; i++ ) {
+	    //D:this.debug( "Testing", ord[i] );
+	    var res = cbs[ ord[i] ].call( this, block, next );
+	    if ( res ) {
+	      //D:this.debug("  matched");
+	      if ( !isArray(res) || ( res.length > 0 && !( isArray(res[0]) ) ) )
+	        this.debug(ord[i], "didn't return a proper array");
+	      //D:this.debug( "" );
+	      return res;
+	    }
+	  }
+
+	  // Uhoh! no match! Should we throw an error?
+	  return [];
+	};
+
+	Markdown.prototype.processInline = function processInline( block ) {
+	  return this.dialect.inline.__call__.call( this, String( block ) );
+	};
+
+	/**
+	 *  Markdown#toTree( source ) -> JsonML
+	 *  - source (String): markdown source to parse
+	 *
+	 *  Parse `source` into a JsonML tree representing the markdown document.
+	 **/
+	// custom_tree means set this.tree to `custom_tree` and restore old value on return
+	Markdown.prototype.toTree = function toTree( source, custom_root ) {
+	  var blocks = source instanceof Array ? source : this.split_blocks( source );
+
+	  // Make tree a member variable so its easier to mess with in extensions
+	  var old_tree = this.tree;
+	  try {
+	    this.tree = custom_root || this.tree || [ "markdown" ];
+
+	    blocks:
+	    while ( blocks.length ) {
+	      var b = this.processBlock( blocks.shift(), blocks );
+
+	      // Reference blocks and the like won't return any content
+	      if ( !b.length ) continue blocks;
+
+	      this.tree.push.apply( this.tree, b );
+	    }
+	    return this.tree;
+	  }
+	  finally {
+	    if ( custom_root ) {
+	      this.tree = old_tree;
+	    }
+	  }
+	};
+
+	// Noop by default
+	Markdown.prototype.debug = function () {
+	  var args = Array.prototype.slice.call( arguments);
+	  args.unshift(this.debug_indent);
+	  if ( typeof print !== "undefined" )
+	      print.apply( print, args );
+	  if ( typeof console !== "undefined" && typeof console.log !== "undefined" )
+	      console.log.apply( null, args );
+	}
+
+	Markdown.prototype.loop_re_over_block = function( re, block, cb ) {
+	  // Dont use /g regexps with this
+	  var m,
+	      b = block.valueOf();
+
+	  while ( b.length && (m = re.exec(b) ) != null ) {
+	    b = b.substr( m[0].length );
+	    cb.call(this, m);
+	  }
+	  return b;
+	};
+
+	/**
+	 * Markdown.dialects
+	 *
+	 * Namespace of built-in dialects.
+	 **/
+	Markdown.dialects = {};
+
+	/**
+	 * Markdown.dialects.Gruber
+	 *
+	 * The default dialect that follows the rules set out by John Gruber's
+	 * markdown.pl as closely as possible. Well actually we follow the behaviour of
+	 * that script which in some places is not exactly what the syntax web page
+	 * says.
+	 **/
+	Markdown.dialects.Gruber = {
+	  block: {
+	    atxHeader: function atxHeader( block, next ) {
+	      var m = block.match( /^(#{1,6})\s*(.*?)\s*#*\s*(?:\n|$)/ );
+
+	      if ( !m ) return undefined;
+
+	      var header = [ "header", { level: m[ 1 ].length } ];
+	      Array.prototype.push.apply(header, this.processInline(m[ 2 ]));
+
+	      if ( m[0].length < block.length )
+	        next.unshift( mk_block( block.substr( m[0].length ), block.trailing, block.lineNumber + 2 ) );
+
+	      return [ header ];
+	    },
+
+	    setextHeader: function setextHeader( block, next ) {
+	      var m = block.match( /^(.*)\n([-=])\2\2+(?:\n|$)/ );
+
+	      if ( !m ) return undefined;
+
+	      var level = ( m[ 2 ] === "=" ) ? 1 : 2;
+	      var header = [ "header", { level : level }, m[ 1 ] ];
+
+	      if ( m[0].length < block.length )
+	        next.unshift( mk_block( block.substr( m[0].length ), block.trailing, block.lineNumber + 2 ) );
+
+	      return [ header ];
+	    },
+
+	    code: function code( block, next ) {
+	      // |    Foo
+	      // |bar
+	      // should be a code block followed by a paragraph. Fun
+	      //
+	      // There might also be adjacent code block to merge.
+
+	      var ret = [],
+	          re = /^(?: {0,3}\t| {4})(.*)\n?/,
+	          lines;
+
+	      // 4 spaces + content
+	      if ( !block.match( re ) ) return undefined;
+
+	      block_search:
+	      do {
+	        // Now pull out the rest of the lines
+	        var b = this.loop_re_over_block(
+	                  re, block.valueOf(), function( m ) { ret.push( m[1] ); } );
+
+	        if ( b.length ) {
+	          // Case alluded to in first comment. push it back on as a new block
+	          next.unshift( mk_block(b, block.trailing) );
+	          break block_search;
+	        }
+	        else if ( next.length ) {
+	          // Check the next block - it might be code too
+	          if ( !next[0].match( re ) ) break block_search;
+
+	          // Pull how how many blanks lines follow - minus two to account for .join
+	          ret.push ( block.trailing.replace(/[^\n]/g, "").substring(2) );
+
+	          block = next.shift();
+	        }
+	        else {
+	          break block_search;
+	        }
+	      } while ( true );
+
+	      return [ [ "code_block", ret.join("\n") ] ];
+	    },
+
+	    horizRule: function horizRule( block, next ) {
+	      // this needs to find any hr in the block to handle abutting blocks
+	      var m = block.match( /^(?:([\s\S]*?)\n)?[ \t]*([-_*])(?:[ \t]*\2){2,}[ \t]*(?:\n([\s\S]*))?$/ );
+
+	      if ( !m ) {
+	        return undefined;
+	      }
+
+	      var jsonml = [ [ "hr" ] ];
+
+	      // if there's a leading abutting block, process it
+	      if ( m[ 1 ] ) {
+	        jsonml.unshift.apply( jsonml, this.processBlock( m[ 1 ], [] ) );
+	      }
+
+	      // if there's a trailing abutting block, stick it into next
+	      if ( m[ 3 ] ) {
+	        next.unshift( mk_block( m[ 3 ] ) );
+	      }
+
+	      return jsonml;
+	    },
+
+	    // There are two types of lists. Tight and loose. Tight lists have no whitespace
+	    // between the items (and result in text just in the <li>) and loose lists,
+	    // which have an empty line between list items, resulting in (one or more)
+	    // paragraphs inside the <li>.
+	    //
+	    // There are all sorts weird edge cases about the original markdown.pl's
+	    // handling of lists:
+	    //
+	    // * Nested lists are supposed to be indented by four chars per level. But
+	    //   if they aren't, you can get a nested list by indenting by less than
+	    //   four so long as the indent doesn't match an indent of an existing list
+	    //   item in the 'nest stack'.
+	    //
+	    // * The type of the list (bullet or number) is controlled just by the
+	    //    first item at the indent. Subsequent changes are ignored unless they
+	    //    are for nested lists
+	    //
+	    lists: (function( ) {
+	      // Use a closure to hide a few variables.
+	      var any_list = "[*+-]|\\d+\\.",
+	          bullet_list = /[*+-]/,
+	          number_list = /\d+\./,
+	          // Capture leading indent as it matters for determining nested lists.
+	          is_list_re = new RegExp( "^( {0,3})(" + any_list + ")[ \t]+" ),
+	          indent_re = "(?: {0,3}\\t| {4})";
+
+	      // TODO: Cache this regexp for certain depths.
+	      // Create a regexp suitable for matching an li for a given stack depth
+	      function regex_for_depth( depth ) {
+
+	        return new RegExp(
+	          // m[1] = indent, m[2] = list_type
+	          "(?:^(" + indent_re + "{0," + depth + "} {0,3})(" + any_list + ")\\s+)|" +
+	          // m[3] = cont
+	          "(^" + indent_re + "{0," + (depth-1) + "}[ ]{0,4})"
+	        );
+	      }
+	      function expand_tab( input ) {
+	        return input.replace( / {0,3}\t/g, "    " );
+	      }
+
+	      // Add inline content `inline` to `li`. inline comes from processInline
+	      // so is an array of content
+	      function add(li, loose, inline, nl) {
+	        if ( loose ) {
+	          li.push( [ "para" ].concat(inline) );
+	          return;
+	        }
+	        // Hmmm, should this be any block level element or just paras?
+	        var add_to = li[li.length -1] instanceof Array && li[li.length - 1][0] == "para"
+	                   ? li[li.length -1]
+	                   : li;
+
+	        // If there is already some content in this list, add the new line in
+	        if ( nl && li.length > 1 ) inline.unshift(nl);
+
+	        for ( var i = 0; i < inline.length; i++ ) {
+	          var what = inline[i],
+	              is_str = typeof what == "string";
+	          if ( is_str && add_to.length > 1 && typeof add_to[add_to.length-1] == "string" ) {
+	            add_to[ add_to.length-1 ] += what;
+	          }
+	          else {
+	            add_to.push( what );
+	          }
+	        }
+	      }
+
+	      // contained means have an indent greater than the current one. On
+	      // *every* line in the block
+	      function get_contained_blocks( depth, blocks ) {
+
+	        var re = new RegExp( "^(" + indent_re + "{" + depth + "}.*?\\n?)*$" ),
+	            replace = new RegExp("^" + indent_re + "{" + depth + "}", "gm"),
+	            ret = [];
+
+	        while ( blocks.length > 0 ) {
+	          if ( re.exec( blocks[0] ) ) {
+	            var b = blocks.shift(),
+	                // Now remove that indent
+	                x = b.replace( replace, "");
+
+	            ret.push( mk_block( x, b.trailing, b.lineNumber ) );
+	          }
+	          else {
+	            break;
+	          }
+	        }
+	        return ret;
+	      }
+
+	      // passed to stack.forEach to turn list items up the stack into paras
+	      function paragraphify(s, i, stack) {
+	        var list = s.list;
+	        var last_li = list[list.length-1];
+
+	        if ( last_li[1] instanceof Array && last_li[1][0] == "para" ) {
+	          return;
+	        }
+	        if ( i + 1 == stack.length ) {
+	          // Last stack frame
+	          // Keep the same array, but replace the contents
+	          last_li.push( ["para"].concat( last_li.splice(1, last_li.length - 1) ) );
+	        }
+	        else {
+	          var sublist = last_li.pop();
+	          last_li.push( ["para"].concat( last_li.splice(1, last_li.length - 1) ), sublist );
+	        }
+	      }
+
+	      // The matcher function
+	      return function( block, next ) {
+	        var m = block.match( is_list_re );
+	        if ( !m ) return undefined;
+
+	        function make_list( m ) {
+	          var list = bullet_list.exec( m[2] )
+	                   ? ["bulletlist"]
+	                   : ["numberlist"];
+
+	          stack.push( { list: list, indent: m[1] } );
+	          return list;
+	        }
+
+
+	        var stack = [], // Stack of lists for nesting.
+	            list = make_list( m ),
+	            last_li,
+	            loose = false,
+	            ret = [ stack[0].list ],
+	            i;
+
+	        // Loop to search over block looking for inner block elements and loose lists
+	        loose_search:
+	        while ( true ) {
+	          // Split into lines preserving new lines at end of line
+	          var lines = block.split( /(?=\n)/ );
+
+	          // We have to grab all lines for a li and call processInline on them
+	          // once as there are some inline things that can span lines.
+	          var li_accumulate = "";
+
+	          // Loop over the lines in this block looking for tight lists.
+	          tight_search:
+	          for ( var line_no = 0; line_no < lines.length; line_no++ ) {
+	            var nl = "",
+	                l = lines[line_no].replace(/^\n/, function(n) { nl = n; return ""; });
+
+	            // TODO: really should cache this
+	            var line_re = regex_for_depth( stack.length );
+
+	            m = l.match( line_re );
+	            //print( "line:", uneval(l), "\nline match:", uneval(m) );
+
+	            // We have a list item
+	            if ( m[1] !== undefined ) {
+	              // Process the previous list item, if any
+	              if ( li_accumulate.length ) {
+	                add( last_li, loose, this.processInline( li_accumulate ), nl );
+	                // Loose mode will have been dealt with. Reset it
+	                loose = false;
+	                li_accumulate = "";
+	              }
+
+	              m[1] = expand_tab( m[1] );
+	              var wanted_depth = Math.floor(m[1].length/4)+1;
+	              //print( "want:", wanted_depth, "stack:", stack.length);
+	              if ( wanted_depth > stack.length ) {
+	                // Deep enough for a nested list outright
+	                //print ( "new nested list" );
+	                list = make_list( m );
+	                last_li.push( list );
+	                last_li = list[1] = [ "listitem" ];
+	              }
+	              else {
+	                // We aren't deep enough to be strictly a new level. This is
+	                // where Md.pl goes nuts. If the indent matches a level in the
+	                // stack, put it there, else put it one deeper then the
+	                // wanted_depth deserves.
+	                var found = false;
+	                for ( i = 0; i < stack.length; i++ ) {
+	                  if ( stack[ i ].indent != m[1] ) continue;
+	                  list = stack[ i ].list;
+	                  stack.splice( i+1, stack.length - (i+1) );
+	                  found = true;
+	                  break;
+	                }
+
+	                if (!found) {
+	                  //print("not found. l:", uneval(l));
+	                  wanted_depth++;
+	                  if ( wanted_depth <= stack.length ) {
+	                    stack.splice(wanted_depth, stack.length - wanted_depth);
+	                    //print("Desired depth now", wanted_depth, "stack:", stack.length);
+	                    list = stack[wanted_depth-1].list;
+	                    //print("list:", uneval(list) );
+	                  }
+	                  else {
+	                    //print ("made new stack for messy indent");
+	                    list = make_list(m);
+	                    last_li.push(list);
+	                  }
+	                }
+
+	                //print( uneval(list), "last", list === stack[stack.length-1].list );
+	                last_li = [ "listitem" ];
+	                list.push(last_li);
+	              } // end depth of shenegains
+	              nl = "";
+	            }
+
+	            // Add content
+	            if ( l.length > m[0].length ) {
+	              li_accumulate += nl + l.substr( m[0].length );
+	            }
+	          } // tight_search
+
+	          if ( li_accumulate.length ) {
+	            add( last_li, loose, this.processInline( li_accumulate ), nl );
+	            // Loose mode will have been dealt with. Reset it
+	            loose = false;
+	            li_accumulate = "";
+	          }
+
+	          // Look at the next block - we might have a loose list. Or an extra
+	          // paragraph for the current li
+	          var contained = get_contained_blocks( stack.length, next );
+
+	          // Deal with code blocks or properly nested lists
+	          if ( contained.length > 0 ) {
+	            // Make sure all listitems up the stack are paragraphs
+	            forEach( stack, paragraphify, this);
+
+	            last_li.push.apply( last_li, this.toTree( contained, [] ) );
+	          }
+
+	          var next_block = next[0] && next[0].valueOf() || "";
+
+	          if ( next_block.match(is_list_re) || next_block.match( /^ / ) ) {
+	            block = next.shift();
+
+	            // Check for an HR following a list: features/lists/hr_abutting
+	            var hr = this.dialect.block.horizRule( block, next );
+
+	            if ( hr ) {
+	              ret.push.apply(ret, hr);
+	              break;
+	            }
+
+	            // Make sure all listitems up the stack are paragraphs
+	            forEach( stack, paragraphify, this);
+
+	            loose = true;
+	            continue loose_search;
+	          }
+	          break;
+	        } // loose_search
+
+	        return ret;
+	      };
+	    })(),
+
+	    blockquote: function blockquote( block, next ) {
+	      if ( !block.match( /^>/m ) )
+	        return undefined;
+
+	      var jsonml = [];
+
+	      // separate out the leading abutting block, if any. I.e. in this case:
+	      //
+	      //  a
+	      //  > b
+	      //
+	      if ( block[ 0 ] != ">" ) {
+	        var lines = block.split( /\n/ ),
+	            prev = [],
+	            line_no = block.lineNumber;
+
+	        // keep shifting lines until you find a crotchet
+	        while ( lines.length && lines[ 0 ][ 0 ] != ">" ) {
+	            prev.push( lines.shift() );
+	            line_no++;
+	        }
+
+	        var abutting = mk_block( prev.join( "\n" ), "\n", block.lineNumber );
+	        jsonml.push.apply( jsonml, this.processBlock( abutting, [] ) );
+	        // reassemble new block of just block quotes!
+	        block = mk_block( lines.join( "\n" ), block.trailing, line_no );
+	      }
+
+
+	      // if the next block is also a blockquote merge it in
+	      while ( next.length && next[ 0 ][ 0 ] == ">" ) {
+	        var b = next.shift();
+	        block = mk_block( block + block.trailing + b, b.trailing, block.lineNumber );
+	      }
+
+	      // Strip off the leading "> " and re-process as a block.
+	      var input = block.replace( /^> ?/gm, "" ),
+	          old_tree = this.tree,
+	          processedBlock = this.toTree( input, [ "blockquote" ] ),
+	          attr = extract_attr( processedBlock );
+
+	      // If any link references were found get rid of them
+	      if ( attr && attr.references ) {
+	        delete attr.references;
+	        // And then remove the attribute object if it's empty
+	        if ( isEmpty( attr ) ) {
+	          processedBlock.splice( 1, 1 );
+	        }
+	      }
+
+	      jsonml.push( processedBlock );
+	      return jsonml;
+	    },
+
+	    referenceDefn: function referenceDefn( block, next) {
+	      var re = /^\s*\[(.*?)\]:\s*(\S+)(?:\s+(?:(['"])(.*?)\3|\((.*?)\)))?\n?/;
+	      // interesting matches are [ , ref_id, url, , title, title ]
+
+	      if ( !block.match(re) )
+	        return undefined;
+
+	      // make an attribute node if it doesn't exist
+	      if ( !extract_attr( this.tree ) ) {
+	        this.tree.splice( 1, 0, {} );
+	      }
+
+	      var attrs = extract_attr( this.tree );
+
+	      // make a references hash if it doesn't exist
+	      if ( attrs.references === undefined ) {
+	        attrs.references = {};
+	      }
+
+	      var b = this.loop_re_over_block(re, block, function( m ) {
+
+	        if ( m[2] && m[2][0] == "<" && m[2][m[2].length-1] == ">" )
+	          m[2] = m[2].substring( 1, m[2].length - 1 );
+
+	        var ref = attrs.references[ m[1].toLowerCase() ] = {
+	          href: m[2]
+	        };
+
+	        if ( m[4] !== undefined )
+	          ref.title = m[4];
+	        else if ( m[5] !== undefined )
+	          ref.title = m[5];
+
+	      } );
+
+	      if ( b.length )
+	        next.unshift( mk_block( b, block.trailing ) );
+
+	      return [];
+	    },
+
+	    para: function para( block, next ) {
+	      // everything's a para!
+	      return [ ["para"].concat( this.processInline( block ) ) ];
+	    }
+	  }
+	};
+
+	Markdown.dialects.Gruber.inline = {
+
+	    __oneElement__: function oneElement( text, patterns_or_re, previous_nodes ) {
+	      var m,
+	          res,
+	          lastIndex = 0;
+
+	      patterns_or_re = patterns_or_re || this.dialect.inline.__patterns__;
+	      var re = new RegExp( "([\\s\\S]*?)(" + (patterns_or_re.source || patterns_or_re) + ")" );
+
+	      m = re.exec( text );
+	      if (!m) {
+	        // Just boring text
+	        return [ text.length, text ];
+	      }
+	      else if ( m[1] ) {
+	        // Some un-interesting text matched. Return that first
+	        return [ m[1].length, m[1] ];
+	      }
+
+	      var res;
+	      if ( m[2] in this.dialect.inline ) {
+	        res = this.dialect.inline[ m[2] ].call(
+	                  this,
+	                  text.substr( m.index ), m, previous_nodes || [] );
+	      }
+	      // Default for now to make dev easier. just slurp special and output it.
+	      res = res || [ m[2].length, m[2] ];
+	      return res;
+	    },
+
+	    __call__: function inline( text, patterns ) {
+
+	      var out = [],
+	          res;
+
+	      function add(x) {
+	        //D:self.debug("  adding output", uneval(x));
+	        if ( typeof x == "string" && typeof out[out.length-1] == "string" )
+	          out[ out.length-1 ] += x;
+	        else
+	          out.push(x);
+	      }
+
+	      while ( text.length > 0 ) {
+	        res = this.dialect.inline.__oneElement__.call(this, text, patterns, out );
+	        text = text.substr( res.shift() );
+	        forEach(res, add )
+	      }
+
+	      return out;
+	    },
+
+	    // These characters are intersting elsewhere, so have rules for them so that
+	    // chunks of plain text blocks don't include them
+	    "]": function () {},
+	    "}": function () {},
+
+	    __escape__ : /^\\[\\`\*_{}\[\]()#\+.!\-]/,
+
+	    "\\": function escaped( text ) {
+	      // [ length of input processed, node/children to add... ]
+	      // Only esacape: \ ` * _ { } [ ] ( ) # * + - . !
+	      if ( this.dialect.inline.__escape__.exec( text ) )
+	        return [ 2, text.charAt( 1 ) ];
+	      else
+	        // Not an esacpe
+	        return [ 1, "\\" ];
+	    },
+
+	    "![": function image( text ) {
+
+	      // Unlike images, alt text is plain text only. no other elements are
+	      // allowed in there
+
+	      // ![Alt text](/path/to/img.jpg "Optional title")
+	      //      1          2            3       4         <--- captures
+	      var m = text.match( /^!\[(.*?)\][ \t]*\([ \t]*([^")]*?)(?:[ \t]+(["'])(.*?)\3)?[ \t]*\)/ );
+
+	      if ( m ) {
+	        if ( m[2] && m[2][0] == "<" && m[2][m[2].length-1] == ">" )
+	          m[2] = m[2].substring( 1, m[2].length - 1 );
+
+	        m[2] = this.dialect.inline.__call__.call( this, m[2], /\\/ )[0];
+
+	        var attrs = { alt: m[1], href: m[2] || "" };
+	        if ( m[4] !== undefined)
+	          attrs.title = m[4];
+
+	        return [ m[0].length, [ "img", attrs ] ];
+	      }
+
+	      // ![Alt text][id]
+	      m = text.match( /^!\[(.*?)\][ \t]*\[(.*?)\]/ );
+
+	      if ( m ) {
+	        // We can't check if the reference is known here as it likely wont be
+	        // found till after. Check it in md tree->hmtl tree conversion
+	        return [ m[0].length, [ "img_ref", { alt: m[1], ref: m[2].toLowerCase(), original: m[0] } ] ];
+	      }
+
+	      // Just consume the '!['
+	      return [ 2, "![" ];
+	    },
+
+	    "[": function link( text ) {
+
+	      var orig = String(text);
+	      // Inline content is possible inside `link text`
+	      var res = Markdown.DialectHelpers.inline_until_char.call( this, text.substr(1), "]" );
+
+	      // No closing ']' found. Just consume the [
+	      if ( !res ) return [ 1, "[" ];
+
+	      var consumed = 1 + res[ 0 ],
+	          children = res[ 1 ],
+	          link,
+	          attrs;
+
+	      // At this point the first [...] has been parsed. See what follows to find
+	      // out which kind of link we are (reference or direct url)
+	      text = text.substr( consumed );
+
+	      // [link text](/path/to/img.jpg "Optional title")
+	      //                 1            2       3         <--- captures
+	      // This will capture up to the last paren in the block. We then pull
+	      // back based on if there a matching ones in the url
+	      //    ([here](/url/(test))
+	      // The parens have to be balanced
+	      var m = text.match( /^\s*\([ \t]*([^"']*)(?:[ \t]+(["'])(.*?)\2)?[ \t]*\)/ );
+	      if ( m ) {
+	        var url = m[1];
+	        consumed += m[0].length;
+
+	        if ( url && url[0] == "<" && url[url.length-1] == ">" )
+	          url = url.substring( 1, url.length - 1 );
+
+	        // If there is a title we don't have to worry about parens in the url
+	        if ( !m[3] ) {
+	          var open_parens = 1; // One open that isn't in the capture
+	          for ( var len = 0; len < url.length; len++ ) {
+	            switch ( url[len] ) {
+	            case "(":
+	              open_parens++;
+	              break;
+	            case ")":
+	              if ( --open_parens == 0) {
+	                consumed -= url.length - len;
+	                url = url.substring(0, len);
+	              }
+	              break;
+	            }
+	          }
+	        }
+
+	        // Process escapes only
+	        url = this.dialect.inline.__call__.call( this, url, /\\/ )[0];
+
+	        attrs = { href: url || "" };
+	        if ( m[3] !== undefined)
+	          attrs.title = m[3];
+
+	        link = [ "link", attrs ].concat( children );
+	        return [ consumed, link ];
+	      }
+
+	      // [Alt text][id]
+	      // [Alt text] [id]
+	      m = text.match( /^\s*\[(.*?)\]/ );
+
+	      if ( m ) {
+
+	        consumed += m[ 0 ].length;
+
+	        // [links][] uses links as its reference
+	        attrs = { ref: ( m[ 1 ] || String(children) ).toLowerCase(),  original: orig.substr( 0, consumed ) };
+
+	        link = [ "link_ref", attrs ].concat( children );
+
+	        // We can't check if the reference is known here as it likely wont be
+	        // found till after. Check it in md tree->hmtl tree conversion.
+	        // Store the original so that conversion can revert if the ref isn't found.
+	        return [ consumed, link ];
+	      }
+
+	      // [id]
+	      // Only if id is plain (no formatting.)
+	      if ( children.length == 1 && typeof children[0] == "string" ) {
+
+	        attrs = { ref: children[0].toLowerCase(),  original: orig.substr( 0, consumed ) };
+	        link = [ "link_ref", attrs, children[0] ];
+	        return [ consumed, link ];
+	      }
+
+	      // Just consume the "["
+	      return [ 1, "[" ];
+	    },
+
+
+	    "<": function autoLink( text ) {
+	      var m;
+
+	      if ( ( m = text.match( /^<(?:((https?|ftp|mailto):[^>]+)|(.*?@.*?\.[a-zA-Z]+))>/ ) ) != null ) {
+	        if ( m[3] ) {
+	          return [ m[0].length, [ "link", { href: "mailto:" + m[3] }, m[3] ] ];
+
+	        }
+	        else if ( m[2] == "mailto" ) {
+	          return [ m[0].length, [ "link", { href: m[1] }, m[1].substr("mailto:".length ) ] ];
+	        }
+	        else
+	          return [ m[0].length, [ "link", { href: m[1] }, m[1] ] ];
+	      }
+
+	      return [ 1, "<" ];
+	    },
+
+	    "`": function inlineCode( text ) {
+	      // Inline code block. as many backticks as you like to start it
+	      // Always skip over the opening ticks.
+	      var m = text.match( /(`+)(([\s\S]*?)\1)/ );
+
+	      if ( m && m[2] )
+	        return [ m[1].length + m[2].length, [ "inlinecode", m[3] ] ];
+	      else {
+	        // TODO: No matching end code found - warn!
+	        return [ 1, "`" ];
+	      }
+	    },
+
+	    "  \n": function lineBreak( text ) {
+	      return [ 3, [ "linebreak" ] ];
+	    }
+
+	};
+
+	// Meta Helper/generator method for em and strong handling
+	function strong_em( tag, md ) {
+
+	  var state_slot = tag + "_state",
+	      other_slot = tag == "strong" ? "em_state" : "strong_state";
+
+	  function CloseTag(len) {
+	    this.len_after = len;
+	    this.name = "close_" + md;
+	  }
+
+	  return function ( text, orig_match ) {
+
+	    if ( this[state_slot][0] == md ) {
+	      // Most recent em is of this type
+	      //D:this.debug("closing", md);
+	      this[state_slot].shift();
+
+	      // "Consume" everything to go back to the recrusion in the else-block below
+	      return[ text.length, new CloseTag(text.length-md.length) ];
+	    }
+	    else {
+	      // Store a clone of the em/strong states
+	      var other = this[other_slot].slice(),
+	          state = this[state_slot].slice();
+
+	      this[state_slot].unshift(md);
+
+	      //D:this.debug_indent += "  ";
+
+	      // Recurse
+	      var res = this.processInline( text.substr( md.length ) );
+	      //D:this.debug_indent = this.debug_indent.substr(2);
+
+	      var last = res[res.length - 1];
+
+	      //D:this.debug("processInline from", tag + ": ", uneval( res ) );
+
+	      var check = this[state_slot].shift();
+	      if ( last instanceof CloseTag ) {
+	        res.pop();
+	        // We matched! Huzzah.
+	        var consumed = text.length - last.len_after;
+	        return [ consumed, [ tag ].concat(res) ];
+	      }
+	      else {
+	        // Restore the state of the other kind. We might have mistakenly closed it.
+	        this[other_slot] = other;
+	        this[state_slot] = state;
+
+	        // We can't reuse the processed result as it could have wrong parsing contexts in it.
+	        return [ md.length, md ];
+	      }
+	    }
+	  }; // End returned function
+	}
+
+	Markdown.dialects.Gruber.inline["**"] = strong_em("strong", "**");
+	Markdown.dialects.Gruber.inline["__"] = strong_em("strong", "__");
+	Markdown.dialects.Gruber.inline["*"]  = strong_em("em", "*");
+	Markdown.dialects.Gruber.inline["_"]  = strong_em("em", "_");
+
+
+	// Build default order from insertion order.
+	Markdown.buildBlockOrder = function(d) {
+	  var ord = [];
+	  for ( var i in d ) {
+	    if ( i == "__order__" || i == "__call__" ) continue;
+	    ord.push( i );
+	  }
+	  d.__order__ = ord;
+	};
+
+	// Build patterns for inline matcher
+	Markdown.buildInlinePatterns = function(d) {
+	  var patterns = [];
+
+	  for ( var i in d ) {
+	    // __foo__ is reserved and not a pattern
+	    if ( i.match( /^__.*__$/) ) continue;
+	    var l = i.replace( /([\\.*+?|()\[\]{}])/g, "\\$1" )
+	             .replace( /\n/, "\\n" );
+	    patterns.push( i.length == 1 ? l : "(?:" + l + ")" );
+	  }
+
+	  patterns = patterns.join("|");
+	  d.__patterns__ = patterns;
+	  //print("patterns:", uneval( patterns ) );
+
+	  var fn = d.__call__;
+	  d.__call__ = function(text, pattern) {
+	    if ( pattern != undefined ) {
+	      return fn.call(this, text, pattern);
+	    }
+	    else
+	    {
+	      return fn.call(this, text, patterns);
+	    }
+	  };
+	};
+
+	Markdown.DialectHelpers = {};
+	Markdown.DialectHelpers.inline_until_char = function( text, want ) {
+	  var consumed = 0,
+	      nodes = [];
+
+	  while ( true ) {
+	    if ( text.charAt( consumed ) == want ) {
+	      // Found the character we were looking for
+	      consumed++;
+	      return [ consumed, nodes ];
+	    }
+
+	    if ( consumed >= text.length ) {
+	      // No closing char found. Abort.
+	      return null;
+	    }
+
+	    var res = this.dialect.inline.__oneElement__.call(this, text.substr( consumed ) );
+	    consumed += res[ 0 ];
+	    // Add any returned nodes.
+	    nodes.push.apply( nodes, res.slice( 1 ) );
+	  }
+	}
+
+	// Helper function to make sub-classing a dialect easier
+	Markdown.subclassDialect = function( d ) {
+	  function Block() {}
+	  Block.prototype = d.block;
+	  function Inline() {}
+	  Inline.prototype = d.inline;
+
+	  return { block: new Block(), inline: new Inline() };
+	};
+
+	Markdown.buildBlockOrder ( Markdown.dialects.Gruber.block );
+	Markdown.buildInlinePatterns( Markdown.dialects.Gruber.inline );
+
+	Markdown.dialects.Maruku = Markdown.subclassDialect( Markdown.dialects.Gruber );
+
+	Markdown.dialects.Maruku.processMetaHash = function processMetaHash( meta_string ) {
+	  var meta = split_meta_hash( meta_string ),
+	      attr = {};
+
+	  for ( var i = 0; i < meta.length; ++i ) {
+	    // id: #foo
+	    if ( /^#/.test( meta[ i ] ) ) {
+	      attr.id = meta[ i ].substring( 1 );
+	    }
+	    // class: .foo
+	    else if ( /^\./.test( meta[ i ] ) ) {
+	      // if class already exists, append the new one
+	      if ( attr["class"] ) {
+	        attr["class"] = attr["class"] + meta[ i ].replace( /./, " " );
+	      }
+	      else {
+	        attr["class"] = meta[ i ].substring( 1 );
+	      }
+	    }
+	    // attribute: foo=bar
+	    else if ( /\=/.test( meta[ i ] ) ) {
+	      var s = meta[ i ].split( /\=/ );
+	      attr[ s[ 0 ] ] = s[ 1 ];
+	    }
+	  }
+
+	  return attr;
+	}
+
+	function split_meta_hash( meta_string ) {
+	  var meta = meta_string.split( "" ),
+	      parts = [ "" ],
+	      in_quotes = false;
+
+	  while ( meta.length ) {
+	    var letter = meta.shift();
+	    switch ( letter ) {
+	      case " " :
+	        // if we're in a quoted section, keep it
+	        if ( in_quotes ) {
+	          parts[ parts.length - 1 ] += letter;
+	        }
+	        // otherwise make a new part
+	        else {
+	          parts.push( "" );
+	        }
+	        break;
+	      case "'" :
+	      case '"' :
+	        // reverse the quotes and move straight on
+	        in_quotes = !in_quotes;
+	        break;
+	      case "\\" :
+	        // shift off the next letter to be used straight away.
+	        // it was escaped so we'll keep it whatever it is
+	        letter = meta.shift();
+	      default :
+	        parts[ parts.length - 1 ] += letter;
+	        break;
+	    }
+	  }
+
+	  return parts;
+	}
+
+	Markdown.dialects.Maruku.block.document_meta = function document_meta( block, next ) {
+	  // we're only interested in the first block
+	  if ( block.lineNumber > 1 ) return undefined;
+
+	  // document_meta blocks consist of one or more lines of `Key: Value\n`
+	  if ( ! block.match( /^(?:\w+:.*\n)*\w+:.*$/ ) ) return undefined;
+
+	  // make an attribute node if it doesn't exist
+	  if ( !extract_attr( this.tree ) ) {
+	    this.tree.splice( 1, 0, {} );
+	  }
+
+	  var pairs = block.split( /\n/ );
+	  for ( p in pairs ) {
+	    var m = pairs[ p ].match( /(\w+):\s*(.*)$/ ),
+	        key = m[ 1 ].toLowerCase(),
+	        value = m[ 2 ];
+
+	    this.tree[ 1 ][ key ] = value;
+	  }
+
+	  // document_meta produces no content!
+	  return [];
+	};
+
+	Markdown.dialects.Maruku.block.block_meta = function block_meta( block, next ) {
+	  // check if the last line of the block is an meta hash
+	  var m = block.match( /(^|\n) {0,3}\{:\s*((?:\\\}|[^\}])*)\s*\}$/ );
+	  if ( !m ) return undefined;
+
+	  // process the meta hash
+	  var attr = this.dialect.processMetaHash( m[ 2 ] );
+
+	  var hash;
+
+	  // if we matched ^ then we need to apply meta to the previous block
+	  if ( m[ 1 ] === "" ) {
+	    var node = this.tree[ this.tree.length - 1 ];
+	    hash = extract_attr( node );
+
+	    // if the node is a string (rather than JsonML), bail
+	    if ( typeof node === "string" ) return undefined;
+
+	    // create the attribute hash if it doesn't exist
+	    if ( !hash ) {
+	      hash = {};
+	      node.splice( 1, 0, hash );
+	    }
+
+	    // add the attributes in
+	    for ( a in attr ) {
+	      hash[ a ] = attr[ a ];
+	    }
+
+	    // return nothing so the meta hash is removed
+	    return [];
+	  }
+
+	  // pull the meta hash off the block and process what's left
+	  var b = block.replace( /\n.*$/, "" ),
+	      result = this.processBlock( b, [] );
+
+	  // get or make the attributes hash
+	  hash = extract_attr( result[ 0 ] );
+	  if ( !hash ) {
+	    hash = {};
+	    result[ 0 ].splice( 1, 0, hash );
+	  }
+
+	  // attach the attributes to the block
+	  for ( a in attr ) {
+	    hash[ a ] = attr[ a ];
+	  }
+
+	  return result;
+	};
+
+	Markdown.dialects.Maruku.block.definition_list = function definition_list( block, next ) {
+	  // one or more terms followed by one or more definitions, in a single block
+	  var tight = /^((?:[^\s:].*\n)+):\s+([\s\S]+)$/,
+	      list = [ "dl" ],
+	      i, m;
+
+	  // see if we're dealing with a tight or loose block
+	  if ( ( m = block.match( tight ) ) ) {
+	    // pull subsequent tight DL blocks out of `next`
+	    var blocks = [ block ];
+	    while ( next.length && tight.exec( next[ 0 ] ) ) {
+	      blocks.push( next.shift() );
+	    }
+
+	    for ( var b = 0; b < blocks.length; ++b ) {
+	      var m = blocks[ b ].match( tight ),
+	          terms = m[ 1 ].replace( /\n$/, "" ).split( /\n/ ),
+	          defns = m[ 2 ].split( /\n:\s+/ );
+
+	      // print( uneval( m ) );
+
+	      for ( i = 0; i < terms.length; ++i ) {
+	        list.push( [ "dt", terms[ i ] ] );
+	      }
+
+	      for ( i = 0; i < defns.length; ++i ) {
+	        // run inline processing over the definition
+	        list.push( [ "dd" ].concat( this.processInline( defns[ i ].replace( /(\n)\s+/, "$1" ) ) ) );
+	      }
+	    }
+	  }
+	  else {
+	    return undefined;
+	  }
+
+	  return [ list ];
+	};
+
+	// splits on unescaped instances of @ch. If @ch is not a character the result
+	// can be unpredictable
+
+	Markdown.dialects.Maruku.block.table = function table (block, next) {
+
+	    var _split_on_unescaped = function(s, ch) {
+	        ch = ch || '\\s';
+	        if (ch.match(/^[\\|\[\]{}?*.+^$]$/)) { ch = '\\' + ch; }
+	        var res = [ ],
+	            r = new RegExp('^((?:\\\\.|[^\\\\' + ch + '])*)' + ch + '(.*)'),
+	            m;
+	        while(m = s.match(r)) {
+	            res.push(m[1]);
+	            s = m[2];
+	        }
+	        res.push(s);
+	        return res;
+	    }
+
+	    var leading_pipe = /^ {0,3}\|(.+)\n {0,3}\|\s*([\-:]+[\-| :]*)\n((?:\s*\|.*(?:\n|$))*)(?=\n|$)/,
+	        // find at least an unescaped pipe in each line
+	        no_leading_pipe = /^ {0,3}(\S(?:\\.|[^\\|])*\|.*)\n {0,3}([\-:]+\s*\|[\-| :]*)\n((?:(?:\\.|[^\\|])*\|.*(?:\n|$))*)(?=\n|$)/,
+	        i, m;
+	    if (m = block.match(leading_pipe)) {
+	        // remove leading pipes in contents
+	        // (header and horizontal rule already have the leading pipe left out)
+	        m[3] = m[3].replace(/^\s*\|/gm, '');
+	    } else if (! ( m = block.match(no_leading_pipe))) {
+	        return undefined;
+	    }
+
+	    var table = [ "table", [ "thead", [ "tr" ] ], [ "tbody" ] ];
+
+	    // remove trailing pipes, then split on pipes
+	    // (no escaped pipes are allowed in horizontal rule)
+	    m[2] = m[2].replace(/\|\s*$/, '').split('|');
+
+	    // process alignment
+	    var html_attrs = [ ];
+	    forEach (m[2], function (s) {
+	        if (s.match(/^\s*-+:\s*$/))       html_attrs.push({align: "right"});
+	        else if (s.match(/^\s*:-+\s*$/))  html_attrs.push({align: "left"});
+	        else if (s.match(/^\s*:-+:\s*$/)) html_attrs.push({align: "center"});
+	        else                              html_attrs.push({});
+	    });
+
+	    // now for the header, avoid escaped pipes
+	    m[1] = _split_on_unescaped(m[1].replace(/\|\s*$/, ''), '|');
+	    for (i = 0; i < m[1].length; i++) {
+	        table[1][1].push(['th', html_attrs[i] || {}].concat(
+	            this.processInline(m[1][i].trim())));
+	    }
+
+	    // now for body contents
+	    forEach (m[3].replace(/\|\s*$/mg, '').split('\n'), function (row) {
+	        var html_row = ['tr'];
+	        row = _split_on_unescaped(row, '|');
+	        for (i = 0; i < row.length; i++) {
+	            html_row.push(['td', html_attrs[i] || {}].concat(this.processInline(row[i].trim())));
+	        }
+	        table[2].push(html_row);
+	    }, this);
+
+	    return [table];
+	}
+
+	Markdown.dialects.Maruku.inline[ "{:" ] = function inline_meta( text, matches, out ) {
+	  if ( !out.length ) {
+	    return [ 2, "{:" ];
+	  }
+
+	  // get the preceeding element
+	  var before = out[ out.length - 1 ];
+
+	  if ( typeof before === "string" ) {
+	    return [ 2, "{:" ];
+	  }
+
+	  // match a meta hash
+	  var m = text.match( /^\{:\s*((?:\\\}|[^\}])*)\s*\}/ );
+
+	  // no match, false alarm
+	  if ( !m ) {
+	    return [ 2, "{:" ];
+	  }
+
+	  // attach the attributes to the preceeding element
+	  var meta = this.dialect.processMetaHash( m[ 1 ] ),
+	      attr = extract_attr( before );
+
+	  if ( !attr ) {
+	    attr = {};
+	    before.splice( 1, 0, attr );
+	  }
+
+	  for ( var k in meta ) {
+	    attr[ k ] = meta[ k ];
+	  }
+
+	  // cut out the string and replace it with nothing
+	  return [ m[ 0 ].length, "" ];
+	};
+
+	Markdown.dialects.Maruku.inline.__escape__ = /^\\[\\`\*_{}\[\]()#\+.!\-|:]/;
+
+	Markdown.buildBlockOrder ( Markdown.dialects.Maruku.block );
+	Markdown.buildInlinePatterns( Markdown.dialects.Maruku.inline );
+
+	var isArray = Array.isArray || function(obj) {
+	  return Object.prototype.toString.call(obj) == "[object Array]";
+	};
+
+	var forEach;
+	// Don't mess with Array.prototype. Its not friendly
+	if ( Array.prototype.forEach ) {
+	  forEach = function( arr, cb, thisp ) {
+	    return arr.forEach( cb, thisp );
+	  };
+	}
+	else {
+	  forEach = function(arr, cb, thisp) {
+	    for (var i = 0; i < arr.length; i++) {
+	      cb.call(thisp || arr, arr[i], i, arr);
+	    }
+	  }
+	}
+
+	var isEmpty = function( obj ) {
+	  for ( var key in obj ) {
+	    if ( hasOwnProperty.call( obj, key ) ) {
+	      return false;
+	    }
+	  }
+
+	  return true;
+	}
+
+	function extract_attr( jsonml ) {
+	  return isArray(jsonml)
+	      && jsonml.length > 1
+	      && typeof jsonml[ 1 ] === "object"
+	      && !( isArray(jsonml[ 1 ]) )
+	      ? jsonml[ 1 ]
+	      : undefined;
+	}
+
+
+
+	/**
+	 *  renderJsonML( jsonml[, options] ) -> String
+	 *  - jsonml (Array): JsonML array to render to XML
+	 *  - options (Object): options
+	 *
+	 *  Converts the given JsonML into well-formed XML.
+	 *
+	 *  The options currently understood are:
+	 *
+	 *  - root (Boolean): wether or not the root node should be included in the
+	 *    output, or just its children. The default `false` is to not include the
+	 *    root itself.
+	 */
+	expose.renderJsonML = function( jsonml, options ) {
+	  options = options || {};
+	  // include the root element in the rendered output?
+	  options.root = options.root || false;
+
+	  var content = [];
+
+	  if ( options.root ) {
+	    content.push( render_tree( jsonml ) );
+	  }
+	  else {
+	    jsonml.shift(); // get rid of the tag
+	    if ( jsonml.length && typeof jsonml[ 0 ] === "object" && !( jsonml[ 0 ] instanceof Array ) ) {
+	      jsonml.shift(); // get rid of the attributes
+	    }
+
+	    while ( jsonml.length ) {
+	      content.push( render_tree( jsonml.shift() ) );
+	    }
+	  }
+
+	  return content.join( "\n\n" );
+	};
+
+	function escapeHTML( text ) {
+	  return text.replace( /&/g, "&amp;" )
+	             .replace( /</g, "&lt;" )
+	             .replace( />/g, "&gt;" )
+	             .replace( /"/g, "&quot;" )
+	             .replace( /'/g, "&#39;" );
+	}
+
+	function render_tree( jsonml ) {
+	  // basic case
+	  if ( typeof jsonml === "string" ) {
+	    return escapeHTML( jsonml );
+	  }
+
+	  var tag = jsonml.shift(),
+	      attributes = {},
+	      content = [];
+
+	  if ( jsonml.length && typeof jsonml[ 0 ] === "object" && !( jsonml[ 0 ] instanceof Array ) ) {
+	    attributes = jsonml.shift();
+	  }
+
+	  while ( jsonml.length ) {
+	    content.push( render_tree( jsonml.shift() ) );
+	  }
+
+	  var tag_attrs = "";
+	  for ( var a in attributes ) {
+	    tag_attrs += " " + a + '="' + escapeHTML( attributes[ a ] ) + '"';
+	  }
+
+	  // be careful about adding whitespace here for inline elements
+	  if ( tag == "img" || tag == "br" || tag == "hr" ) {
+	    return "<"+ tag + tag_attrs + "/>";
+	  }
+	  else {
+	    return "<"+ tag + tag_attrs + ">" + content.join( "" ) + "</" + tag + ">";
+	  }
+	}
+
+	function convert_tree_to_html( tree, references, options ) {
+	  var i;
+	  options = options || {};
+
+	  // shallow clone
+	  var jsonml = tree.slice( 0 );
+
+	  if ( typeof options.preprocessTreeNode === "function" ) {
+	      jsonml = options.preprocessTreeNode(jsonml, references);
+	  }
+
+	  // Clone attributes if they exist
+	  var attrs = extract_attr( jsonml );
+	  if ( attrs ) {
+	    jsonml[ 1 ] = {};
+	    for ( i in attrs ) {
+	      jsonml[ 1 ][ i ] = attrs[ i ];
+	    }
+	    attrs = jsonml[ 1 ];
+	  }
+
+	  // basic case
+	  if ( typeof jsonml === "string" ) {
+	    return jsonml;
+	  }
+
+	  // convert this node
+	  switch ( jsonml[ 0 ] ) {
+	    case "header":
+	      jsonml[ 0 ] = "h" + jsonml[ 1 ].level;
+	      delete jsonml[ 1 ].level;
+	      break;
+	    case "bulletlist":
+	      jsonml[ 0 ] = "ul";
+	      break;
+	    case "numberlist":
+	      jsonml[ 0 ] = "ol";
+	      break;
+	    case "listitem":
+	      jsonml[ 0 ] = "li";
+	      break;
+	    case "para":
+	      jsonml[ 0 ] = "p";
+	      break;
+	    case "markdown":
+	      jsonml[ 0 ] = "html";
+	      if ( attrs ) delete attrs.references;
+	      break;
+	    case "code_block":
+	      jsonml[ 0 ] = "pre";
+	      i = attrs ? 2 : 1;
+	      var code = [ "code" ];
+	      code.push.apply( code, jsonml.splice( i, jsonml.length - i ) );
+	      jsonml[ i ] = code;
+	      break;
+	    case "inlinecode":
+	      jsonml[ 0 ] = "code";
+	      break;
+	    case "img":
+	      jsonml[ 1 ].src = jsonml[ 1 ].href;
+	      delete jsonml[ 1 ].href;
+	      break;
+	    case "linebreak":
+	      jsonml[ 0 ] = "br";
+	    break;
+	    case "link":
+	      jsonml[ 0 ] = "a";
+	      break;
+	    case "link_ref":
+	      jsonml[ 0 ] = "a";
+
+	      // grab this ref and clean up the attribute node
+	      var ref = references[ attrs.ref ];
+
+	      // if the reference exists, make the link
+	      if ( ref ) {
+	        delete attrs.ref;
+
+	        // add in the href and title, if present
+	        attrs.href = ref.href;
+	        if ( ref.title ) {
+	          attrs.title = ref.title;
+	        }
+
+	        // get rid of the unneeded original text
+	        delete attrs.original;
+	      }
+	      // the reference doesn't exist, so revert to plain text
+	      else {
+	        return attrs.original;
+	      }
+	      break;
+	    case "img_ref":
+	      jsonml[ 0 ] = "img";
+
+	      // grab this ref and clean up the attribute node
+	      var ref = references[ attrs.ref ];
+
+	      // if the reference exists, make the link
+	      if ( ref ) {
+	        delete attrs.ref;
+
+	        // add in the href and title, if present
+	        attrs.src = ref.href;
+	        if ( ref.title ) {
+	          attrs.title = ref.title;
+	        }
+
+	        // get rid of the unneeded original text
+	        delete attrs.original;
+	      }
+	      // the reference doesn't exist, so revert to plain text
+	      else {
+	        return attrs.original;
+	      }
+	      break;
+	  }
+
+	  // convert all the children
+	  i = 1;
+
+	  // deal with the attribute node, if it exists
+	  if ( attrs ) {
+	    // if there are keys, skip over it
+	    for ( var key in jsonml[ 1 ] ) {
+	        i = 2;
+	        break;
+	    }
+	    // if there aren't, remove it
+	    if ( i === 1 ) {
+	      jsonml.splice( i, 1 );
+	    }
+	  }
+
+	  for ( ; i < jsonml.length; ++i ) {
+	    jsonml[ i ] = convert_tree_to_html( jsonml[ i ], references, options );
+	  }
+
+	  return jsonml;
+	}
+
+
+	// merges adjacent text nodes into a single node
+	function merge_text_nodes( jsonml ) {
+	  // skip the tag name and attribute hash
+	  var i = extract_attr( jsonml ) ? 2 : 1;
+
+	  while ( i < jsonml.length ) {
+	    // if it's a string check the next item too
+	    if ( typeof jsonml[ i ] === "string" ) {
+	      if ( i + 1 < jsonml.length && typeof jsonml[ i + 1 ] === "string" ) {
+	        // merge the second string into the first and remove it
+	        jsonml[ i ] += jsonml.splice( i + 1, 1 )[ 0 ];
+	      }
+	      else {
+	        ++i;
+	      }
+	    }
+	    // if it's not a string recurse
+	    else {
+	      merge_text_nodes( jsonml[ i ] );
+	      ++i;
+	    }
+	  }
+	}
+
+	} )( (function() {
+	  if ( false ) {
+	    window.markdown = {};
+	    return window.markdown;
+	  }
+	  else {
+	    return exports;
+	  }
+	} )() );
+
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	var formatRegExp = /%[sdj%]/g;
+	exports.format = function(f) {
+	  if (!isString(f)) {
+	    var objects = [];
+	    for (var i = 0; i < arguments.length; i++) {
+	      objects.push(inspect(arguments[i]));
+	    }
+	    return objects.join(' ');
+	  }
+
+	  var i = 1;
+	  var args = arguments;
+	  var len = args.length;
+	  var str = String(f).replace(formatRegExp, function(x) {
+	    if (x === '%%') return '%';
+	    if (i >= len) return x;
+	    switch (x) {
+	      case '%s': return String(args[i++]);
+	      case '%d': return Number(args[i++]);
+	      case '%j':
+	        try {
+	          return JSON.stringify(args[i++]);
+	        } catch (_) {
+	          return '[Circular]';
+	        }
+	      default:
+	        return x;
+	    }
+	  });
+	  for (var x = args[i]; i < len; x = args[++i]) {
+	    if (isNull(x) || !isObject(x)) {
+	      str += ' ' + x;
+	    } else {
+	      str += ' ' + inspect(x);
+	    }
+	  }
+	  return str;
+	};
+
+
+	// Mark that a method should not be used.
+	// Returns a modified function which warns once by default.
+	// If --no-deprecation is set, then it is a no-op.
+	exports.deprecate = function(fn, msg) {
+	  // Allow for deprecating things in the process of starting up.
+	  if (isUndefined(global.process)) {
+	    return function() {
+	      return exports.deprecate(fn, msg).apply(this, arguments);
+	    };
+	  }
+
+	  if (process.noDeprecation === true) {
+	    return fn;
+	  }
+
+	  var warned = false;
+	  function deprecated() {
+	    if (!warned) {
+	      if (process.throwDeprecation) {
+	        throw new Error(msg);
+	      } else if (process.traceDeprecation) {
+	        console.trace(msg);
+	      } else {
+	        console.error(msg);
+	      }
+	      warned = true;
+	    }
+	    return fn.apply(this, arguments);
+	  }
+
+	  return deprecated;
+	};
+
+
+	var debugs = {};
+	var debugEnviron;
+	exports.debuglog = function(set) {
+	  if (isUndefined(debugEnviron))
+	    debugEnviron = process.env.NODE_DEBUG || '';
+	  set = set.toUpperCase();
+	  if (!debugs[set]) {
+	    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
+	      var pid = process.pid;
+	      debugs[set] = function() {
+	        var msg = exports.format.apply(exports, arguments);
+	        console.error('%s %d: %s', set, pid, msg);
+	      };
+	    } else {
+	      debugs[set] = function() {};
+	    }
+	  }
+	  return debugs[set];
+	};
+
+
+	/**
+	 * Echos the value of a value. Trys to print the value out
+	 * in the best way possible given the different types.
+	 *
+	 * @param {Object} obj The object to print out.
+	 * @param {Object} opts Optional options object that alters the output.
+	 */
+	/* legacy: obj, showHidden, depth, colors*/
+	function inspect(obj, opts) {
+	  // default options
+	  var ctx = {
+	    seen: [],
+	    stylize: stylizeNoColor
+	  };
+	  // legacy...
+	  if (arguments.length >= 3) ctx.depth = arguments[2];
+	  if (arguments.length >= 4) ctx.colors = arguments[3];
+	  if (isBoolean(opts)) {
+	    // legacy...
+	    ctx.showHidden = opts;
+	  } else if (opts) {
+	    // got an "options" object
+	    exports._extend(ctx, opts);
+	  }
+	  // set default options
+	  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
+	  if (isUndefined(ctx.depth)) ctx.depth = 2;
+	  if (isUndefined(ctx.colors)) ctx.colors = false;
+	  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
+	  if (ctx.colors) ctx.stylize = stylizeWithColor;
+	  return formatValue(ctx, obj, ctx.depth);
+	}
+	exports.inspect = inspect;
+
+
+	// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
+	inspect.colors = {
+	  'bold' : [1, 22],
+	  'italic' : [3, 23],
+	  'underline' : [4, 24],
+	  'inverse' : [7, 27],
+	  'white' : [37, 39],
+	  'grey' : [90, 39],
+	  'black' : [30, 39],
+	  'blue' : [34, 39],
+	  'cyan' : [36, 39],
+	  'green' : [32, 39],
+	  'magenta' : [35, 39],
+	  'red' : [31, 39],
+	  'yellow' : [33, 39]
+	};
+
+	// Don't use 'blue' not visible on cmd.exe
+	inspect.styles = {
+	  'special': 'cyan',
+	  'number': 'yellow',
+	  'boolean': 'yellow',
+	  'undefined': 'grey',
+	  'null': 'bold',
+	  'string': 'green',
+	  'date': 'magenta',
+	  // "name": intentionally not styling
+	  'regexp': 'red'
+	};
+
+
+	function stylizeWithColor(str, styleType) {
+	  var style = inspect.styles[styleType];
+
+	  if (style) {
+	    return '\u001b[' + inspect.colors[style][0] + 'm' + str +
+	           '\u001b[' + inspect.colors[style][1] + 'm';
+	  } else {
+	    return str;
+	  }
+	}
+
+
+	function stylizeNoColor(str, styleType) {
+	  return str;
+	}
+
+
+	function arrayToHash(array) {
+	  var hash = {};
+
+	  array.forEach(function(val, idx) {
+	    hash[val] = true;
+	  });
+
+	  return hash;
+	}
+
+
+	function formatValue(ctx, value, recurseTimes) {
+	  // Provide a hook for user-specified inspect functions.
+	  // Check that value is an object with an inspect function on it
+	  if (ctx.customInspect &&
+	      value &&
+	      isFunction(value.inspect) &&
+	      // Filter out the util module, it's inspect function is special
+	      value.inspect !== exports.inspect &&
+	      // Also filter out any prototype objects using the circular check.
+	      !(value.constructor && value.constructor.prototype === value)) {
+	    var ret = value.inspect(recurseTimes, ctx);
+	    if (!isString(ret)) {
+	      ret = formatValue(ctx, ret, recurseTimes);
+	    }
+	    return ret;
+	  }
+
+	  // Primitive types cannot have properties
+	  var primitive = formatPrimitive(ctx, value);
+	  if (primitive) {
+	    return primitive;
+	  }
+
+	  // Look up the keys of the object.
+	  var keys = Object.keys(value);
+	  var visibleKeys = arrayToHash(keys);
+
+	  if (ctx.showHidden) {
+	    keys = Object.getOwnPropertyNames(value);
+	  }
+
+	  // IE doesn't make error fields non-enumerable
+	  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
+	  if (isError(value)
+	      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
+	    return formatError(value);
+	  }
+
+	  // Some type of object without properties can be shortcutted.
+	  if (keys.length === 0) {
+	    if (isFunction(value)) {
+	      var name = value.name ? ': ' + value.name : '';
+	      return ctx.stylize('[Function' + name + ']', 'special');
+	    }
+	    if (isRegExp(value)) {
+	      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+	    }
+	    if (isDate(value)) {
+	      return ctx.stylize(Date.prototype.toString.call(value), 'date');
+	    }
+	    if (isError(value)) {
+	      return formatError(value);
+	    }
+	  }
+
+	  var base = '', array = false, braces = ['{', '}'];
+
+	  // Make Array say that they are Array
+	  if (isArray(value)) {
+	    array = true;
+	    braces = ['[', ']'];
+	  }
+
+	  // Make functions say that they are functions
+	  if (isFunction(value)) {
+	    var n = value.name ? ': ' + value.name : '';
+	    base = ' [Function' + n + ']';
+	  }
+
+	  // Make RegExps say that they are RegExps
+	  if (isRegExp(value)) {
+	    base = ' ' + RegExp.prototype.toString.call(value);
+	  }
+
+	  // Make dates with properties first say the date
+	  if (isDate(value)) {
+	    base = ' ' + Date.prototype.toUTCString.call(value);
+	  }
+
+	  // Make error with message first say the error
+	  if (isError(value)) {
+	    base = ' ' + formatError(value);
+	  }
+
+	  if (keys.length === 0 && (!array || value.length == 0)) {
+	    return braces[0] + base + braces[1];
+	  }
+
+	  if (recurseTimes < 0) {
+	    if (isRegExp(value)) {
+	      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+	    } else {
+	      return ctx.stylize('[Object]', 'special');
+	    }
+	  }
+
+	  ctx.seen.push(value);
+
+	  var output;
+	  if (array) {
+	    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+	  } else {
+	    output = keys.map(function(key) {
+	      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+	    });
+	  }
+
+	  ctx.seen.pop();
+
+	  return reduceToSingleString(output, base, braces);
+	}
+
+
+	function formatPrimitive(ctx, value) {
+	  if (isUndefined(value))
+	    return ctx.stylize('undefined', 'undefined');
+	  if (isString(value)) {
+	    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
+	                                             .replace(/'/g, "\\'")
+	                                             .replace(/\\"/g, '"') + '\'';
+	    return ctx.stylize(simple, 'string');
+	  }
+	  if (isNumber(value))
+	    return ctx.stylize('' + value, 'number');
+	  if (isBoolean(value))
+	    return ctx.stylize('' + value, 'boolean');
+	  // For some reason typeof null is "object", so special case here.
+	  if (isNull(value))
+	    return ctx.stylize('null', 'null');
+	}
+
+
+	function formatError(value) {
+	  return '[' + Error.prototype.toString.call(value) + ']';
+	}
+
+
+	function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
+	  var output = [];
+	  for (var i = 0, l = value.length; i < l; ++i) {
+	    if (hasOwnProperty(value, String(i))) {
+	      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+	          String(i), true));
+	    } else {
+	      output.push('');
+	    }
+	  }
+	  keys.forEach(function(key) {
+	    if (!key.match(/^\d+$/)) {
+	      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+	          key, true));
+	    }
+	  });
+	  return output;
+	}
+
+
+	function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
+	  var name, str, desc;
+	  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
+	  if (desc.get) {
+	    if (desc.set) {
+	      str = ctx.stylize('[Getter/Setter]', 'special');
+	    } else {
+	      str = ctx.stylize('[Getter]', 'special');
+	    }
+	  } else {
+	    if (desc.set) {
+	      str = ctx.stylize('[Setter]', 'special');
+	    }
+	  }
+	  if (!hasOwnProperty(visibleKeys, key)) {
+	    name = '[' + key + ']';
+	  }
+	  if (!str) {
+	    if (ctx.seen.indexOf(desc.value) < 0) {
+	      if (isNull(recurseTimes)) {
+	        str = formatValue(ctx, desc.value, null);
+	      } else {
+	        str = formatValue(ctx, desc.value, recurseTimes - 1);
+	      }
+	      if (str.indexOf('\n') > -1) {
+	        if (array) {
+	          str = str.split('\n').map(function(line) {
+	            return '  ' + line;
+	          }).join('\n').substr(2);
+	        } else {
+	          str = '\n' + str.split('\n').map(function(line) {
+	            return '   ' + line;
+	          }).join('\n');
+	        }
+	      }
+	    } else {
+	      str = ctx.stylize('[Circular]', 'special');
+	    }
+	  }
+	  if (isUndefined(name)) {
+	    if (array && key.match(/^\d+$/)) {
+	      return str;
+	    }
+	    name = JSON.stringify('' + key);
+	    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
+	      name = name.substr(1, name.length - 2);
+	      name = ctx.stylize(name, 'name');
+	    } else {
+	      name = name.replace(/'/g, "\\'")
+	                 .replace(/\\"/g, '"')
+	                 .replace(/(^"|"$)/g, "'");
+	      name = ctx.stylize(name, 'string');
+	    }
+	  }
+
+	  return name + ': ' + str;
+	}
+
+
+	function reduceToSingleString(output, base, braces) {
+	  var numLinesEst = 0;
+	  var length = output.reduce(function(prev, cur) {
+	    numLinesEst++;
+	    if (cur.indexOf('\n') >= 0) numLinesEst++;
+	    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
+	  }, 0);
+
+	  if (length > 60) {
+	    return braces[0] +
+	           (base === '' ? '' : base + '\n ') +
+	           ' ' +
+	           output.join(',\n  ') +
+	           ' ' +
+	           braces[1];
+	  }
+
+	  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
+	}
+
+
+	// NOTE: These type checking functions intentionally don't use `instanceof`
+	// because it is fragile and can be easily faked with `Object.create()`.
+	function isArray(ar) {
+	  return Array.isArray(ar);
+	}
+	exports.isArray = isArray;
+
+	function isBoolean(arg) {
+	  return typeof arg === 'boolean';
+	}
+	exports.isBoolean = isBoolean;
+
+	function isNull(arg) {
+	  return arg === null;
+	}
+	exports.isNull = isNull;
+
+	function isNullOrUndefined(arg) {
+	  return arg == null;
+	}
+	exports.isNullOrUndefined = isNullOrUndefined;
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+	exports.isNumber = isNumber;
+
+	function isString(arg) {
+	  return typeof arg === 'string';
+	}
+	exports.isString = isString;
+
+	function isSymbol(arg) {
+	  return typeof arg === 'symbol';
+	}
+	exports.isSymbol = isSymbol;
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+	exports.isUndefined = isUndefined;
+
+	function isRegExp(re) {
+	  return isObject(re) && objectToString(re) === '[object RegExp]';
+	}
+	exports.isRegExp = isRegExp;
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+	exports.isObject = isObject;
+
+	function isDate(d) {
+	  return isObject(d) && objectToString(d) === '[object Date]';
+	}
+	exports.isDate = isDate;
+
+	function isError(e) {
+	  return isObject(e) &&
+	      (objectToString(e) === '[object Error]' || e instanceof Error);
+	}
+	exports.isError = isError;
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
+	}
+	exports.isFunction = isFunction;
+
+	function isPrimitive(arg) {
+	  return arg === null ||
+	         typeof arg === 'boolean' ||
+	         typeof arg === 'number' ||
+	         typeof arg === 'string' ||
+	         typeof arg === 'symbol' ||  // ES6 symbol
+	         typeof arg === 'undefined';
+	}
+	exports.isPrimitive = isPrimitive;
+
+	exports.isBuffer = __webpack_require__(22);
+
+	function objectToString(o) {
+	  return Object.prototype.toString.call(o);
+	}
+
+
+	function pad(n) {
+	  return n < 10 ? '0' + n.toString(10) : n.toString(10);
+	}
+
+
+	var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+	              'Oct', 'Nov', 'Dec'];
+
+	// 26 Feb 16:19:34
+	function timestamp() {
+	  var d = new Date();
+	  var time = [pad(d.getHours()),
+	              pad(d.getMinutes()),
+	              pad(d.getSeconds())].join(':');
+	  return [d.getDate(), months[d.getMonth()], time].join(' ');
+	}
+
+
+	// log is just a thin wrapper to console.log that prepends a timestamp
+	exports.log = function() {
+	  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
+	};
+
+
+	/**
+	 * Inherit the prototype methods from one constructor into another.
+	 *
+	 * The Function.prototype.inherits from lang.js rewritten as a standalone
+	 * function (not on Function.prototype). NOTE: If this file is to be loaded
+	 * during bootstrapping this function needs to be rewritten using some native
+	 * functions as prototype setup using normal JavaScript does not work as
+	 * expected during bootstrapping (see mirror.js in r114903).
+	 *
+	 * @param {function} ctor Constructor function which needs to inherit the
+	 *     prototype.
+	 * @param {function} superCtor Constructor function to inherit prototype from.
+	 */
+	exports.inherits = __webpack_require__(23);
+
+	exports._extend = function(origin, add) {
+	  // Don't do anything if add isn't an object
+	  if (!add || !isObject(add)) return origin;
+
+	  var keys = Object.keys(add);
+	  var i = keys.length;
+	  while (i--) {
+	    origin[keys[i]] = add[keys[i]];
+	  }
+	  return origin;
+	};
+
+	function hasOwnProperty(obj, prop) {
+	  return Object.prototype.hasOwnProperty.call(obj, prop);
+	}
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(21)))
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	// shim for using process in browser
+
+	var process = module.exports = {};
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+
+	function cleanUpNextTick() {
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = setTimeout(cleanUpNextTick);
+	    draining = true;
+
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    clearTimeout(timeout);
+	}
+
+	process.nextTick = function (fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        setTimeout(drainQueue, 0);
+	    }
+	};
+
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+	process.title = 'browser';
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
+
+	function noop() {}
+
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+
+	process.binding = function (name) {
+	    throw new Error('process.binding is not supported');
+	};
+
+	process.cwd = function () { return '/' };
+	process.chdir = function (dir) {
+	    throw new Error('process.chdir is not supported');
+	};
+	process.umask = function() { return 0; };
+
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	module.exports = function isBuffer(arg) {
+	  return arg && typeof arg === 'object'
+	    && typeof arg.copy === 'function'
+	    && typeof arg.fill === 'function'
+	    && typeof arg.readUInt8 === 'function';
+	}
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	if (typeof Object.create === 'function') {
+	  // implementation from standard node.js 'util' module
+	  module.exports = function inherits(ctor, superCtor) {
+	    ctor.super_ = superCtor
+	    ctor.prototype = Object.create(superCtor.prototype, {
+	      constructor: {
+	        value: ctor,
+	        enumerable: false,
+	        writable: true,
+	        configurable: true
+	      }
+	    });
+	  };
+	} else {
+	  // old school shim for old browsers
+	  module.exports = function inherits(ctor, superCtor) {
+	    ctor.super_ = superCtor
+	    var TempCtor = function () {}
+	    TempCtor.prototype = superCtor.prototype
+	    ctor.prototype = new TempCtor()
+	    ctor.prototype.constructor = ctor
+	  }
+	}
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _footer = __webpack_require__(25);
 
 	var _footer2 = _interopRequireDefault(_footer);
 
-	var _menu = __webpack_require__(16);
+	var _menu = __webpack_require__(28);
 
 	var _menu2 = _interopRequireDefault(_menu);
 
-	var _subscribe = __webpack_require__(19);
+	var _subscribe = __webpack_require__(31);
 
 	var _subscribe2 = _interopRequireDefault(_subscribe);
 
@@ -35244,7 +38561,7 @@
 	exports.default = _angular2.default.module("TourepediaBlog.Templates", [_footer2.default, _menu2.default, _subscribe2.default]).name;
 
 /***/ },
-/* 13 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35257,16 +38574,16 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _footer = __webpack_require__(14);
+	var _footer = __webpack_require__(26);
 
 	var _footer2 = _interopRequireDefault(_footer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _angular2.default.module("Templates.Footer", []).directive("blogFooter", _footer2.default).name;
+	exports.default = _angular2.default.module("Templates.Footer", []).directive("tpbFooter", _footer2.default).name;
 
 /***/ },
-/* 14 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35286,18 +38603,18 @@
 	  return {
 	    restrict: "E",
 	    scopr: {},
-	    template: __webpack_require__(15)
+	    template: __webpack_require__(27)
 	  };
 	}
 
 /***/ },
-/* 15 */
+/* 27 */
 /***/ function(module, exports) {
 
-	module.exports = "<footer id=\"main-footer\">I am the main footer.</footer>\n"
+	module.exports = "<footer class=\"main-footer\">\r\n    <p class=\"main-footer__copyright\">&copy; 2015 @ Tourepedia.com. All right reserved.</p>\r\n    <div class=\"main-footer__menu\">\r\n        <a ui-sref=\".home\">Home</a>\r\n        <a ui-sref=\".about\">About</a>\r\n        <a ui-sref=\".sitemap\">Sitemap</a>\r\n        <a ui-sref=\".tc\">Terms &amp; Conditions</a>\r\n        <a ui-sref=\".faqs\">FAQs</a>\r\n        <a ui-sref=\".contactUs\">Contact Us</a>\r\n    </div>\r\n</footer>\r\n"
 
 /***/ },
-/* 16 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35310,16 +38627,16 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _menu = __webpack_require__(17);
+	var _menu = __webpack_require__(29);
 
 	var _menu2 = _interopRequireDefault(_menu);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _angular2.default.module("Templates.Menu", []).directive("blogMenu", _menu2.default).name;
+	exports.default = _angular2.default.module("Templates.Menu", []).directive("tpbMenu", _menu2.default).name;
 
 /***/ },
-/* 17 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35332,18 +38649,18 @@
 	    return {
 	        restrict: "E",
 	        scope: {},
-	        template: __webpack_require__(18)
+	        template: __webpack_require__(30)
 	    };
 	}
 
 /***/ },
-/* 18 */
+/* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "<nav>\n    <a ui-sref=\"home\">Home</a>\n    <a ui-sref=\"about\">about</a> \n</nav>"
+	module.exports = "<nav class=\"menu\">\r\n    <div class=\"menu__logo\">\r\n        <a href=\"#\"><img src=\"./assets/img/logo.png\"></a>\r\n    </div>\r\n    <div class=\"menu__items\">\r\n        <a class=\"menu__item\" ui-sref-active=\"active\" ui-sref=\"home\">Home</a>\r\n        <a class=\"menu__item\" ui-sref-active=\"active\" ui-sref=\"about\">About</a>\r\n        <button class=\"menu__item\">Account</button>\r\n    </div>\r\n</nav>"
 
 /***/ },
-/* 19 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35356,20 +38673,20 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _subscribe = __webpack_require__(20);
+	var _subscribe = __webpack_require__(32);
 
 	var _subscribe2 = _interopRequireDefault(_subscribe);
 
-	var _subscribe3 = __webpack_require__(21);
+	var _subscribe3 = __webpack_require__(33);
 
 	var _subscribe4 = _interopRequireDefault(_subscribe3);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _angular2.default.module("Template.Subscribe", []).directive("blog-subscribe", _subscribe4.default).service("SubscribeService", _subscribe2.default).name;
+	exports.default = _angular2.default.module("Template.Subscribe", []).directive("tpbSubscribe", _subscribe4.default).service("SubscribeService", _subscribe2.default).name;
 
 /***/ },
-/* 20 */
+/* 32 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35408,7 +38725,7 @@
 	SubscribeService.$inject = ["$http"];
 
 /***/ },
-/* 21 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35424,7 +38741,7 @@
 	    return {
 	        restrict: "E",
 	        scope: {},
-	        template: __webpack_require__(22),
+	        template: __webpack_require__(34),
 	        link: function link(scope, elem, attrs) {
 	            scope.user = { name: "", email: "" };
 	            scope.subscribe = function subscribe() {
@@ -35436,13 +38753,13 @@
 	}
 
 /***/ },
-/* 22 */
+/* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"subscribe\">\n    <h2>Get notified right inside the inbox</h2>\n    <form name=\"subscribeForm\" data-ng-submit=\"subscribe()\" novalidate>\n        <input type=\"text\" placeholder=\"Your Name\" data-ng-model=\"user.name\" required >\n        <input type=\"email\" placeholder=\"Your Email...\" data-ng-model=\"user.email\" required>\n        <button >Submit</button>\n    </form>\n</div>"
+	module.exports = "<div class=\"subscribe\">\r\n    <h1 class=\"subscribe__title\">Subscribe</h1>\r\n    <p class=\"subscribe__description\">Get notified on every new blog upload, right into your inbox.</p>\r\n    <form class=\"subscribe__form\" name=\"subscribeForm\" data-ng-submit=\"subscribe()\" novalidate>\r\n        <input type=\"text\" placeholder=\"Your Name\" data-ng-model=\"user.name\" required >\r\n        <input type=\"email\" placeholder=\"Your Email...\" data-ng-model=\"user.email\" required>\r\n        <button class=\"subscribe__btn\" >Notify Me</button>\r\n    </form>\r\n</div>"
 
 /***/ },
-/* 23 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35455,19 +38772,19 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _home = __webpack_require__(24);
+	var _home = __webpack_require__(36);
 
 	var _home2 = _interopRequireDefault(_home);
 
-	var _about = __webpack_require__(28);
+	var _about = __webpack_require__(40);
 
 	var _about2 = _interopRequireDefault(_about);
 
-	var _author = __webpack_require__(31);
+	var _author = __webpack_require__(43);
 
 	var _author2 = _interopRequireDefault(_author);
 
-	var _post = __webpack_require__(48);
+	var _post = __webpack_require__(66);
 
 	var _post2 = _interopRequireDefault(_post);
 
@@ -35477,7 +38794,7 @@
 	exports.default = _angular2.default.module("TourepediaBlog.Components", [_home2.default, _about2.default, _author2.default, _post2.default]).name;
 
 /***/ },
-/* 24 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35494,11 +38811,11 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _home = __webpack_require__(25);
+	var _home = __webpack_require__(37);
 
 	var _home2 = _interopRequireDefault(_home);
 
-	var _home3 = __webpack_require__(26);
+	var _home3 = __webpack_require__(38);
 
 	var _home4 = _interopRequireDefault(_home3);
 
@@ -35507,7 +38824,7 @@
 	exports.default = _angular2.default.module("Components.Home", [_angularUiRouter2.default]).config(_home4.default).controller("HomeController", _home2.default).name;
 
 /***/ },
-/* 25 */
+/* 37 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35531,7 +38848,7 @@
 	HomeController.$inject = ["DB"];
 
 /***/ },
-/* 26 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35547,7 +38864,7 @@
 	    url: "/",
 	    views: {
 	      "homeView": {
-	        template: __webpack_require__(27),
+	        template: __webpack_require__(39),
 	        controller: "HomeController",
 	        controllerAs: "home"
 	      }
@@ -35556,13 +38873,13 @@
 	}
 
 /***/ },
-/* 27 */
+/* 39 */
 /***/ function(module, exports) {
 
-	module.exports = "<h1>Home view for Tourepedia.</h1>\n<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, veniam corporis quae, tempore minima delectus eveniet temporibus optio cupiditate dignissimos aliquam. Asperiores, laborum in excepturi, eius natus nesciunt eaque impedit!</p>\n<ul>\n    <tp-postcard data-ng-repeat=\"post in home.posts\" post=\"post\"><tp-postcard>\n</ul>\n"
+	module.exports = "<div class=\"postcards-container\">\r\n    <tpb-postcard data-ng-repeat=\"post in home.posts\" post=\"post\"></tpb-postcard>\r\n</div>\r\n"
 
 /***/ },
-/* 28 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35579,7 +38896,7 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _about = __webpack_require__(29);
+	var _about = __webpack_require__(41);
 
 	var _about2 = _interopRequireDefault(_about);
 
@@ -35588,7 +38905,7 @@
 	exports.default = _angular2.default.module("Components.About", [_angularUiRouter2.default]).config(_about2.default).name;
 
 /***/ },
-/* 29 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35604,20 +38921,20 @@
 	    url: "/about",
 	    views: {
 	      "aboutView": {
-	        template: __webpack_require__(30)
+	        template: __webpack_require__(42)
 	      }
 	    }
 	  });
 	};
 
 /***/ },
-/* 30 */
+/* 42 */
 /***/ function(module, exports) {
 
-	module.exports = "<h1>About Page for our application.</h1>\n<p>This is something about out company. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, nam ducimus sit similique recusandae, nulla, quaerat consectetur exercitationem repellat earum sint qui explicabo voluptates ad neque! Pariatur soluta omnis atque.</p>\n"
+	module.exports = "<section class=\"about\">\r\n    <h1 class=\"about__title\">About Tourepedia</h1>\r\n    <p class=\"about__info\">Tourepedia is a full process trip planner which provides the following services:</p>\r\n    <div class=\"about__services\">\r\n        <div class=\"about__service about__service--first\">\r\n            <p>All booking of hotels, travel (including local transport), and amenities for trip.</p>\r\n        </div>\r\n        <div class=\"about__service about__service--last\">\r\n            <p>Day-wise scheduling of trip with a full customer care service for the full trip time.</p>\r\n        </div>\r\n    </div>\r\n    <button class=\"about__btn\">\r\n        Plan your trip\r\n    </button>\r\n\r\n</section>\r\n"
 
 /***/ },
-/* 31 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35634,19 +38951,19 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _author = __webpack_require__(32);
+	var _author = __webpack_require__(44);
 
 	var _author2 = _interopRequireDefault(_author);
 
-	var _profile = __webpack_require__(36);
+	var _profile = __webpack_require__(48);
 
 	var _profile2 = _interopRequireDefault(_profile);
 
-	var _posts = __webpack_require__(41);
+	var _posts = __webpack_require__(53);
 
 	var _posts2 = _interopRequireDefault(_posts);
 
-	var _author3 = __webpack_require__(47);
+	var _author3 = __webpack_require__(65);
 
 	var _author4 = _interopRequireDefault(_author3);
 
@@ -35659,7 +38976,7 @@
 	.name;
 
 /***/ },
-/* 32 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35675,17 +38992,17 @@
 	    url: "/author/{authorId}",
 	    views: {
 	      "authorView": {
-	        template: __webpack_require__(33),
+	        template: __webpack_require__(45),
 	        controller: "AuthorController",
 	        controllerAs: "author"
 	      },
 	      "authorProfileView@author": {
-	        template: __webpack_require__(34),
+	        template: __webpack_require__(46),
 	        controller: "AuthorProfileController",
 	        controllerAs: "profile"
 	      },
 	      "authorPostsView@author": {
-	        template: __webpack_require__(35),
+	        template: __webpack_require__(47),
 	        controller: "AuthorPostsController",
 	        controllerAs: "posts"
 	      }
@@ -35694,25 +39011,25 @@
 	}
 
 /***/ },
-/* 33 */
+/* 45 */
 /***/ function(module, exports) {
 
-	module.exports = "<u><b>author view</b></u>\n<section>\n  <ui-view name=\"authorProfileView\" id=\"authorProfileView\"></ui-view>\n  <ui-view name=\"authorPostsView\" id=\"authorPostsView\"></ui-view>\n</section>\n"
+	module.exports = "<section>\r\n  <ui-view name=\"authorProfileView\" id=\"authorProfileView\"></ui-view>\r\n  <ui-view name=\"authorPostsView\" id=\"authorPostsView\"></ui-view>\r\n</section>\r\n"
 
 /***/ },
-/* 34 */
+/* 46 */
 /***/ function(module, exports) {
 
-	module.exports = "<section>\n  <b><u>Profile view of author</u></b>\n  <h2>{{profile.author.name}}</h2>\n  <a ui-sref=\".editProfile\">Edit</a>\n  <p>{{profile.author.bio}}</p>\n  <p><a href=\"{{profile.author.fb}}\">fb</a></p>\n</section>\n"
+	module.exports = "<section class=\"author-profile\">\r\n    <div class=\"media\">\r\n        <a ui-sref=\".editProfile\" class=\"author-profile__edit-btn\" >Edit</a>\r\n        <div class=\"media__img author-profile__img\">\r\n            <img src=\"./assets/img/authors/{{profile.author.img}}\" alt=\"Profie Image\">\r\n        </div>\r\n        <div class=\"media__content author-profile__content\">\r\n            <h2 class=\"author-profile__name\">{{profile.author.name}}</h2>\r\n            <p class=\"author-profile__tagline\">A blogger, traveler and nature lover.</p>\r\n            <p class=\"author-profile__followers\">\r\n                <span>10 Followers</span>\r\n                <button>Follow</button>\r\n            </p>\r\n            <p class=\"author-profile__social-links\">\r\n                <a href=\"{{profile.author.fb}}\">fb</a>\r\n                <a href=\"{{profile.author.fb}}\">g+</a>\r\n                <a href=\"{{profile.author.fb}}\">in</a>\r\n                <a href=\"{{profile.author.fb}}\">tr</a>\r\n            </p>\r\n        </div>\r\n    </div>\r\n    <p class=\"author-profile__bio\">{{profile.author.bio}}</p>\r\n</section>\r\n"
 
 /***/ },
-/* 35 */
+/* 47 */
 /***/ function(module, exports) {
 
-	module.exports = "<b><u>A posts under author</u></b>\n\n<a ui-sref=\".posts.new\">New Blog</a>\n<b>{{posts.message}}</b>\n<div >\n  <ui-view name=\"authorPostsNewView\" id=\"authorPostsNewView\"></ui-view>\n  <ui-view name=\"authorPostsEditView\" id=\"authorPostsNewView\"></ui-view>\n</div>\n\n<ul>\n  <li>\n    <h2>This is the title of the post.</h2>\n    <a ui-sref=\".posts.edit({'postId': 1})\">edit</a> <buttom>Delete</button>\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>\n  </li>\n  <li>\n    <h2>This is the title of the post.</h2>\n    <a ui-sref=\".posts.edit({'postId': 2})\">edit</a> <buttom>Delete</button>\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>\n  </li>\n  <li>\n    <h2>This is the title of the post.</h2>\n    <a ui-sref=\".posts.edit({'postId': 3})\">edit</a> <buttom>Delete</button>\n    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora magni in ratione placeat eius, voluptatem laboriosam. Delectus distinctio sunt numquam amet in ut nostrum, reiciendis, tempora repellat error cumque ducimus.</p>\n  </li>\n</ul>\n"
+	module.exports = "<a ui-sref=\".posts.new\">New Blog</a>\r\n<div >\r\n  <ui-view name=\"authorPostsNewView\" id=\"authorPostsNewView\"></ui-view>\r\n  <ui-view name=\"authorPostsEditView\" id=\"authorPostsNewView\"></ui-view>\r\n</div>\r\n\r\n<div class=\"postcards-container\">\r\n    <tpb-postcard data-ng-repeat=\"post in posts.posts\" post=\"post\" can-edit=\"{{true}}\"><tpb-postcard>\r\n</div>\r\n"
 
 /***/ },
-/* 36 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35729,15 +39046,15 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _authorProfile = __webpack_require__(37);
+	var _authorProfile = __webpack_require__(49);
 
 	var _authorProfile2 = _interopRequireDefault(_authorProfile);
 
-	var _authorProfile3 = __webpack_require__(39);
+	var _authorProfile3 = __webpack_require__(51);
 
 	var _authorProfile4 = _interopRequireDefault(_authorProfile3);
 
-	var _authorProfile5 = __webpack_require__(40);
+	var _authorProfile5 = __webpack_require__(52);
 
 	var _authorProfile6 = _interopRequireDefault(_authorProfile5);
 
@@ -35746,7 +39063,7 @@
 	exports.default = _angular2.default.module("Author.Profile", [_angularUiRouter2.default]).config(_authorProfile2.default).controller("AuthorProfileController", _authorProfile4.default).service("AuthorProfileService", _authorProfile6.default).name;
 
 /***/ },
-/* 37 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35762,8 +39079,8 @@
 	    url: "/editProfile",
 	    views: {
 	      "authorProfileView": {
-	        template: __webpack_require__(38),
-	        constructor: "AuthorProfileController",
+	        template: __webpack_require__(50),
+	        controller: "AuthorProfileController",
 	        controllerAs: "profile"
 	      }
 	    }
@@ -35771,13 +39088,13 @@
 	}
 
 /***/ },
-/* 38 */
+/* 50 */
 /***/ function(module, exports) {
 
-	module.exports = "<section>\n  <b><u>Profile Edit view</u></b>\n  <label for=\"authorName\">Name:</label>\n  <input type=\"text\" id=\"authoName\" data-ng-model=\"profile.author.name\">\n  <buttom data-ng-click=\"profile.update()\">Update</button>\n</section>\n"
+	module.exports = "<section class=\"author-profile\">\r\n    <div class=\"media\">\r\n        <a ui-sref=\"author\" class=\"author-profile__edit-btn\" >Done</a>\r\n        <div class=\"media__img author-profile__img\">\r\n            <img src=\"./assets/img/authors/{{profile.author.img}}\" alt=\"Profie Image\">\r\n        </div>\r\n        <div class=\"media__content author-profile__content\">\r\n            <input type=\"text\" id=\"authorName\" data-ng-model=\"profile.author.name\">\r\n            <input type=\"text\" id=\"authorTagline\" data-ng-model=\"profile.author.tagline\">\r\n            <p class=\"author-profile__followers\">\r\n                <span>10 Followers</span>\r\n                <button>Follow</button>\r\n            </p>\r\n            <p class=\"author-profile__social-links\">\r\n                <a href=\"{{profile.author.fb}}\">fb</a>\r\n                <a href=\"{{profile.author.fb}}\">g+</a>\r\n                <a href=\"{{profile.author.fb}}\">in</a>\r\n                <a href=\"{{profile.author.fb}}\">tr</a>\r\n            </p>\r\n        </div>\r\n    </div>\r\n    <p class=\"author-profile__bio\">{{profile.author.bio}}</p>\r\n</section>\r\n\r\n"
 
 /***/ },
-/* 39 */
+/* 51 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35791,17 +39108,26 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var AuthorProfileController = function () {
-	  function AuthorProfileController(authorProfileService) {
+	  function AuthorProfileController(authorProfileService, stateParams) {
 	    _classCallCheck(this, AuthorProfileController);
 
-	    this.service = authorProfileService;
-	    this.author = authorProfileService.profile;
+	    this._profileService = authorProfileService;
+	    this._stateParams = stateParams;
+	    this.get();
 	  }
 
-	  // Update the profile
+	  // get the author profile
 
 
 	  _createClass(AuthorProfileController, [{
+	    key: "get",
+	    value: function get() {
+	      this.author = this._profileService.get(this._stateParams.authorId);
+	    }
+
+	    // Update the profile
+
+	  }, {
 	    key: "update",
 	    value: function update() {
 	      console.log(this.author);
@@ -35815,10 +39141,10 @@
 
 
 	exports.default = AuthorProfileController;
-	AuthorProfileController.$inject = ["AuthorProfileService"];
+	AuthorProfileController.$inject = ["AuthorProfileService", "$stateParams"];
 
 /***/ },
-/* 40 */
+/* 52 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35832,20 +39158,31 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var AuthorProfileService = function () {
-	  function AuthorProfileService() {
+	  function AuthorProfileService(http, db) {
 	    _classCallCheck(this, AuthorProfileService);
 
-	    this.profile = {
-	      name: "Sudhir",
-	      bio: "Some bio for author",
-	      fb: "https://www.facebook.com/sdhmitharwal"
-	    };
+	    this._http = http;
+	    this._authors = db.authors;
 	  }
 
-	  // Update the profile
+	  // get the profile
 
 
 	  _createClass(AuthorProfileService, [{
+	    key: "get",
+	    value: function get(authorId) {
+	      var author;
+	      for (var i = this._authors.length - 1; i >= 0; i--) {
+	        author = this._authors[i];
+	        if (author.username == authorId) {
+	          return author;
+	        }
+	      }
+	    }
+
+	    // Update the profile
+
+	  }, {
 	    key: "update",
 	    value: function update(profile) {
 	      console.log("AuthorProfileService.update::", profile);
@@ -35857,8 +39194,11 @@
 
 	exports.default = AuthorProfileService;
 
+
+	AuthorProfileService.$inject = ["$http", "DB"];
+
 /***/ },
-/* 41 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35875,24 +39215,33 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _authorPosts = __webpack_require__(42);
+	var _authorPosts = __webpack_require__(54);
 
 	var _authorPosts2 = _interopRequireDefault(_authorPosts);
 
-	var _authorPosts3 = __webpack_require__(45);
+	var _authorPosts3 = __webpack_require__(55);
 
 	var _authorPosts4 = _interopRequireDefault(_authorPosts3);
 
-	var _authorPosts5 = __webpack_require__(46);
+	var _authorPosts5 = __webpack_require__(56);
 
 	var _authorPosts6 = _interopRequireDefault(_authorPosts5);
 
+	var _edit = __webpack_require__(57);
+
+	var _edit2 = _interopRequireDefault(_edit);
+
+	var _new = __webpack_require__(61);
+
+	var _new2 = _interopRequireDefault(_new);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = _angular2.default.module("Author.Posts", [_angularUiRouter2.default]).config(_authorPosts2.default).controller("AuthorPostsController", _authorPosts4.default).service("AuthorPostsService", _authorPosts6.default).name;
+	// import the components of author posts
+	exports.default = _angular2.default.module("Author.Posts", [_angularUiRouter2.default, _new2.default, _edit2.default]).config(_authorPosts2.default).controller("AuthorPostsController", _authorPosts4.default).service("AuthorPostsService", _authorPosts6.default).name;
 
 /***/ },
-/* 42 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35906,41 +39255,19 @@
 	function routes($stateProvider) {
 	  $stateProvider.state("author.posts", {
 	    url: "/posts",
-	    abstract: true,
 	    views: {
-	      "authorProfileView@author": {}
-	    }
-	  }).state("author.posts.new", {
-	    url: "/new",
-	    views: {
-	      "authorPostsNewView@author": {
-	        template: __webpack_require__(43)
-	      }
-	    }
-	  }).state("author.posts.edit", {
-	    url: "/edit/{postId}",
-	    views: {
-	      "authorPostsEditView": {
-	        template: __webpack_require__(44)
+	      "authorProfileView": {},
+	      "authorPostsView": {
+	        template: __webpack_require__(47),
+	        controller: "AuthorPostsController",
+	        controllerAs: "posts"
 	      }
 	    }
 	  });
 	}
 
 /***/ },
-/* 43 */
-/***/ function(module, exports) {
-
-	module.exports = "<u><b>New blog Post</b></u>\n<section>\n  <form action=\"\">\n    <div>\n      <label for=\"newPostTitle\">Title:</label>\n      <input type=\"text\" name=\"newPostTitle\" id=\"newPostTitle\" data-ng-model=\"posts.newPost.title\">\n    </div>\n    <div>\n      <label for=\"newPostInfo\">Short Description:</label>\n      <input type=\"text\" name=\"newPostInfo\" id=\"newPostInfo\" data-ng-model=\"posts.newPost.info\">\n    </div>\n\n    <div>\n      <label for=\"newPostContent\">Title</label>\n      <textarea style=\"display: block;\" name=\"newPostContent\" id=\"newPostContent\" rows=\"8\" cols=\"40\" data-ng-model=\"posts.newPost.content\"></textarea>\n    </div>\n    <div>\n      <input type=\"submit\" value=\"Submit\">\n    </div>\n  </form>\n</section>\n"
-
-/***/ },
-/* 44 */
-/***/ function(module, exports) {
-
-	module.exports = "<u><b>New blog Post</b></u>\n<section>\n  <form action=\"\">\n    <div>\n      <label for=\"newPostTitle\">Title:</label>\n      <input type=\"text\" name=\"newPostTitle\" id=\"newPostTitle\" data-ng-model=\"posts.post.title\">\n    </div>\n    <div>\n      <label for=\"newPostInfo\">Short Description:</label>\n      <input type=\"text\" name=\"newPostInfo\" id=\"newPostInfo\" data-ng-model=\"posts.post.info\">\n    </div>\n\n    <div>\n      <label for=\"newPostContent\">Title</label>\n      <textarea style=\"display: block;\" name=\"newPostContent\" id=\"newPostContent\" rows=\"8\" cols=\"40\" data-ng-model=\"posts.post.content\"></textarea>\n    </div>\n    <div>\n      <input type=\"submit\" value=\"Submit\">\n    </div>\n  </form>\n</section>\n"
-
-/***/ },
-/* 45 */
+/* 55 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -35958,24 +39285,27 @@
 	    _classCallCheck(this, AuthorPostsController);
 
 	    // Dependencies
-	    this._service = authorPostsService;
+	    this._postService = authorPostsService;
 	    this._stateParams = stateParams;
 
-	    // the new post
-	    this.newPost = {};
-
-	    // the editable post
-	    this.post = {};
-
+	    // all the post of the author
+	    this.posts = [];
 	    // Controller variables
-	    // get all the post for the author
-	    this.posts = authorPostsService.posts;
+	    this.all();
 	  }
 
-	  // update the post
+	  // get all the post for the author
 
 
 	  _createClass(AuthorPostsController, [{
+	    key: "all",
+	    value: function all() {
+	      this.posts = this._postService.all(this._stateParams.authorId);
+	    }
+
+	    // update the post
+
+	  }, {
 	    key: "update",
 	    value: function update() {
 	      console.log("Update the post:", this.post);
@@ -36007,7 +39337,7 @@
 	AuthorPostsController.$inject = ["AuthorPostsService", "$stateParams"];
 
 /***/ },
-/* 46 */
+/* 56 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36021,19 +39351,54 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var AuthorPostsService = function () {
-	  function AuthorPostsService() {
+	  function AuthorPostsService(http, db) {
 	    _classCallCheck(this, AuthorPostsService);
 
-	    this.posts = [{ title: "Blog 1 -- Title", info: "Some info about blog", authorId: "sudkumar" }, { title: "Blog 2 -- Title", info: "Some info about blog", authorId: "sudkumar" }];
+	    this._http = http;
+	    this._posts = db.posts;
 	  }
 
-	  // get the post with this id
-
-
 	  _createClass(AuthorPostsService, [{
+	    key: "all",
+	    value: function all(authorId) {
+	      var posts = [];
+	      for (var i = this._posts.length - 1; i >= 0; i--) {
+	        var post = this._posts[i];
+	        if (post.authorId == authorId) {
+	          posts.push(post);
+	        }
+	      }
+	      return posts;
+	    }
+
+	    // get the post with this id
+
+	  }, {
 	    key: "get",
-	    value: function get(postId) {
-	      return { title: "New blog-- Title", info: "Some info", author: "Some one", postId: postId };
+	    value: function get(authorId, postId) {
+	      var post = {};
+	      for (var i = this._posts.length - 1; i >= 0; i--) {
+	        post = this._posts[i];
+	        if (post.id == postId && post.authroId == authorId) {
+	          return post;
+	        }
+	      }
+	      return undefined;
+	    }
+
+	    // get post with token
+
+	  }, {
+	    key: "getWithToken",
+	    value: function getWithToken(postToken) {
+	      var post = {};
+	      for (var i = this._posts.length - 1; i >= 0; i--) {
+	        post = this._posts[i];
+	        if (post.token == postToken) {
+	          return post;
+	        }
+	      }
+	      return undefined;
 	    }
 
 	    // Put a new post.
@@ -36067,8 +39432,207 @@
 
 	exports.default = AuthorPostsService;
 
+
+	AuthorPostsService.$inject = ["$http", "DB"];
+
 /***/ },
-/* 47 */
+/* 57 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _authorPostsEdit = __webpack_require__(58);
+
+	var _authorPostsEdit2 = _interopRequireDefault(_authorPostsEdit);
+
+	var _authorPostsEdit3 = __webpack_require__(60);
+
+	var _authorPostsEdit4 = _interopRequireDefault(_authorPostsEdit3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _angular2.default.module("Author.Posts.Edit", []).config(_authorPostsEdit2.default).controller("AuthorPostsEditContoller", _authorPostsEdit4.default).name;
+
+/***/ },
+/* 58 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = routes;
+	routes.$inject = ["$stateProvider"];
+
+	function routes($stateProvider) {
+	  $stateProvider.state("author.posts.edit", {
+	    url: "/edit/{postToken}",
+	    views: {
+	      "authorPostsView@author": {
+	        template: __webpack_require__(59),
+	        controller: "AuthorPostsEditContoller",
+	        controllerAs: "edit"
+	      }
+	    }
+	  });
+	}
+
+/***/ },
+/* 59 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"new-post\">\r\n  <form class=\"new-post-form\" name=\"newPostForm\">\r\n    <fieldset>\r\n      <label for=\"newPostTitle\">Title:</label>\r\n      <input type=\"text\" name=\"newPostTitle\" id=\"newPostTitle\" data-ng-model=\"edit.post.title\">\r\n    </fieldset>\r\n    <fieldset>\r\n      <label for=\"newPostInfo\">Short Description:</label>\r\n      <textarea  name=\"newPostInfo\" id=\"newPostInfo\" rows=\"4\" data-ng-model=\"edit.post.info\"></textarea>\r\n    </fieldset>\r\n\r\n    <fieldset>\r\n      <label for=\"newPostContent\">Content</label>\r\n      <tpb-mdeditor md=\"edit.post.content\"></tpb-mdeditor>\r\n    </fieldset>\r\n    <fieldset>\r\n      <input type=\"submit\" value=\"Submit\">\r\n    </fieldset>\r\n  </form>\r\n  <div id=\"preview\" ></div>\r\n</section>\r\n"
+
+/***/ },
+/* 60 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var AuthorPostsEditController = function () {
+	    function AuthorPostsEditController(authorPostsService, stateParams) {
+	        _classCallCheck(this, AuthorPostsEditController);
+
+	        this._postsService = authorPostsService;
+	        this._stateParams = stateParams;
+
+	        // get the current selected post if it exists
+	        // else get it from the state params
+	        var token = this._stateParams.postToken;
+	        this.post = this._postsService.getWithToken(token);
+	    }
+
+	    // update the post
+
+
+	    _createClass(AuthorPostsEditController, [{
+	        key: "update",
+	        value: function update() {
+	            console.log("Update the post:", this.post);
+	        }
+	    }]);
+
+	    return AuthorPostsEditController;
+	}();
+
+	exports.default = AuthorPostsEditController;
+
+
+	AuthorPostsEditController.$inject = ["AuthorPostsService", "$stateParams"];
+
+/***/ },
+/* 61 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _authorPostsNew = __webpack_require__(62);
+
+	var _authorPostsNew2 = _interopRequireDefault(_authorPostsNew);
+
+	var _authorPostsNew3 = __webpack_require__(63);
+
+	var _authorPostsNew4 = _interopRequireDefault(_authorPostsNew3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _angular2.default.module("Author.Posts.New", []).config(_authorPostsNew4.default).controller("AuthorPostsNewContoller", _authorPostsNew2.default).name;
+
+/***/ },
+/* 62 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var AuthorPostsNewController = function () {
+	    function AuthorPostsNewController(postsService) {
+	        _classCallCheck(this, AuthorPostsNewController);
+
+	        this._postsService = postsService;
+	        this.post = {};
+	    }
+
+	    _createClass(AuthorPostsNewController, [{
+	        key: "new",
+	        value: function _new() {
+	            console.log("something");
+	        }
+	    }]);
+
+	    return AuthorPostsNewController;
+	}();
+
+	exports.default = AuthorPostsNewController;
+	;
+
+	AuthorPostsNewController.$inject = ["AuthorPostsService"];
+
+/***/ },
+/* 63 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = routes;
+	routes.$inject = ["$stateProvider"];
+
+	function routes($stateProvider) {
+	  $stateProvider.state("author.posts.new", {
+	    url: "/new",
+	    views: {
+	      "authorPostsView@author": {
+	        template: __webpack_require__(64),
+	        controller: "AuthorPostsNewContoller",
+	        controllerAs: "new"
+	      }
+	    }
+	  });
+	}
+
+/***/ },
+/* 64 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"new-post\">\r\n  <form class=\"new-post-form\" name=\"newPostForm\">\r\n    <fieldset>\r\n      <label for=\"newPostTitle\">Title:</label>\r\n      <input type=\"text\" name=\"newPostTitle\" id=\"newPostTitle\" data-ng-model=\"posts.newPost.title\">\r\n    </fieldset>\r\n    <fieldset>\r\n      <label for=\"newPostInfo\">Short Description:</label>\r\n      <textarea  name=\"newPostInfo\" id=\"newPostInfo\" rows=\"5\" data-ng-model=\"posts.newPost.info\"></textarea>\r\n    </fieldset>\r\n\r\n    \r\n\r\n    <fieldset>\r\n      <label for=\"newPostContent\">Content</label>\r\n      <tpb-mdeditor md=\"posts.newPost.content\"></tpb-mdeditor>\r\n    </fieldset>\r\n    <fieldset>\r\n      <input type=\"submit\" value=\"Submit\">\r\n    </fieldset>\r\n  </form>\r\n</section>\r\n"
+
+/***/ },
+/* 65 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36088,7 +39652,7 @@
 	exports.default = AuthorController;
 
 /***/ },
-/* 48 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36105,15 +39669,15 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _post = __webpack_require__(49);
+	var _post = __webpack_require__(67);
 
 	var _post2 = _interopRequireDefault(_post);
 
-	var _post3 = __webpack_require__(51);
+	var _post3 = __webpack_require__(69);
 
 	var _post4 = _interopRequireDefault(_post3);
 
-	var _post5 = __webpack_require__(52);
+	var _post5 = __webpack_require__(70);
 
 	var _post6 = _interopRequireDefault(_post5);
 
@@ -36122,7 +39686,7 @@
 	exports.default = _angular2.default.module("Components.Post", [_angularUiRouter2.default]).config(_post2.default).controller("PostController", _post4.default).service("PostService", _post6.default).name;
 
 /***/ },
-/* 49 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36138,7 +39702,7 @@
 	    url: "/{postId}",
 	    views: {
 	      "postView": {
-	        template: __webpack_require__(50),
+	        template: __webpack_require__(68),
 	        controller: "PostController",
 	        controllerAs: "post"
 	      }
@@ -36147,13 +39711,13 @@
 	}
 
 /***/ },
-/* 50 */
+/* 68 */
 /***/ function(module, exports) {
 
-	module.exports = "<section>\n  <h1>{{post.post.title}}</h1>\n  <p>{{post.post.authorName}} <br> {{post.post.publishedDate}} </p>\n  <p>{{post.post.info}}</p>\n</section>\n"
+	module.exports = "<section class=\"main-post\">\r\n    <header class=\"main-post__header\" style=\" background-image: url('./assets/img/posts/{{post.post.img}}');\">\r\n        <h1 class=\"main-post__title\">{{post.post.title}}</h1>\r\n        <a class=\"main-post__author\" ui-sref=\"author({'authorId': post.post.authorId})\">\r\n            <tpb-authorinfo class=\"authorinfo--white\" author=\"{'name': post.post.authorName, 'publishedDate': post.post.publishedDate, 'img': post.post.authorImg}\"></tpb-authorinfo>\r\n        </a>\r\n    </header>\r\n    <div class=\"main-post__content\" data-ng-bind-html=\"post.post.html\" >\r\n        \r\n    </div>\r\n</section>\r\n"
 
 /***/ },
-/* 51 */
+/* 69 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36167,12 +39731,14 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var PostController = function () {
-	  function PostController(postService, stateParams) {
+	  function PostController(postService, stateParams, mdService) {
 	    _classCallCheck(this, PostController);
 
 	    this._postService = postService;
 	    this._stateParams = stateParams;
+	    this._mdService = mdService;
 	    this.post = this._postService.get(this._stateParams.postId);
+	    this.post.html = this._mdService.toHTML(this.post.content);
 	  }
 
 	  // like the post
@@ -36199,10 +39765,10 @@
 	exports.default = PostController;
 	;
 
-	PostController.$inject = ["PostService", "$stateParams"];
+	PostController.$inject = ["PostService", "$stateParams", "MDEditorService"];
 
 /***/ },
-/* 52 */
+/* 70 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36265,7 +39831,7 @@
 	PostService.$inject = ["$http", "DB"];
 
 /***/ },
-/* 53 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36278,11 +39844,11 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _posts = __webpack_require__(54);
+	var _posts = __webpack_require__(72);
 
 	var _posts2 = _interopRequireDefault(_posts);
 
-	var _authors = __webpack_require__(55);
+	var _authors = __webpack_require__(73);
 
 	var _authors2 = _interopRequireDefault(_authors);
 
@@ -36291,7 +39857,7 @@
 	exports.default = _angular2.default.module("Tourepedia.DB", []).constant("DB", { posts: _posts2.default, authors: _authors2.default }).name;
 
 /***/ },
-/* 54 */
+/* 72 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36301,60 +39867,64 @@
 	});
 	exports.default = [{
 	    id: 1,
-	    postId: "834jabfaifakdnfad2874rjahdfkafki234wykafkadfadaf",
-	    title: "This is the title",
+	    token: "834jabfaifakdnfad2874rjahdfkafki234wykafkadfadaf",
+	    title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid ab blanditiis alias expedita omnis, illo.",
 	    handle: "This-is-the-title",
-	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, beatae.",
+	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore deserunt ullam sapiente a impedit mollitia obcaecati at eligendi id facilis iure nesciunt minus, dolores doloribus deleniti ipsum! Nobis fugiat omnis facere ullam, vero magnam ipsa quos debitis natus provident assumenda cum eligendi. A, totam eaque doloremque molestias officia non eveniet.",
 	    img: "blog_img1.jpg",
-	    authorId: 1,
-	    authorName: "Sudhir",
+	    authorId: "sudkumar",
+	    authorName: "Sudhir Mitharwal",
 	    publishedDate: "2016-06-01",
-	    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus nisi non ducimus facilis fuga veritatis vel ea sed perspiciatis, quidem nobis molestias mollitia nihil neque nemo consequuntur soluta, eius culpa in saepe? Vero quia nisi, assumenda, recusandae reiciendis aut totam, accusantium eveniet provident placeat beatae necessitatibus soluta error, ratione nulla hic quos laboriosam velit officiis voluptates. Magnam quibusdam dolores at repudiandae odit consequuntur debitis illum. Officiis ab cum molestias totam fugiat laboriosam, perferendis corporis alias numquam sint pariatur at ullam itaque! Reiciendis eveniet laudantium esse minus iste quasi architecto distinctio itaque ipsa quisquam voluptatibus commodi expedita, culpa, accusamus cumque nobis voluptate neque et deleniti nulla, ratione delectus iusto tempora! Cumque ullam porro adipisci consequatur et facere quaerat debitis asperiores atque, excepturi nemo consequuntur, voluptates molestias aperiam omnis corporis earum, dolores laudantium. Ducimus placeat, in. Doloribus laborum illum libero voluptatum nobis porro laboriosam hic quae cupiditate, eius culpa, maxime voluptatibus, accusamus perspiciatis quam tenetur atque. Eaque aliquam in cupiditate dolorem suscipit dicta, adipisci autem tempora! Inventore, illum placeat? Atque nostrum reiciendis praesentium sequi! Illo ducimus nihil cumque beatae quod, aspernatur sit fuga temporibus, eius perferendis, omnis labore necessitatibus voluptatibus, unde saepe. Quaerat sint optio, obcaecati vel cupiditate iure culpa. Mollitia reiciendis deserunt animi. Totam, quam, voluptatibus. Repellendus tenetur, ratione hic, temporibus libero praesentium deserunt ipsa laborum iure sit ex dolorem voluptatum doloremque nulla mollitia, atque eligendi deleniti? Excepturi deserunt nemo pariatur consequatur debitis recusandae esse, vel ducimus quod qui consequuntur eveniet dolorum tempora officia ex dolor, alias cumque harum optio maiores delectus laboriosam aliquam vero. Veritatis delectus iusto tempora, cupiditate quae nobis eum reprehenderit provident perferendis nihil, aperiam, commodi ullam recusandae molestias. Alias omnis, eligendi architecto fuga non. Architecto quae sit quod tempora excepturi explicabo porro, velit repellendus ut. Error similique tempora ratione officiis reprehenderit. Quis magnam impedit sequi possimus nostrum laboriosam, obcaecati facere dicta atque itaque esse eum necessitatibus harum ut error odit velit, officia repellendus architecto molestias soluta ratione. Fugiat reprehenderit, est quaerat excepturi, officia repellat, accusantium architecto cumque adipisci quis quibusdam aut. Molestiae praesentium veritatis, quod at, illo fuga ratione nobis inventore accusamus similique! Perferendis at autem vel recusandae illum dolore aliquam facilis magni in unde. Eaque maiores magni architecto molestiae. Eius autem porro quasi rerum aperiam? Et nam odio esse. Deleniti magni expedita fugit quod, optio asperiores? Unde minima dolore quia porro molestias ex, cumque cum incidunt repellat, et adipisci explicabo. Ullam nemo, doloribus maxime totam asperiores eaque illo vitae. Vero harum cumque, consequatur dolor dolorum. Quisquam velit omnis perspiciatis, delectus at quaerat placeat. Officia et quis laboriosam porro reiciendis eligendi nisi, voluptas nemo. Saepe totam odit, libero dolore tempora. Architecto eaque ipsa molestias velit sapiente voluptatem distinctio vero, natus error aliquid ut cupiditate consectetur magni commodi quasi dolorem placeat, veniam ratione nulla dolores a? Dolor ex deleniti necessitatibus tenetur dolorem, natus est molestias, voluptatibus, culpa exercitationem, animi perferendis hic. Obcaecati provident, alias expedita consequuntur velit ea repellendus. Quas dolorum debitis molestias, quos, dicta in ullam quaerat voluptatem, minus repudiandae tempore assumenda repellat dolorem aperiam, libero. Blanditiis.",
+	    content: "Lorem ipsum dolor sit bold __amet__, consectetur adipisicing italic _elit_. Qui deleniti [link_name](http://www.domain.com \"Title of link\") recusandae, quas aliquid, distinctio soluta corporis quo expedita sapiente laboriosam. Ad deleniti ![Alternate text](/assets/img/posts/blog_img1.jpg \"Optional title\") maxime asperiores architecto ipsum itaque nisi hic, impedit obcaecati vel, iste quae necessitatibus nobis culpa doloremque sit.\n\n## Lorem ipsum dolor sit amet. \n\n1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, totam! \n2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati quod non rem earum temporibus, porro nostrum esse quibusdam nam animi. \n3. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo recusandae quod animi alias, sint harum.\n\nLorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet nostrum sequi odit consectetur nemo fuga cumque, rerum tenetur sit possimus.",
 	    likes: 1000,
-	    shares: 10
+	    shares: 10,
+	    authorImg: "author1.jpg"
 	}, {
 	    id: 2,
-	    postId: "aa2487addfadifakdnfad2874rjahdfkafki234wykafkadfadaf",
-	    title: "Another title of the title",
+	    token: "aa2487addfadifakdnfad2874rjahdfkafki234wykafkadfadaf",
+	    title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, eligendi.",
 	    handle: "Another-title-of-the-title",
-	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore nulla, iste porro praesentium natus et..",
-	    img: "blog_img1.jpg",
-	    authorId: 2,
-	    authorName: "Anand",
+	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. At ipsam non nihil voluptatibus velit nobis vitae odio esse laborum, sit atque soluta laboriosam cum deleniti quibusdam optio! Ullam a odit sint, incidunt ducimus, et. Aperiam repellendus nostrum exercitationem non, aliquam vitae fuga, recusandae cupiditate voluptate.",
+	    img: "blog_img2.jpg",
+	    authorId: "anandss",
+	    authorName: "Anand Singh",
 	    publishedDate: "2015-06-01",
-	    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus nisi non ducimus facilis fuga veritatis vel ea sed perspiciatis, quidem nobis molestias mollitia nihil neque nemo consequuntur soluta, eius culpa in saepe? Vero quia nisi, assumenda, recusandae reiciendis aut totam, accusantium eveniet provident placeat beatae necessitatibus soluta error, ratione nulla hic quos laboriosam velit officiis voluptates. Magnam quibusdam dolores at repudiandae odit consequuntur debitis illum. Officiis ab cum molestias totam fugiat laboriosam, perferendis corporis alias numquam sint pariatur at ullam itaque! Reiciendis eveniet laudantium esse minus iste quasi architecto distinctio itaque ipsa quisquam voluptatibus commodi expedita, culpa, accusamus cumque nobis voluptate neque et deleniti nulla, ratione delectus iusto tempora! Cumque ullam porro adipisci consequatur et facere quaerat debitis asperiores atque, excepturi nemo consequuntur, voluptates molestias aperiam omnis corporis earum, dolores laudantium. Ducimus placeat, in. Doloribus laborum illum libero voluptatum nobis porro laboriosam hic quae cupiditate, eius culpa, maxime voluptatibus, accusamus perspiciatis quam tenetur atque. Eaque aliquam in cupiditate dolorem suscipit dicta, adipisci autem tempora! Inventore, illum placeat? Atque nostrum reiciendis praesentium sequi! Illo ducimus nihil cumque beatae quod, aspernatur sit fuga temporibus, eius perferendis, omnis labore necessitatibus voluptatibus, unde saepe. Quaerat sint optio, obcaecati vel cupiditate iure culpa. Mollitia reiciendis deserunt animi. Totam, quam, voluptatibus. Repellendus tenetur, ratione hic, temporibus libero praesentium deserunt ipsa laborum iure sit ex dolorem voluptatum doloremque nulla mollitia, atque eligendi deleniti? Excepturi deserunt nemo pariatur consequatur debitis recusandae esse, vel ducimus quod qui consequuntur eveniet dolorum tempora officia ex dolor, alias cumque harum optio maiores delectus laboriosam aliquam vero. Veritatis delectus iusto tempora, cupiditate quae nobis eum reprehenderit provident perferendis nihil, aperiam, commodi ullam recusandae molestias. Alias omnis, eligendi architecto fuga non. Architecto quae sit quod tempora excepturi explicabo porro, velit repellendus ut. Error similique tempora ratione officiis reprehenderit. Quis magnam impedit sequi possimus nostrum laboriosam, obcaecati facere dicta atque itaque esse eum necessitatibus harum ut error odit velit, officia repellendus architecto molestias soluta ratione. Fugiat reprehenderit, est quaerat excepturi, officia repellat, accusantium architecto cumque adipisci quis quibusdam aut. Molestiae praesentium veritatis, quod at, illo fuga ratione nobis inventore accusamus similique! Perferendis at autem vel recusandae illum dolore aliquam facilis magni in unde. Eaque maiores magni architecto molestiae. Eius autem porro quasi rerum aperiam? Et nam odio esse. Deleniti magni expedita fugit quod, optio asperiores? Unde minima dolore quia porro molestias ex, cumque cum incidunt repellat, et adipisci explicabo. Ullam nemo, doloribus maxime totam asperiores eaque illo vitae. Vero harum cumque, consequatur dolor dolorum. Quisquam velit omnis perspiciatis, delectus at quaerat placeat. Officia et quis laboriosam porro reiciendis eligendi nisi, voluptas nemo. Saepe totam odit, libero dolore tempora. Architecto eaque ipsa molestias velit sapiente voluptatem distinctio vero, natus error aliquid ut cupiditate consectetur magni commodi quasi dolorem placeat, veniam ratione nulla dolores a? Dolor ex deleniti necessitatibus tenetur dolorem, natus est molestias, voluptatibus, culpa exercitationem, animi perferendis hic. Obcaecati provident, alias expedita consequuntur velit ea repellendus. Quas dolorum debitis molestias, quos, dicta in ullam quaerat voluptatem, minus repudiandae tempore assumenda repellat dolorem aperiam, libero. Blanditiis.",
+	    content: "Lorem ipsum dolor sit bold __amet__, consectetur adipisicing italic _elit_. Qui deleniti [link_name](http://www.domain.com \"Title of link\") recusandae, quas aliquid, distinctio soluta corporis quo expedita sapiente laboriosam. Ad deleniti ![Alternate text](/assets/img/posts/blog_img1.jpg \"Optional title\") maxime asperiores architecto ipsum itaque nisi hic, impedit obcaecati vel, iste quae necessitatibus nobis culpa doloremque sit.\n\n## Lorem ipsum dolor sit amet. \n\n1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, totam! \n2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati quod non rem earum temporibus, porro nostrum esse quibusdam nam animi. \n3. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo recusandae quod animi alias, sint harum.\n\nLorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet nostrum sequi odit consectetur nemo fuga cumque, rerum tenetur sit possimus.",
 	    likes: 100,
-	    shares: 10
+	    shares: 10,
+	    authorImg: "author2.jpg"
 	}, {
 	    id: 3,
-	    postId: "akfh29472398478dfjadfkafki234wykafkadfadaf",
-	    title: "This is one the title",
+	    token: "akfh29472398478dfjadfkafki234wykafkadfadaf",
+	    title: "Lorem ipsum dolor sit amet, consectetur adipisicing.",
 	    handle: "This-is-one-the-title",
-	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio, beatae.",
-	    img: "blog_img1.jpg",
-	    authorId: 1,
-	    authorName: "Sudhir",
+	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti alias illo, exercitationem soluta qui et tenetur blanditiis! Sit earum, iusto totam, assumenda ex quam atque laborum vero inventore dicta in quasi vitae suscipit rerum, hic dignissimos, at quae deserunt aperiam.",
+	    img: "blog_img3.jpg",
+	    authorId: "sudkumar",
+	    authorName: "Sudhir Mitharwal",
 	    publishedDate: "2014-06-01",
-	    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus nisi non ducimus facilis fuga veritatis vel ea sed perspiciatis, quidem nobis molestias mollitia nihil neque nemo consequuntur soluta, eius culpa in saepe? Vero quia nisi, assumenda, recusandae reiciendis aut totam, accusantium eveniet provident placeat beatae necessitatibus soluta error, ratione nulla hic quos laboriosam velit officiis voluptates. Magnam quibusdam dolores at repudiandae odit consequuntur debitis illum. Officiis ab cum molestias totam fugiat laboriosam, perferendis corporis alias numquam sint pariatur at ullam itaque! Reiciendis eveniet laudantium esse minus iste quasi architecto distinctio itaque ipsa quisquam voluptatibus commodi expedita, culpa, accusamus cumque nobis voluptate neque et deleniti nulla, ratione delectus iusto tempora! Cumque ullam porro adipisci consequatur et facere quaerat debitis asperiores atque, excepturi nemo consequuntur, voluptates molestias aperiam omnis corporis earum, dolores laudantium. Ducimus placeat, in. Doloribus laborum illum libero voluptatum nobis porro laboriosam hic quae cupiditate, eius culpa, maxime voluptatibus, accusamus perspiciatis quam tenetur atque. Eaque aliquam in cupiditate dolorem suscipit dicta, adipisci autem tempora! Inventore, illum placeat? Atque nostrum reiciendis praesentium sequi! Illo ducimus nihil cumque beatae quod, aspernatur sit fuga temporibus, eius perferendis, omnis labore necessitatibus voluptatibus, unde saepe. Quaerat sint optio, obcaecati vel cupiditate iure culpa. Mollitia reiciendis deserunt animi. Totam, quam, voluptatibus. Repellendus tenetur, ratione hic, temporibus libero praesentium deserunt ipsa laborum iure sit ex dolorem voluptatum doloremque nulla mollitia, atque eligendi deleniti? Excepturi deserunt nemo pariatur consequatur debitis recusandae esse, vel ducimus quod qui consequuntur eveniet dolorum tempora officia ex dolor, alias cumque harum optio maiores delectus laboriosam aliquam vero. Veritatis delectus iusto tempora, cupiditate quae nobis eum reprehenderit provident perferendis nihil, aperiam, commodi ullam recusandae molestias. Alias omnis, eligendi architecto fuga non. Architecto quae sit quod tempora excepturi explicabo porro, velit repellendus ut. Error similique tempora ratione officiis reprehenderit. Quis magnam impedit sequi possimus nostrum laboriosam, obcaecati facere dicta atque itaque esse eum necessitatibus harum ut error odit velit, officia repellendus architecto molestias soluta ratione. Fugiat reprehenderit, est quaerat excepturi, officia repellat, accusantium architecto cumque adipisci quis quibusdam aut. Molestiae praesentium veritatis, quod at, illo fuga ratione nobis inventore accusamus similique! Perferendis at autem vel recusandae illum dolore aliquam facilis magni in unde. Eaque maiores magni architecto molestiae. Eius autem porro quasi rerum aperiam? Et nam odio esse. Deleniti magni expedita fugit quod, optio asperiores? Unde minima dolore quia porro molestias ex, cumque cum incidunt repellat, et adipisci explicabo. Ullam nemo, doloribus maxime totam asperiores eaque illo vitae. Vero harum cumque, consequatur dolor dolorum. Quisquam velit omnis perspiciatis, delectus at quaerat placeat. Officia et quis laboriosam porro reiciendis eligendi nisi, voluptas nemo. Saepe totam odit, libero dolore tempora. Architecto eaque ipsa molestias velit sapiente voluptatem distinctio vero, natus error aliquid ut cupiditate consectetur magni commodi quasi dolorem placeat, veniam ratione nulla dolores a? Dolor ex deleniti necessitatibus tenetur dolorem, natus est molestias, voluptatibus, culpa exercitationem, animi perferendis hic. Obcaecati provident, alias expedita consequuntur velit ea repellendus. Quas dolorum debitis molestias, quos, dicta in ullam quaerat voluptatem, minus repudiandae tempore assumenda repellat dolorem aperiam, libero. Blanditiis.",
+	    content: "Lorem ipsum dolor sit bold __amet__, consectetur adipisicing italic _elit_. Qui deleniti [link_name](http://www.domain.com \"Title of link\") recusandae, quas aliquid, distinctio soluta corporis quo expedita sapiente laboriosam. Ad deleniti ![Alternate text](/assets/img/posts/blog_img1.jpg \"Optional title\") maxime asperiores architecto ipsum itaque nisi hic, impedit obcaecati vel, iste quae necessitatibus nobis culpa doloremque sit.\n\n## Lorem ipsum dolor sit amet. \n\n1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, totam! \n2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati quod non rem earum temporibus, porro nostrum esse quibusdam nam animi. \n3. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo recusandae quod animi alias, sint harum.\n\nLorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet nostrum sequi odit consectetur nemo fuga cumque, rerum tenetur sit possimus.",
 	    likes: 1000,
-	    shares: 10
+	    shares: 10,
+	    authorImg: "author1.jpg"
 	}, {
 	    id: 4,
-	    postId: "kafda223askfhadfadkhawfpadhdfkafki234wykafkadfadaf",
-	    title: "Mama blog is here",
+	    token: "kafda223askfhadfadkhawfpadhdfkafki234wykafkadfadaf",
+	    title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem neque fuga dicta asperiores provident, obcaecati.",
 	    handle: "Mama-blog-is-here",
-	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore nulla, iste porro praesentium natus et..",
-	    img: "blog_img1.jpg",
-	    authorId: 2,
-	    authorName: "Anand",
+	    info: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor praesentium, cumque voluptatum maiores officiis ipsam quibusdam, aut illum earum, nam hic, cum nulla incidunt quisquam. Facere, aliquam a. Ad necessitatibus, in ducimus consectetur quas culpa. Culpa nemo, earum nesciunt iusto, placeat aliquid qui necessitatibus eius similique eos ipsa optio minima.",
+	    img: "blog_img4.jpg",
+	    authorId: "anandss",
+	    authorName: "Anand Singh",
 	    publishedDate: "2015-05-10",
-	    content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus nisi non ducimus facilis fuga veritatis vel ea sed perspiciatis, quidem nobis molestias mollitia nihil neque nemo consequuntur soluta, eius culpa in saepe? Vero quia nisi, assumenda, recusandae reiciendis aut totam, accusantium eveniet provident placeat beatae necessitatibus soluta error, ratione nulla hic quos laboriosam velit officiis voluptates. Magnam quibusdam dolores at repudiandae odit consequuntur debitis illum. Officiis ab cum molestias totam fugiat laboriosam, perferendis corporis alias numquam sint pariatur at ullam itaque! Reiciendis eveniet laudantium esse minus iste quasi architecto distinctio itaque ipsa quisquam voluptatibus commodi expedita, culpa, accusamus cumque nobis voluptate neque et deleniti nulla, ratione delectus iusto tempora! Cumque ullam porro adipisci consequatur et facere quaerat debitis asperiores atque, excepturi nemo consequuntur, voluptates molestias aperiam omnis corporis earum, dolores laudantium. Ducimus placeat, in. Doloribus laborum illum libero voluptatum nobis porro laboriosam hic quae cupiditate, eius culpa, maxime voluptatibus, accusamus perspiciatis quam tenetur atque. Eaque aliquam in cupiditate dolorem suscipit dicta, adipisci autem tempora! Inventore, illum placeat? Atque nostrum reiciendis praesentium sequi! Illo ducimus nihil cumque beatae quod, aspernatur sit fuga temporibus, eius perferendis, omnis labore necessitatibus voluptatibus, unde saepe. Quaerat sint optio, obcaecati vel cupiditate iure culpa. Mollitia reiciendis deserunt animi. Totam, quam, voluptatibus. Repellendus tenetur, ratione hic, temporibus libero praesentium deserunt ipsa laborum iure sit ex dolorem voluptatum doloremque nulla mollitia, atque eligendi deleniti? Excepturi deserunt nemo pariatur consequatur debitis recusandae esse, vel ducimus quod qui consequuntur eveniet dolorum tempora officia ex dolor, alias cumque harum optio maiores delectus laboriosam aliquam vero. Veritatis delectus iusto tempora, cupiditate quae nobis eum reprehenderit provident perferendis nihil, aperiam, commodi ullam recusandae molestias. Alias omnis, eligendi architecto fuga non. Architecto quae sit quod tempora excepturi explicabo porro, velit repellendus ut. Error similique tempora ratione officiis reprehenderit. Quis magnam impedit sequi possimus nostrum laboriosam, obcaecati facere dicta atque itaque esse eum necessitatibus harum ut error odit velit, officia repellendus architecto molestias soluta ratione. Fugiat reprehenderit, est quaerat excepturi, officia repellat, accusantium architecto cumque adipisci quis quibusdam aut. Molestiae praesentium veritatis, quod at, illo fuga ratione nobis inventore accusamus similique! Perferendis at autem vel recusandae illum dolore aliquam facilis magni in unde. Eaque maiores magni architecto molestiae. Eius autem porro quasi rerum aperiam? Et nam odio esse. Deleniti magni expedita fugit quod, optio asperiores? Unde minima dolore quia porro molestias ex, cumque cum incidunt repellat, et adipisci explicabo. Ullam nemo, doloribus maxime totam asperiores eaque illo vitae. Vero harum cumque, consequatur dolor dolorum. Quisquam velit omnis perspiciatis, delectus at quaerat placeat. Officia et quis laboriosam porro reiciendis eligendi nisi, voluptas nemo. Saepe totam odit, libero dolore tempora. Architecto eaque ipsa molestias velit sapiente voluptatem distinctio vero, natus error aliquid ut cupiditate consectetur magni commodi quasi dolorem placeat, veniam ratione nulla dolores a? Dolor ex deleniti necessitatibus tenetur dolorem, natus est molestias, voluptatibus, culpa exercitationem, animi perferendis hic. Obcaecati provident, alias expedita consequuntur velit ea repellendus. Quas dolorum debitis molestias, quos, dicta in ullam quaerat voluptatem, minus repudiandae tempore assumenda repellat dolorem aperiam, libero. Blanditiis.",
+	    content: "Lorem ipsum dolor sit bold __amet__, consectetur adipisicing italic _elit_. Qui deleniti [link_name](http://www.domain.com \"Title of link\") recusandae, quas aliquid, distinctio soluta corporis quo expedita sapiente laboriosam. Ad deleniti ![Alternate text](/assets/img/posts/blog_img1.jpg \"Optional title\") maxime asperiores architecto ipsum itaque nisi hic, impedit obcaecati vel, iste quae necessitatibus nobis culpa doloremque sit.\n\n## Lorem ipsum dolor sit amet. \n\n1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, totam! \n2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati quod non rem earum temporibus, porro nostrum esse quibusdam nam animi. \n3. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo recusandae quod animi alias, sint harum.\n\nLorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet nostrum sequi odit consectetur nemo fuga cumque, rerum tenetur sit possimus.",
 	    likes: 100,
-	    shares: 10
+	    shares: 10,
+	    authorImg: "author2.jpg"
 	}];
 
 /***/ },
-/* 55 */
+/* 73 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36366,22 +39936,26 @@
 	    id: 1,
 	    username: "sudkumar",
 	    name: "Sudhir Mitharwal",
-	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate, veniam nisi, ex sed velit distinctio."
+	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus quia, nobis velit voluptatem labore possimus non, quod quae, architecto ratione nemo similique laborum eos repellat!",
+	    img: "author1.jpg"
 	}, {
 	    id: 2,
-	    username: "mama",
+	    username: "anandss",
 	    name: "Anand Singh",
-	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, unde!"
+	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam nam aperiam expedita magni tenetur aspernatur culpa aliquam rerum molestias, animi vitae. Maxime, ratione illo ipsam? Ullam est, accusantium deserunt voluptates?",
+	    img: "author2.jpg"
 	}, {
 	    id: 3,
 	    username: "rmoria",
 	    name: "Rohit Moriya",
-	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit iste sed doloremque, magni ad quam impedit voluptatibus. Quae blanditiis, accusamus."
+	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit iste sed doloremque, magni ad quam impedit voluptatibus. Quae blanditiis, accusamus.",
+	    img: "author3.jpg"
 	}, {
 	    id: 4,
 	    username: "rjsharma",
 	    name: "Rajat Sharma",
-	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, similique?"
+	    bio: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat, similique?",
+	    img: "author4.jpg"
 	}];
 
 /***/ }

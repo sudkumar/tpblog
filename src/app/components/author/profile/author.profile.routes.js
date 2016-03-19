@@ -7,7 +7,7 @@ export default function routes($stateProvider){
       views:{
         "authorProfileView":{
           template: require("./edit/author.profile.edit.view.html"),
-          constructor: "AuthorProfileController",
+          controller: "AuthorProfileController",
           controllerAs: "profile"
         }
       }

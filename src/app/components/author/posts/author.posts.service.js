@@ -1,15 +1,43 @@
 
 export default class AuthorPostsService{
-  constructor(){
-    this.posts = [
-      {title: "Blog 1 -- Title", info: "Some info about blog", authorId: "sudkumar"},
-      {title: "Blog 2 -- Title", info: "Some info about blog", authorId: "sudkumar"}
-    ];
+  constructor(http, db){
+    this._http = http;
+    this._posts = db.posts;
+  }
+
+  all(authorId){
+    var posts = [];
+    for (var i = this._posts.length - 1; i >= 0; i--) {
+      var post = this._posts[i];
+      if (post.authorId == authorId){
+        posts.push(post);
+      }
+    }
+    return posts;
   }
 
   // get the post with this id
-  get(postId){
-    return {title: "New blog-- Title", info: "Some info", author: "Some one", postId: postId};
+  get(authorId, postId){
+    var post = {};
+    for (var i = this._posts.length - 1; i >= 0; i--) {
+      post = this._posts[i];
+      if (post.id == postId && post.authroId == authorId){
+        return post;
+      }
+    }
+    return undefined;
+  }
+
+  // get post with token
+  getWithToken(postToken){
+    var post = {};
+    for (var i = this._posts.length - 1; i >= 0; i--) {
+      post = this._posts[i];
+      if (post.token == postToken){
+        return post;
+      }
+    }
+    return undefined;
   }
 
   // Put a new post.
@@ -28,3 +56,6 @@ export default class AuthorPostsService{
     console.log("AuthorPostsService.delete::", postId);
   }
 }
+
+
+AuthorPostsService.$inject = ["$http", "DB"];

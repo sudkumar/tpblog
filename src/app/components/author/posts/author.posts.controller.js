@@ -1,18 +1,20 @@
 export default class AuthorPostsController{
   constructor(authorPostsService, stateParams){
     // Dependencies
-    this._service = authorPostsService;
+    this._postService = authorPostsService;
     this._stateParams = stateParams;
 
-    // the new post
-    this.newPost = {}
-
-    // the editable post
-    this.post = {}
-
+    // all the post of the author
+    this.posts = [];
     // Controller variables
-    // get all the post for the author
-    this.posts = authorPostsService.posts;
+    this.all();
+
+  }
+
+
+  // get all the post for the author
+  all(){
+    this.posts = this._postService.all(this._stateParams.authorId);
   }
 
   // update the post

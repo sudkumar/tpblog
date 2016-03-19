@@ -1,0 +1,28 @@
+@at-root .main-footer{
+    background: whitesomke;
+    padding: 20px 5px;
+    border-top: 1px solid rgba(0,0,0,.2);
+
+    &__copyright{
+        padding: 10px;
+        text-align: center;
+        color: grey;
+    }
+    &__menu{
+        padding: 10px;
+        text-align: center;
+        a{
+            display: inline-block;
+            color: darkgrey;
+            padding: 3px 15px;
+            text-decoration: none;
+            &:not(:last-child){
+                border-right: 2px solid silver;
+            }
+            &:hover{
+                color:dimgrey ;
+            }
+        }
+
+    }
+}

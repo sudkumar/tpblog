@@ -5,7 +5,12 @@ import authorPostsRoutes from "./author.posts.routes";
 import authorPostsController from "./author.posts.controller";
 import authorPostsService from "./author.posts.service";
 
-export default angular.module("Author.Posts", [uirouter])
+// import the components of author posts
+import postsEdit from "./edit";
+import postsNew from "./new";
+
+
+export default angular.module("Author.Posts", [uirouter, postsNew, postsEdit])
   .config(authorPostsRoutes)
   .controller("AuthorPostsController", authorPostsController)
   .service("AuthorPostsService", authorPostsService)

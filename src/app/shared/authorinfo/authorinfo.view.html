@@ -1,5 +1,9 @@
-<div class="authorinfo">
-    <img src="img" alt="author image">
-    <p>Author Name: {{author.name}}</p>
-    <p>Date: {{author.publisedDate}}</p>
+<div class="authorinfo media">
+    <div class="media__img authorinfo__img">
+        <img data-ng-src="./assets/img/authors/{{author.img}}" alt="author image">
+    </div>
+    <div class="media__content authorinfo__content">
+        <p class="authorinfo__name">{{author.name}}</p>
+        <p class="authorinfo__meta">{{author.publishedDate}}</p>
+    </div>
 </div>

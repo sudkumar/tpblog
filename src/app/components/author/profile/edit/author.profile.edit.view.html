@@ -1,6 +1,24 @@
-<section>
-  <b><u>Profile Edit view</u></b>
-  <label for="authorName">Name:</label>
-  <input type="text" id="authoName" data-ng-model="profile.author.name">
-  <buttom data-ng-click="profile.update()">Update</button>
+<section class="author-profile">
+    <div class="media">
+        <a ui-sref="author" class="author-profile__edit-btn" >Done</a>
+        <div class="media__img author-profile__img">
+            <img src="./assets/img/authors/{{profile.author.img}}" alt="Profie Image">
+        </div>
+        <div class="media__content author-profile__content">
+            <input type="text" id="authorName" data-ng-model="profile.author.name">
+            <input type="text" id="authorTagline" data-ng-model="profile.author.tagline">
+            <p class="author-profile__followers">
+                <span>10 Followers</span>
+                <button>Follow</button>
+            </p>
+            <p class="author-profile__social-links">
+                <a href="{{profile.author.fb}}">fb</a>
+                <a href="{{profile.author.fb}}">g+</a>
+                <a href="{{profile.author.fb}}">in</a>
+                <a href="{{profile.author.fb}}">tr</a>
+            </p>
+        </div>
+    </div>
+    <p class="author-profile__bio">{{profile.author.bio}}</p>
 </section>
+

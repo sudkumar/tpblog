@@ -3,10 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title>Tourepedia Blog</title>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/app.css">
   </head>
   <body>
     <div id="mainMenu">
-      <blog-menu></blog-menu>
+      <tpb-menu></tpb-menu>
     </div>
 
     <div id="appView">
@@ -16,13 +18,14 @@
         <ui-view name="aboutView" id="aboutView"></ui-view>
     </div>
 
+    <div id="subscribe"> 
+
     <div id="mainFooter">
-      <blog-footer></blog-footer>
+      <tpb-footer></tpb-footer>
     </div>
 
     <div id="modalsContainer">
-      <blog-auth></blog-auth>
-      <blog-subscribe></blog-subscribe>
+      <tpb-auth></tpb-auth>
     </div>
 
     <script type="text/javascript" src="./assets/js/app.js"> </script>

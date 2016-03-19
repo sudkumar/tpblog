@@ -1,18 +1,23 @@
-<div class="card card--post">
-    <h2 class="card__title">Title: {{post.title}}</h2>
-    <div class="card__meta"> <tp-authorinfo author="{'name': post.authorName, 'publishedDate': post.publishedDate}"></tp-authorinfo>
-     </div>
+<div class="card">
+    <h2 class="card__title">{{post.title}}</h2>
+    <div class="card__meta"> 
+        <a ui-sref=".posts.edit({'postToken': post.token})" data-ng-if="canEdit == 'true'">Edit</a>
+    </div>
     <div class="card__content">
         <div class="card__img">
-            <img src="src" alt="Blog Image">
+            <img data-ng-src="./assets/img/posts/{{post.img}}" alt="Blog Image">
         </div>
-        <p class="card__info">Info: {{post.info}}</p>
+        <div class="card__info">
+            <a class="card__author" ui-sref="author({'authorId': post.authorId})">
+                <tpb-authorinfo author="{'name': post.authorName, 'publishedDate': post.publishedDate, 'img': post.authorImg}"></tpb-authorinfo>
+            </a>
+            <p>{{post.info}}</p>
+        </div>
     </div>
     <div class="card__footer">
         <a ui-sref="post({'postId': post.handle})">Read</a>
         <button>Like</button>
         <button>Share</button>
     </div>
-    
     
 </div>

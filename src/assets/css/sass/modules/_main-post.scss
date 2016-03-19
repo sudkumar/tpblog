@@ -1,0 +1,63 @@
+@at-root .main-post{
+
+    &__header{
+        padding: 70px 2px;
+        position: relative;
+        background: {
+            size: cover;
+            position: center;
+        }
+        color: white;
+        text-align: center;
+
+        &:before{
+            content: "";
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,.5);
+
+        }
+    }
+    
+    &__title{
+        position: relative;
+        max-width: 700px;
+        margin: 10px auto;
+    }
+
+    &__author{
+        position: relative;
+    }
+
+    &__content{
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        background: white;
+        line-height: 1.7;
+        color: rgba(0,0,0,.84);
+
+        a{
+            text-decoration: none;
+            color: yellow;
+            border-bottom: 2px solid yellow;
+        }
+
+        img{
+            display: block;
+            width: 100%;
+            max-width: 700px;
+            margin: 10px auto;
+        }
+
+        ul, ol{
+            padding: 20px;
+        }
+
+    }
+
+}

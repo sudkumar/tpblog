@@ -1,21 +1,21 @@
-<u><b>New blog Post</b></u>
-<section>
-  <form action="">
-    <div>
+<section class="new-post">
+  <form class="new-post-form" name="newPostForm">
+    <fieldset>
       <label for="newPostTitle">Title:</label>
-      <input type="text" name="newPostTitle" id="newPostTitle" data-ng-model="posts.post.title">
-    </div>
-    <div>
+      <input type="text" name="newPostTitle" id="newPostTitle" data-ng-model="edit.post.title">
+    </fieldset>
+    <fieldset>
       <label for="newPostInfo">Short Description:</label>
-      <input type="text" name="newPostInfo" id="newPostInfo" data-ng-model="posts.post.info">
-    </div>
+      <textarea  name="newPostInfo" id="newPostInfo" rows="4" data-ng-model="edit.post.info"></textarea>
+    </fieldset>
 
-    <div>
-      <label for="newPostContent">Title</label>
-      <textarea style="display: block;" name="newPostContent" id="newPostContent" rows="8" cols="40" data-ng-model="posts.post.content"></textarea>
-    </div>
-    <div>
+    <fieldset>
+      <label for="newPostContent">Content</label>
+      <tpb-mdeditor md="edit.post.content"></tpb-mdeditor>
+    </fieldset>
+    <fieldset>
       <input type="submit" value="Submit">
-    </div>
+    </fieldset>
   </form>
+  <div id="preview" ></div>
 </section>

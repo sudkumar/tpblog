@@ -1,0 +1,63 @@
+@at-root .new-post{
+    margin: 50px auto;
+    padding: 5px;
+    fieldset{
+        padding: 10px 5px;    
+        box-sizing: border-box;
+        color: rgba(0,0,0,.85);
+    }
+
+    label{
+        display: block;
+        color: grey;
+        font-weight: bold;
+    }
+
+    input{
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 5px;
+        font-size: 1.2em;
+
+        &[type="submit"]{
+            width: auto;
+            background: hotpink;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 30px;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    }
+    ul{
+        background: whitesmoke;
+        li{
+            display: inline-block;
+            margin-right: 5px;
+            cursor: pointer;
+            padding: 5px;
+            &:hover{
+                background: silver;
+            }
+        }
+    }
+    textarea{
+        width: 100%;
+        box-sizing: border-box;
+        max-width: 100%;
+        resize: none;
+        font-size: 1.3em;
+        line-height: 1.7;
+        // background: {
+        //     image: linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px);
+        //     image: -webkit-linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px);
+        //     size: 100% 1.7em;
+        //     position: 0 1.2em;
+        //     origin: content-box;
+        //     attachment: local;
+        // }
+        padding: 5px;
+    }
+}

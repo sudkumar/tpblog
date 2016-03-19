@@ -1,7 +1,13 @@
 export default class AuthorProfileController{
-  constructor(authorProfileService){
-    this.service = authorProfileService;
-    this.author = authorProfileService.profile;
+  constructor(authorProfileService, stateParams){
+    this._profileService = authorProfileService;
+    this._stateParams = stateParams;
+    this.get();
+  }
+
+  // get the author profile
+  get(){
+    this.author = this._profileService.get(this._stateParams.authorId);
   }
 
   // Update the profile
@@ -11,4 +17,4 @@ export default class AuthorProfileController{
 }
 
 // inject the dependencies
-AuthorProfileController.$inject = ["AuthorProfileService"];
+AuthorProfileController.$inject = ["AuthorProfileService", "$stateParams"];

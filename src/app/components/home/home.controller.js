@@ -4,6 +4,7 @@ export default class HomeController{
     this.posts = db.posts;
   }
   
+
 }
 
 
