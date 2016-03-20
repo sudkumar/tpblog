@@ -1,0 +1,27 @@
+@at-root .main-header{
+    padding: 100px 5px;
+    text-align: center;
+    line-height: 1.6;
+    color: white;
+    background:{
+        image: url("./../img/posts/blog_img1.jpg");
+        repeat: no-repeat;
+        size: cover;
+        position: center;
+    } 
+    &__explore{
+        background: transparent;
+        outline: none;
+        border: 1px solid white;
+        border-radius: 50px;
+        padding: 10px 30px;
+        color: white;
+        text-transform: uppercase;
+        margin-top: 50px;
+
+        &:hover{
+            background: white;
+            color: black;
+        }
+    }
+}

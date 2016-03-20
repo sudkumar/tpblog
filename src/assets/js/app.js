@@ -35112,6 +35112,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	// import sliderShared from "./slider";
+
 	// export the complete shared module
 	exports.default = _angular2.default.module("TourepediaBlog.Shared", [_postcard2.default, _authorinfo2.default, _mdeditor2.default]).name;
 
@@ -38876,7 +38878,7 @@
 /* 39 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"postcards-container\">\r\n    <tpb-postcard data-ng-repeat=\"post in home.posts\" post=\"post\"></tpb-postcard>\r\n</div>\r\n"
+	module.exports = "<header class=\"main-header\">\r\n    <h1>Tag line of blog</h1>\r\n    <p>Something that the blogs that are here and something about tourepedia blog.</p>\r\n    <button class=\"main-header__explore\">Explore</button>\r\n</header>\r\n\r\n<div class=\"postcards-container\">\r\n    <tpb-postcard data-ng-repeat=\"post in home.posts\" post=\"post\"></tpb-postcard>\r\n</div>\r\n"
 
 /***/ },
 /* 40 */

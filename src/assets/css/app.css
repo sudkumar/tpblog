@@ -516,3 +516,87 @@ button {
     color: rgba(0, 0, 0, 0.54);
     text-align: center;
     padding: 20px 0; }
+
+.author-profile {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  padding-top: 20px; }
+  .author-profile__edit-btn {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 20px;
+    width: 50px;
+    height: 50px;
+    background: skyblue;
+    line-height: 50px;
+    text-align: center;
+    text-decoration: none;
+    color: #006E9A;
+    font-weight: bold;
+    border-radius: 50%;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4); }
+  .author-profile__img {
+    width: 200px; }
+    .author-profile__img img {
+      width: 100%;
+      max-width: 100%;
+      height: auto; }
+  .author-profile__content {
+    padding-left: 20px; }
+  .author-profile__name {
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 1.5em; }
+  .author-profile__tagline {
+    color: rgba(0, 0, 0, 0.54); }
+  .author-profile__followers {
+    padding: 10px 0;
+    color: rgba(0, 0, 0, 0.54); }
+    .author-profile__followers button {
+      background: hotpink;
+      color: white;
+      border: none;
+      outline: none;
+      padding: 7px 20px; }
+  .author-profile__social-links {
+    padding: 10px 0;
+    text-align: center; }
+    .author-profile__social-links a {
+      text-decoration: none;
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      background: yellow;
+      color: #9C9C01;
+      border-radius: 50%;
+      font-size: 1.2em; }
+  .author-profile__bio {
+    line-height: 1.6;
+    color: rgba(0, 0, 0, 0.54);
+    text-align: center;
+    padding: 20px 0; }
+
+.main-header {
+  padding: 100px 5px;
+  text-align: center;
+  line-height: 1.6;
+  color: white;
+  background-image: url("./../img/posts/blog_img1.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center; }
+  .main-header__explore {
+    background: transparent;
+    outline: none;
+    border: 1px solid white;
+    border-radius: 50px;
+    padding: 10px 30px;
+    color: white;
+    text-transform: uppercase;
+    margin-top: 50px; }
+    .main-header__explore:hover {
+      background: white;
+      color: black; }

@@ -4,6 +4,7 @@ import angular from "angular";
 import postcardShared from "./postcard";
 import authorinfoShared from "./authorinfo";
 import mdeditorShared from "./mdeditor";
+// import sliderShared from "./slider";
 
 
 // export the complete shared module
