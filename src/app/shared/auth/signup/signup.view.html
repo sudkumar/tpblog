@@ -1,0 +1,21 @@
+<form name="signupForm" class="auth__form" novalidate data-ng-submit="signup()">
+    <fieldset>
+        <label for="signupName">Name</label>
+        <input type="text" id="signupName" required data-ng-model="newuser.name">
+    </fieldset>
+    <fieldset>
+        <label for="signupEmail">Email</label>
+        <input type="email" id="signupEmail" required data-ng-model="newuser.email">
+    </fieldset>
+    <fieldset>
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" required data-ng-model="newuser.password">
+    </fieldset>
+    <fieldset>
+        <label for="signupRePassword">Re-type Password</label>
+        <input type="password" id="signupRePassword" required data-ng-model="newuser.repassword">
+    </fieldset>
+    <fieldset>
+        <input type="submit" value="SIGNUP" data-ng-click="success = 'You have been successfully registered. Please check your email for activation of your account.'">
+    </fieldset>
+</form>

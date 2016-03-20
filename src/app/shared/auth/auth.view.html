@@ -1,0 +1,34 @@
+<div class="auth" >
+    <!-- create a swap for login/sign and forgot password  -->
+    <div class="swap" data-ng-init="forgot = false">
+        <div class="swap__section swap__section--up" data-ng-class="{'active': !forgot}" data-ng-init="wants = 'login'">
+
+            <div class="auth__tabs">
+                <div class="auth__tab" data-ng-click="wants = 'login'; success=undefined" data-ng-class="{'active': wants == 'login'}">Login</div>
+                <div class="auth__tab" data-ng-click="wants = 'signup'; success=undefined" data-ng-class="{'active': wants == 'signup'}">Signup</div>
+            </div>
+            <!-- create swap section for login and signup -->
+            <div class="swap" data-ng-init="success = false">
+                <div class="swap__section swap__section--left" data-ng-class="{'active': wants == 'login' && !success}">
+                    <tpb-login></tpb-login>
+                </div>
+                
+                <div class="swap__section swap__section--right" data-ng-class="{'active': wants == 'signup' && !success}">
+                    <tpb-signup></tpb-signup>
+                </div>
+
+                <div class="swap__section swap__section--bottom" data-ng-class="{'active': success}">
+                    <div class="auth__success">
+                        <h1>Success !!!</h1>
+                        <p>{{success}}</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="swap__section swap__section--down" data-ng-class="{'active': forgot}">
+            <tpb-forgotpass></tpb-forgotpass>
+        </div>
+    </div>
+
+</div>

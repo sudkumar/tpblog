@@ -1,0 +1,129 @@
+@at-root .auth{
+    background: whitesmoke;
+    max-width: 400px;
+    margin: 0 auto;
+    border: 1px solid rgba(0,0,0,.2);
+    &__tabs{
+        display: block;
+        box-sizing: border-box;
+        font-weight: bold;
+        @include clearfix();
+
+    }
+
+    &__tab{
+        width: 50%;
+        box-sizing: border-box;
+        float: left;
+        border-bottom: 1px solid silver;
+        height: 60px;
+        line-height: 60px;
+        font-size: 1em;
+        text-transform: uppercase;
+        cursor: pointer;
+        color: darkgrey;
+        transition: all linear .15s;
+        text-align: center;
+
+        &:not(:last-child){
+            border-right: 1px solid silver;
+        }
+
+        &.active{
+            border-bottom: none;
+            color: dimgrey;
+        }   
+    }
+
+    &__form{
+        padding: 20px;
+        box-sizing: border-box;
+        color: grey;
+        max-width: 320px;
+        margin: 0 auto;
+
+    }
+
+    fieldset{
+        padding: 10px 0;
+    }
+    label, input{
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    label{
+        text-transform: uppercase;
+        padding: 5px 0;
+        font-size: .8em;
+        font-weight: bold;
+        color: darkgrey;
+    }
+
+    input{
+        border: 2px solid grey;
+        background: transparent;
+        outline: none;
+        padding: 10px;
+        color: dimgrey;
+        font-size: 1em;
+        font-weight: bold;
+        
+        &:active, &:focus{
+            border-color: black;
+        }
+
+        &[type="checkbox"], &[type="checkbox"] + label{
+            display: inline-block;
+            width: auto;
+            line-height: 1;
+            vertical-align: middle;
+            text-transform: none;
+        }
+    }
+
+    input[type="submit"], button[type="submit"]{
+        background: grey;
+        color: white;
+        font-weight: bold;
+        text-transform: uppercase;
+        cursor: pointer
+    }
+
+    &__footer{
+        box-sizing: border-box;
+        font-size: .8em;
+        color: grey;
+        padding:20px;
+        line-height: 1;
+        border-top: 1px solid rgba(0,0,0,.1);
+        max-width: 320px;
+        margin: 0 auto;
+    
+        button{
+            background: transparent;
+            outline: none;
+            border: none; 
+            border-bottom: 1px solid silver;
+            padding: 0;
+            color: inherit;
+        }
+
+    }
+
+    &__success{
+        padding: 30px;
+        text-align: center;
+        line-height: 1.6;
+        color: dimgrey;
+    }
+    
+    p{
+        line-height: 1.5;
+        font-size: .8em;
+    }
+
+
+
+}

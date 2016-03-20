@@ -2,6 +2,7 @@
 <html data-ng-app="TourepediaBlog">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tourepedia Blog</title>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="./assets/css/app.css">
@@ -16,16 +17,18 @@
         <ui-view name="postView" id="postView"></ui-view>
         <ui-view name="authorView" id="authorView"></ui-view>
         <ui-view name="aboutView" id="aboutView"></ui-view>
+        <ui-view name="authView" id="authView"></ui-view>
     </div>
 
     <div id="subscribe"> 
-
+      <tpb-subscribe></tpb-subscribe>
+    </div>
     <div id="mainFooter">
       <tpb-footer></tpb-footer>
     </div>
 
     <div id="modalsContainer">
-      <tpb-auth></tpb-auth>
+      <!-- <tpb-auth></tpb-auth> -->
     </div>
 
     <script type="text/javascript" src="./assets/js/app.js"> </script>

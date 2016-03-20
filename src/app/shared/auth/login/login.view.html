@@ -1,0 +1,20 @@
+<form name="loginForm" class="auth__form" novalidate data-ng-submit="login()">
+    <fieldset>
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" required data-ng-model="user.email">
+    </fieldset>
+    <fieldset>
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required data-ng-model="user.password">
+    </fieldset>
+    <fieldset>
+        <input type="checkbox" name="keepLoggedIn" id="keepLoggedIn" data-ng-modal="user.keepLoggedIn">
+        <label for="keepLoggedIn">Keep me logged In</label>
+    </fieldset>
+    <fieldset>
+        <input type="submit" value="LOGIN" data-ng-click="success = 'You have successfully logged in.'">
+    </fieldset>
+</form>
+<div class="auth__footer">
+    <p ><button data-ng-click="forgot = true">Forgot Password ?</button></p>
+</div>

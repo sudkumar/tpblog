@@ -4,10 +4,10 @@ import angular from "angular";
 import postcardShared from "./postcard";
 import authorinfoShared from "./authorinfo";
 import mdeditorShared from "./mdeditor";
-// import sliderShared from "./slider";
+import authShared from "./auth";
 
 
 // export the complete shared module
 export default angular.module("TourepediaBlog.Shared", 
-    [postcardShared, authorinfoShared, mdeditorShared])
+    [postcardShared, authorinfoShared, mdeditorShared, authShared])
     .name;
