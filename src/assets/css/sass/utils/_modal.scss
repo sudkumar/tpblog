@@ -1,0 +1,76 @@
+@at-root .modal{
+    background: fade-out(black, .3);
+    bottom: 0;
+    display: block;
+    left: 0;
+    opacity: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transition: visibility 0s linear .3s, opacity .3s linear;
+    visibility: hidden;
+    z-index: 1000;
+
+    &.active{
+        visibility: visible;
+        opacity: 1;
+        transition-delay: 0s;
+    }
+
+
+    &__container{
+        display: block;
+        width: 100%;
+        min-height: 100%;
+        box-shadow: 0px 0px 30px 20px fade-out(black, .8);
+        overflow: auto;
+    }
+
+    &__window{
+        background: white;
+        border-radius: 5px;
+        margin: 50px auto;
+        transition: transform .3s;
+        transform: translate(0, -50px);
+        &.sm{
+            max-width: 400px;
+        }
+
+        &.md{
+            max-width: 600px;
+        }
+
+        &.lg{
+            max-width: 800px;
+        }
+    }
+
+    &.active &__window{
+        transform: translate(0,0);
+    }
+    &__close{
+        z-index: 20;
+        display: block;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        font-size: 14px;
+        background: white;
+        border: none;
+        box-shadow: 0 0 1px 2px fade-out(gray, .9);
+        border-radius: 50%;
+        color: dimgray;
+        cursor: pointer;
+        outline: none;
+        transition: all linear .15s;
+        &:hover{
+            box-shadow: 0 0 1px 2px fade-out(gray, .8);
+        }
+    }
+}

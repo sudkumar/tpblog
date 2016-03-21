@@ -5,9 +5,9 @@ import postcardShared from "./postcard";
 import authorinfoShared from "./authorinfo";
 import mdeditorShared from "./mdeditor";
 import authShared from "./auth";
-
+import authmodalShared from "./authmodal";
 
 // export the complete shared module
 export default angular.module("TourepediaBlog.Shared", 
-    [postcardShared, authorinfoShared, mdeditorShared, authShared])
+    [postcardShared, authorinfoShared, mdeditorShared, authShared, authmodalShared])
     .name;

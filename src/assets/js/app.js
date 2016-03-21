@@ -58,30 +58,37 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _shared = __webpack_require__(5);
+	var _services = __webpack_require__(5);
+
+	var _services2 = _interopRequireDefault(_services);
+
+	var _shared = __webpack_require__(8);
 
 	var _shared2 = _interopRequireDefault(_shared);
 
-	var _templates = __webpack_require__(38);
+	var _templates = __webpack_require__(44);
 
 	var _templates2 = _interopRequireDefault(_templates);
 
-	var _components = __webpack_require__(49);
+	var _components = __webpack_require__(55);
 
 	var _components2 = _interopRequireDefault(_components);
 
-	var _db = __webpack_require__(88);
+	var _db = __webpack_require__(93);
 
 	var _db2 = _interopRequireDefault(_db);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	// import all the modules
 
 
-	_angular2.default.module("TourepediaBlog", [_angularUiRouter2.default, _templates2.default, _shared2.default, _components2.default, _db2.default]).config(_app2.default);
-
 	// import the configuration
+
+
+	_angular2['default'].module("TourepediaBlog", [_services2['default'], _angularUiRouter2['default'], _templates2['default'], _shared2['default'], _components2['default'], _db2['default']]).config(_app2['default']);
+
+	// import the services
 
 /***/ },
 /* 1 */
@@ -35077,7 +35084,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = routing;
+	exports['default'] = routing;
 	routing.$inject = ['$urlRouterProvider'];
 
 	function routing($urlRouterProvider, $stateProvider) {
@@ -35098,32 +35105,240 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _postcard = __webpack_require__(6);
+	var _post = __webpack_require__(6);
 
-	var _postcard2 = _interopRequireDefault(_postcard);
+	var _post2 = _interopRequireDefault(_post);
 
-	var _authorinfo = __webpack_require__(9);
+	var _modal = __webpack_require__(7);
 
-	var _authorinfo2 = _interopRequireDefault(_authorinfo);
+	var _modal2 = _interopRequireDefault(_modal);
 
-	var _mdeditor = __webpack_require__(12);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _mdeditor2 = _interopRequireDefault(_mdeditor);
-
-	var _auth = __webpack_require__(24);
-
-	var _auth2 = _interopRequireDefault(_auth);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// export the complete shared module
-
-
-	// import the shared modules
-	exports.default = _angular2.default.module("TourepediaBlog.Shared", [_postcard2.default, _authorinfo2.default, _mdeditor2.default, _auth2.default]).name;
+	exports["default"] = _angular2["default"].module("TourepediaBlog.Services", []).service("PostService", _post2["default"]).service("ModalService", _modal2["default"]).name;
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var PostService = function () {
+	    function PostService(http, db) {
+	        _classCallCheck(this, PostService);
+
+	        this._http = http;
+	        this._posts = db.posts;
+	    }
+
+	    // get a blog
+
+
+	    _createClass(PostService, [{
+	        key: "get",
+	        value: function get(postHandle) {
+	            console.log("Get post with handle:", postHandle);
+	            var post;
+	            for (var i = this._posts.length - 1; i >= 0; i--) {
+	                post = this._posts[i];
+	                if (post.handle == postHandle) {
+	                    return post;
+	                }
+	            }
+	        }
+
+	        // like
+
+	    }, {
+	        key: "like",
+	        value: function like(post) {
+	            console.log("Like this post:", post);
+	        }
+
+	        // share
+
+	    }, {
+	        key: "share",
+	        value: function share(post) {
+	            console.log("Share this post:", post);
+	        }
+	    }]);
+
+	    return PostService;
+	}();
+
+	exports["default"] = PostService;
+
+
+	PostService.$inject = ["$http", "DB"];
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * Modal Service
+	 * This service exhibits a functionality for opening or 
+	 * closing modal from anywhere in the app. Opening a new modal 
+	 * return a promise for which caller can wait for resolve or rejection
+	 * and caller can also do chaining of modals if required.
+	 */
+
+	var ModalService = function () {
+	    function ModalService(rootScope, q) {
+	        _classCallCheck(this, ModalService);
+
+	        // attach the dependencies
+	        this._rootScope = rootScope;
+	        this._q = q;
+
+	        // attach the new modal instance
+	        this.modal = {
+	            deferred: null,
+	            params: null
+	        };
+	    }
+
+	    /**
+	     * Open a new modal
+	     * @param  {object} params any parameters that we want to associate with the modal
+	     * @param  {boolean} doPipe a boolean value indicating whether to do pipe the new modal to previous or not
+	     * @return {promise}        a promise to resolve and reject later
+	     */
+
+
+	    _createClass(ModalService, [{
+	        key: "open",
+	        value: function open(params, doPipe) {
+	            // get the previous promise, if there is any
+	            var previousDeferred = this.modal.deferred;
+
+	            // create the new modal instance
+	            this.modal.deferred = this._q.defer();
+	            this.modal.params = params;
+
+	            // if there was a modal already opened
+	            if (previousDeferred) {
+
+	                // and if user wants to pipe the new modal to previous opened modal
+	                if (doPipe) {
+	                    // pipe the previous defer's callback to resolution or rejection of the newly created modal
+	                    this.modal.promise.then(previousDeferred.resolve, previousDeferred.reject);
+	                } else {
+	                    // don't pipe. reject the previous modal
+	                    previousDeferred.reject();
+	                }
+	            }
+
+	            // previous deferred has been taken care from above
+	            // now emit a modal open event (modal directive to open a modal)
+	            this._rootScope.$emit('modal.open', this.modal.params);
+
+	            // now return the new promise to the caller
+	            return this.modal.deferred.promise;
+	        }
+
+	        /**
+	         * Resolve the associated modal
+	         * @param  {object} response a reponse that we want to give when resolving the modal
+	         * @return {null}          
+	         */
+
+	    }, {
+	        key: "resolve",
+	        value: function resolve(response) {
+	            // check if there is a promise to resolve
+	            if (!this.modal.deferred) {
+	                return;
+	            }
+
+	            // resolve the promise
+	            this.modal.deferred.resolve(response);
+
+	            // emit a modal close event
+	            this._rootScope.$emit("modal.close", this.modal.params);
+
+	            // remove the current modal
+	            this.modal.deferred = this.modal.params = null;
+	        }
+
+	        /**
+	         * Reject the associated modal
+	         * @param  {object} reason a reason that we want to give when rejecting the modal
+	         * @return {null}
+	         */
+
+	    }, {
+	        key: "reject",
+	        value: function reject(reason) {
+	            // check if there is a promise to resolve
+	            if (!this.modal.deferred) {
+	                return;
+	            }
+
+	            // reject the promise
+	            this.modal.deferred.reject(reason);
+
+	            // emit a modal close event
+	            this._rootScope.$emit("modal.close", this.modal.params);
+
+	            // remove the current modal
+	            this.modal.deferred = this.modal.params = null;
+	        }
+
+	        /**
+	         * Proceed to a new modal (a convenient value for chaining of modals)
+	         * @param  {object} params params to the new modal that we want to proceed
+	         * @return {promise}       a promise (return value of this.open) to be resolved later
+	         */
+
+	    }, {
+	        key: "proceedTo",
+	        value: function proceedTo(params) {
+	            return this.open(params, true);
+	        }
+
+	        /**
+	         * Get the parameters with the associated modal
+	         * @return {object} parameters associated with modal
+	         */
+
+	    }, {
+	        key: "params",
+	        value: function params() {
+	            return this.modal.params || {};
+	        }
+	    }]);
+
+	    return ModalService;
+	}();
+
+	// inject the dependencies
+
+
+	exports["default"] = ModalService;
+	ModalService.$inject = ["$rootScope", "$q"];
+
+/***/ },
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35136,44 +35351,32 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _postcard = __webpack_require__(7);
+	var _postcard = __webpack_require__(9);
 
 	var _postcard2 = _interopRequireDefault(_postcard);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _authorinfo = __webpack_require__(12);
 
-	exports.default = _angular2.default.module("Shared.Postcard", []).directive("tpbPostcard", _postcard2.default).name;
+	var _authorinfo2 = _interopRequireDefault(_authorinfo);
 
-/***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
+	var _mdeditor = __webpack_require__(15);
 
-	"use strict";
+	var _mdeditor2 = _interopRequireDefault(_mdeditor);
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = postcardDirective;
-	function postcardDirective() {
-	    return {
-	        restrict: "E",
-	        scope: {
-	            // get the post from the parent
-	            post: "=",
-	            canEdit: "@"
-	        },
-	        template: __webpack_require__(8),
-	        link: function link(scope, elem, attrs) {
-	            // console.log(scope.canEdit);
-	        }
-	    };
-	}
+	var _auth = __webpack_require__(27);
 
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
+	var _auth2 = _interopRequireDefault(_auth);
 
-	module.exports = "<div class=\"card\">\r\n    <h2 class=\"card__title\">{{post.title}}</h2>\r\n    <div class=\"card__meta\"> \r\n        <a ui-sref=\".posts.edit({'postToken': post.token})\" data-ng-if=\"canEdit == 'true'\">Edit</a>\r\n    </div>\r\n    <div class=\"card__content\">\r\n        <div class=\"card__img\">\r\n            <img data-ng-src=\"./assets/img/posts/{{post.img}}\" alt=\"Blog Image\">\r\n        </div>\r\n        <div class=\"card__info\">\r\n            <a class=\"card__author\" ui-sref=\"author({'authorId': post.authorId})\">\r\n                <tpb-authorinfo author=\"{'name': post.authorName, 'publishedDate': post.publishedDate, 'img': post.authorImg}\"></tpb-authorinfo>\r\n            </a>\r\n            <p>{{post.info}}</p>\r\n        </div>\r\n    </div>\r\n    <div class=\"card__footer\">\r\n        <a ui-sref=\"post({'postId': post.handle})\">Read</a>\r\n        <button>Like</button>\r\n        <button>Share</button>\r\n    </div>\r\n    \r\n</div>"
+	var _authmodal = __webpack_require__(41);
+
+	var _authmodal2 = _interopRequireDefault(_authmodal);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	// export the complete shared module
+	exports["default"] = _angular2["default"].module("TourepediaBlog.Shared", [_postcard2["default"], _authorinfo2["default"], _mdeditor2["default"], _auth2["default"], _authmodal2["default"]]).name;
+
+	// import the shared modules
 
 /***/ },
 /* 9 */
@@ -35189,13 +35392,13 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _authorinfo = __webpack_require__(10);
+	var _postcard = __webpack_require__(10);
 
-	var _authorinfo2 = _interopRequireDefault(_authorinfo);
+	var _postcard2 = _interopRequireDefault(_postcard);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports.default = _angular2.default.module("Shared.Authorinfo", []).directive("tpbAuthorinfo", _authorinfo2.default).name;
+	exports["default"] = _angular2["default"].module("Shared.Postcard", []).directive("tpbPostcard", _postcard2["default"]).name;
 
 /***/ },
 /* 10 */
@@ -35206,15 +35409,19 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = authorinfoDirective;
-	function authorinfoDirective() {
+	exports["default"] = postcardDirective;
+	function postcardDirective() {
 	    return {
 	        restrict: "E",
 	        scope: {
-	            // get the author
-	            author: "="
+	            // get the post from the parent
+	            post: "=",
+	            canEdit: "@"
 	        },
-	        template: __webpack_require__(11)
+	        template: __webpack_require__(11),
+	        link: function link(scope, elem, attrs) {
+	            // console.log(scope.canEdit);
+	        }
 	    };
 	}
 
@@ -35222,7 +35429,7 @@
 /* 11 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"authorinfo media\">\r\n    <div class=\"media__img authorinfo__img\">\r\n        <img data-ng-src=\"./assets/img/authors/{{author.img}}\" alt=\"author image\">\r\n    </div>\r\n    <div class=\"media__content authorinfo__content\">\r\n        <p class=\"authorinfo__name\">{{author.name}}</p>\r\n        <p class=\"authorinfo__meta\">{{author.publishedDate}}</p>\r\n    </div>\r\n</div>"
+	module.exports = "<div class=\"card\">\r\n    <h2 class=\"card__title\">{{post.title}}</h2>\r\n    <div class=\"card__meta\"> \r\n        <a ui-sref=\".posts.edit({'postToken': post.token})\" data-ng-if=\"canEdit == 'true'\">Edit</a>\r\n    </div>\r\n    <div class=\"card__content\">\r\n        <div class=\"card__img\">\r\n            <img data-ng-src=\"./assets/img/posts/{{post.img}}\" alt=\"Blog Image\">\r\n        </div>\r\n        <div class=\"card__info\">\r\n            <a class=\"card__author\" ui-sref=\"author({'authorId': post.authorId})\">\r\n                <tpb-authorinfo author=\"{'name': post.authorName, 'publishedDate': post.publishedDate, 'img': post.authorImg}\"></tpb-authorinfo>\r\n            </a>\r\n            <p>{{post.info}}</p>\r\n        </div>\r\n    </div>\r\n    <div class=\"card__footer\">\r\n        <a ui-sref=\"post({'postId': post.handle})\">Read</a>\r\n        <button>Like</button>\r\n        <button>Share</button>\r\n    </div>\r\n    \r\n</div>"
 
 /***/ },
 /* 12 */
@@ -35238,32 +35445,81 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _angularSanitize = __webpack_require__(13);
+	var _authorinfo = __webpack_require__(13);
 
-	var _angularSanitize2 = _interopRequireDefault(_angularSanitize);
+	var _authorinfo2 = _interopRequireDefault(_authorinfo);
 
-	var _mdeditor = __webpack_require__(15);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _mdeditor2 = _interopRequireDefault(_mdeditor);
-
-	var _mdeditor3 = __webpack_require__(17);
-
-	var _mdeditor4 = _interopRequireDefault(_mdeditor3);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _angular2.default.module("Shared.Mdeditor", [_angularSanitize2.default]).directive("tpbMdeditor", _mdeditor2.default).service("MDEditorService", _mdeditor4.default).name;
+	exports["default"] = _angular2["default"].module("Shared.Authorinfo", []).directive("tpbAuthorinfo", _authorinfo2["default"]).name;
 
 /***/ },
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(14);
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = authorinfoDirective;
+	function authorinfoDirective() {
+	    return {
+	        restrict: "E",
+	        scope: {
+	            // get the author
+	            author: "="
+	        },
+	        template: __webpack_require__(14)
+	    };
+	}
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"authorinfo media\">\r\n    <div class=\"media__img authorinfo__img\">\r\n        <img data-ng-src=\"./assets/img/authors/{{author.img}}\" alt=\"author image\">\r\n    </div>\r\n    <div class=\"media__content authorinfo__content\">\r\n        <p class=\"authorinfo__name\">{{author.name}}</p>\r\n        <p class=\"authorinfo__meta\">{{author.publishedDate}}</p>\r\n    </div>\r\n</div>"
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _angularSanitize = __webpack_require__(16);
+
+	var _angularSanitize2 = _interopRequireDefault(_angularSanitize);
+
+	var _mdeditor = __webpack_require__(18);
+
+	var _mdeditor2 = _interopRequireDefault(_mdeditor);
+
+	var _mdeditor3 = __webpack_require__(20);
+
+	var _mdeditor4 = _interopRequireDefault(_mdeditor3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	exports["default"] = _angular2["default"].module("Shared.Mdeditor", [_angularSanitize2["default"]]).directive("tpbMdeditor", _mdeditor2["default"]).service("MDEditorService", _mdeditor4["default"]).name;
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(17);
 	module.exports = 'ngSanitize';
 
 
 /***/ },
-/* 14 */
+/* 17 */
 /***/ function(module, exports) {
 
 	/**
@@ -35986,7 +36242,7 @@
 
 
 /***/ },
-/* 15 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -35994,7 +36250,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = mdeditorDirective;
+	exports["default"] = mdeditorDirective;
 	mdeditorDirective.$inject = ["MDEditorService"];
 
 	function mdeditorDirective(mdService) {
@@ -36003,7 +36259,7 @@
 	        scope: {
 	            md: "="
 	        },
-	        template: __webpack_require__(16),
+	        template: __webpack_require__(19),
 	        link: function link(scope, elems, attrs) {
 	            // get the markdown instance
 
@@ -36021,13 +36277,13 @@
 	}
 
 /***/ },
-/* 16 */
+/* 19 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"mdeditor\">\r\n    <div class=\"mdeditor__md\">\r\n        \r\n        <div class=\"mdeditor__specs\">\r\n            <div class=\"mdeditor__specs__group\">\r\n                <button class=\"mdeditor__spec mdeditor__spec--bold fa fa-bold\" title=\"Bold\"></button>\r\n                <button class=\"mdeditor__spec mdeditor__spec--italic fa fa-italic\" title=\"Italic\"></button>\r\n            </div>\r\n            <div class=\"mdeditor__specs__group\">\r\n                \r\n                <button class=\"mdeditor__spec fa fa-link\" title=\"Web Link\"></button>\r\n                <button class=\"mdeditor__spec fa fa-image\" title=\"Image\"></button>\r\n            </div>\r\n            <div class=\"mdeditor__specs__group\">\r\n                <button class=\"mdeditor__spec fa fa-quote-left\" title=\"Quote\"></button>\r\n                <button class=\"mdeditor__spec fa fa-code\" title=\"Code\"></button>            \r\n            </div>\r\n            <div class=\"mdeditor__specs__group\">\r\n                <button class=\"mdeditor__spec fa fa-list-ol\" title=\"Ordered List\"></button>\r\n                <button class=\"mdeditor__spec fa fa-list-ul\" title=\"Unordered List\"></button>\r\n            </div>\r\n            <div class=\"mdeditor__specs__group\">\r\n                <button class=\"mdeditor__spec fa fa-header\" title=\"Headings\"></button>\r\n                <button class=\"mdeditor__spec fa fa-paragraph\" title=\"Paragraph\"></button>\r\n            </div>\r\n            <div class=\"mdeditor__specs__group\">\r\n                <button class=\"mdeditor__spec fa fa-minus\" title=\"horizontal line\"></button>\r\n            </div>\r\n        </div>\r\n        <textarea name=\"mdeditorMD\" data-ng-model=\"md\" data-ng-change=\"preview()\" class=\"mdeditor__input\" cols=\"30\" rows=\"10\">\r\n            **Your post content**\r\n        </textarea>\r\n    </div>\r\n    <div class=\"mdeditor__html main-post__content\" data-ng-bind-html=\"html\">\r\n    </div>\r\n</div>"
 
 /***/ },
-/* 17 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36038,11 +36294,11 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _markdown = __webpack_require__(18);
+	var _markdown = __webpack_require__(21);
 
 	var _markdown2 = _interopRequireDefault(_markdown);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -36050,7 +36306,7 @@
 	    function MDEditorService() {
 	        _classCallCheck(this, MDEditorService);
 
-	        this._markdown = _markdown2.default.markdown;
+	        this._markdown = _markdown2["default"].markdown;
 	    }
 
 	    _createClass(MDEditorService, [{
@@ -36063,19 +36319,19 @@
 	    return MDEditorService;
 	}();
 
-	exports.default = MDEditorService;
+	exports["default"] = MDEditorService;
 
 /***/ },
-/* 18 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// super simple module for the most common nodejs use case.
-	exports.markdown = __webpack_require__(19);
+	exports.markdown = __webpack_require__(22);
 	exports.parse = exports.markdown.toHTML;
 
 
 /***/ },
-/* 19 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Released under MIT license
@@ -36207,7 +36463,7 @@
 
 	// node
 	function mk_block_inspect() {
-	  var util = __webpack_require__(20);
+	  var util = __webpack_require__(23);
 	  return "Markdown.mk_block( " +
 	          util.inspect(this.toString()) +
 	          ", " +
@@ -37806,7 +38062,7 @@
 
 
 /***/ },
-/* 20 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -38334,7 +38590,7 @@
 	}
 	exports.isPrimitive = isPrimitive;
 
-	exports.isBuffer = __webpack_require__(22);
+	exports.isBuffer = __webpack_require__(25);
 
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
@@ -38378,7 +38634,7 @@
 	 *     prototype.
 	 * @param {function} superCtor Constructor function to inherit prototype from.
 	 */
-	exports.inherits = __webpack_require__(23);
+	exports.inherits = __webpack_require__(26);
 
 	exports._extend = function(origin, add) {
 	  // Don't do anything if add isn't an object
@@ -38396,10 +38652,10 @@
 	  return Object.prototype.hasOwnProperty.call(obj, prop);
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(21)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(24)))
 
 /***/ },
-/* 21 */
+/* 24 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -38496,7 +38752,7 @@
 
 
 /***/ },
-/* 22 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = function isBuffer(arg) {
@@ -38507,7 +38763,7 @@
 	}
 
 /***/ },
-/* 23 */
+/* 26 */
 /***/ function(module, exports) {
 
 	if (typeof Object.create === 'function') {
@@ -38536,7 +38792,7 @@
 
 
 /***/ },
-/* 24 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38549,87 +38805,33 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _login = __webpack_require__(25);
+	var _login = __webpack_require__(28);
 
 	var _login2 = _interopRequireDefault(_login);
 
-	var _signup = __webpack_require__(28);
+	var _signup = __webpack_require__(31);
 
 	var _signup2 = _interopRequireDefault(_signup);
 
-	var _forgotpass = __webpack_require__(31);
+	var _forgotpass = __webpack_require__(34);
 
 	var _forgotpass2 = _interopRequireDefault(_forgotpass);
 
-	var _auth = __webpack_require__(34);
+	var _auth = __webpack_require__(37);
 
 	var _auth2 = _interopRequireDefault(_auth);
 
-	var _auth3 = __webpack_require__(35);
+	var _auth3 = __webpack_require__(38);
 
 	var _auth4 = _interopRequireDefault(_auth3);
 
-	var _auth5 = __webpack_require__(36);
+	var _auth5 = __webpack_require__(39);
 
 	var _auth6 = _interopRequireDefault(_auth5);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports.default = _angular2.default.module("Shared.Auth", [_login2.default, _signup2.default, _forgotpass2.default]).directive("tpbAuth", _auth6.default).controller("AuthController", _auth2.default).service("AuthService", _auth4.default).name;
-
-/***/ },
-/* 25 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _angular = __webpack_require__(1);
-
-	var _angular2 = _interopRequireDefault(_angular);
-
-	var _login = __webpack_require__(26);
-
-	var _login2 = _interopRequireDefault(_login);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _angular2.default.module("Auth.Login", []).directive("tpbLogin", _login2.default).name;
-
-/***/ },
-/* 26 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = loginDirective;
-	function loginDirective() {
-	    return {
-	        require: "^^tpbAuth",
-	        restrict: "E",
-	        template: __webpack_require__(27),
-	        link: function link(scope, elems, attrs, authCtrl) {
-
-	            scope.user = { email: "luckysud4@gmail.com", password: "name", keepLoggedIn: true };
-
-	            scope.login = function () {
-	                authCtrl.login(scope.user);
-	            };
-	        }
-	    };
-	}
-
-/***/ },
-/* 27 */
-/***/ function(module, exports) {
-
-	module.exports = "<form name=\"loginForm\" class=\"auth__form\" novalidate data-ng-submit=\"login()\">\r\n    <fieldset>\r\n        <label for=\"loginEmail\">Email</label>\r\n        <input type=\"email\" id=\"loginEmail\" required data-ng-model=\"user.email\">\r\n    </fieldset>\r\n    <fieldset>\r\n        <label for=\"loginPassword\">Password</label>\r\n        <input type=\"password\" id=\"loginPassword\" required data-ng-model=\"user.password\">\r\n    </fieldset>\r\n    <fieldset>\r\n        <input type=\"checkbox\" name=\"keepLoggedIn\" id=\"keepLoggedIn\" data-ng-modal=\"user.keepLoggedIn\">\r\n        <label for=\"keepLoggedIn\">Keep me logged In</label>\r\n    </fieldset>\r\n    <fieldset>\r\n        <input type=\"submit\" value=\"LOGIN\" data-ng-click=\"success = 'You have successfully logged in.'\">\r\n    </fieldset>\r\n</form>\r\n<div class=\"auth__footer\">\r\n    <p ><button data-ng-click=\"forgot = true\">Forgot Password ?</button></p>\r\n</div>"
+	exports["default"] = _angular2["default"].module("Shared.Auth", [_login2["default"], _signup2["default"], _forgotpass2["default"]]).directive("tpbAuth", _auth6["default"]).controller("AuthController", _auth2["default"]).service("AuthService", _auth4["default"]).name;
 
 /***/ },
 /* 28 */
@@ -38645,13 +38847,13 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _signup = __webpack_require__(29);
+	var _login = __webpack_require__(29);
 
-	var _signup2 = _interopRequireDefault(_signup);
+	var _login2 = _interopRequireDefault(_login);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports.default = _angular2.default.module("Auth.Signup", []).directive("tpbSignup", _signup2.default).name;
+	exports["default"] = _angular2["default"].module("Auth.Login", []).directive("tpbLogin", _login2["default"]).name;
 
 /***/ },
 /* 29 */
@@ -38662,13 +38864,67 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = signupDirective;
+	exports["default"] = loginDirective;
+	function loginDirective() {
+	    return {
+	        require: "^^tpbAuth",
+	        restrict: "E",
+	        template: __webpack_require__(30),
+	        link: function link(scope, elems, attrs, authCtrl) {
+
+	            scope.user = { email: "luckysud4@gmail.com", password: "name", keepLoggedIn: true };
+
+	            scope.login = function () {
+	                authCtrl.login(scope.user);
+	            };
+	        }
+	    };
+	}
+
+/***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	module.exports = "<form name=\"loginForm\" class=\"auth__form\" novalidate data-ng-submit=\"login()\">\r\n    <fieldset>\r\n        <label for=\"loginEmail\">Email</label>\r\n        <input type=\"email\" id=\"loginEmail\" required data-ng-model=\"user.email\">\r\n    </fieldset>\r\n    <fieldset>\r\n        <label for=\"loginPassword\">Password</label>\r\n        <input type=\"password\" id=\"loginPassword\" required data-ng-model=\"user.password\">\r\n    </fieldset>\r\n    <fieldset>\r\n        <input type=\"checkbox\" name=\"keepLoggedIn\" id=\"keepLoggedIn\" data-ng-modal=\"user.keepLoggedIn\">\r\n        <label for=\"keepLoggedIn\">Keep me logged In</label>\r\n    </fieldset>\r\n    <fieldset>\r\n        <input type=\"submit\" value=\"LOGIN\" data-ng-click=\"success = 'You have successfully logged in.'\">\r\n    </fieldset>\r\n</form>\r\n<div class=\"auth__footer\">\r\n    <p ><button data-ng-click=\"forgot = true\">Forgot Password ?</button></p>\r\n</div>"
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _signup = __webpack_require__(32);
+
+	var _signup2 = _interopRequireDefault(_signup);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	exports["default"] = _angular2["default"].module("Auth.Signup", []).directive("tpbSignup", _signup2["default"]).name;
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = signupDirective;
 	function signupDirective() {
 	    return {
 	        // require the auth controller
 	        require: "^^tpbAuth",
 	        restrict: "E",
-	        template: __webpack_require__(30),
+	        template: __webpack_require__(33),
 	        link: function link(scope, elem, attrs, authCtrl) {
 	            scope.newuser = {
 	                name: "Sudhir Mitharwal",
@@ -38685,13 +38941,13 @@
 	}
 
 /***/ },
-/* 30 */
+/* 33 */
 /***/ function(module, exports) {
 
 	module.exports = "<form name=\"signupForm\" class=\"auth__form\" novalidate data-ng-submit=\"signup()\">\r\n    <fieldset>\r\n        <label for=\"signupName\">Name</label>\r\n        <input type=\"text\" id=\"signupName\" required data-ng-model=\"newuser.name\">\r\n    </fieldset>\r\n    <fieldset>\r\n        <label for=\"signupEmail\">Email</label>\r\n        <input type=\"email\" id=\"signupEmail\" required data-ng-model=\"newuser.email\">\r\n    </fieldset>\r\n    <fieldset>\r\n        <label for=\"signupPassword\">Password</label>\r\n        <input type=\"password\" id=\"signupPassword\" required data-ng-model=\"newuser.password\">\r\n    </fieldset>\r\n    <fieldset>\r\n        <label for=\"signupRePassword\">Re-type Password</label>\r\n        <input type=\"password\" id=\"signupRePassword\" required data-ng-model=\"newuser.repassword\">\r\n    </fieldset>\r\n    <fieldset>\r\n        <input type=\"submit\" value=\"SIGNUP\" data-ng-click=\"success = 'You have been successfully registered. Please check your email for activation of your account.'\">\r\n    </fieldset>\r\n</form>"
 
 /***/ },
-/* 31 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38704,16 +38960,16 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _forgotpass = __webpack_require__(32);
+	var _forgotpass = __webpack_require__(35);
 
 	var _forgotpass2 = _interopRequireDefault(_forgotpass);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports.default = _angular2.default.module("Auth.Forgotpass", []).directive("tpbForgotpass", _forgotpass2.default).name;
+	exports["default"] = _angular2["default"].module("Auth.Forgotpass", []).directive("tpbForgotpass", _forgotpass2["default"]).name;
 
 /***/ },
-/* 32 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38721,12 +38977,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = forgotpassDirective;
+	exports["default"] = forgotpassDirective;
 	function forgotpassDirective() {
 	    return {
 	        require: "^^tpbAuth",
 	        restrict: "E",
-	        template: __webpack_require__(33),
+	        template: __webpack_require__(36),
 	        link: function link(scope, elems, attrs, authCtrl) {
 	            scope.forgotpass = authCtrl.forgotpass;
 	        }
@@ -38734,13 +38990,13 @@
 	}
 
 /***/ },
-/* 33 */
+/* 36 */
 /***/ function(module, exports) {
 
 	module.exports = "<form name=\"forgotpassForm\" class=\"auth__form\">\r\n    <fieldset>\r\n        <p>Please enter your email address, you used to login into your account. We will send instruction regarding reseting you password through an email.</p>\r\n        <label for=\"forgotpassEmail\">Email</label>\r\n        <input type=\"email\" id=\"forgotpassEmail\">\r\n    </fieldset>\r\n    <fieldset>\r\n        <input type=\"submit\" value=\"SEND\">\r\n    </fieldset>\r\n    <fieldset>\r\n        <input type=\"submit\" value=\"CANCEL\" data-ng-click=\"forgot = false\" >\r\n    </fieldset>\r\n</form>"
 
 /***/ },
-/* 34 */
+/* 37 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38754,16 +39010,18 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var AuthController = function () {
-	    function AuthController(authService) {
+	    function AuthController(authService, modalService) {
 	        _classCallCheck(this, AuthController);
 
 	        this._service = authService;
+	        this._modal = modalService;
 	    }
 
 	    _createClass(AuthController, [{
 	        key: "login",
 	        value: function login(credentials) {
 	            this._service.login(credentials);
+	            this._modal.resolve("Login Success");
 	        }
 	    }, {
 	        key: "logout",
@@ -38785,13 +39043,13 @@
 	    return AuthController;
 	}();
 
-	exports.default = AuthController;
+	exports["default"] = AuthController;
 
 
-	AuthController.$inject = ["AuthService"];
+	AuthController.$inject = ["AuthService", "ModalService"];
 
 /***/ },
-/* 35 */
+/* 38 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -38841,67 +39099,10 @@
 	    return AuthService;
 	}();
 
-	exports.default = AuthService;
+	exports["default"] = AuthService;
 
 
 	AuthService.$inject = ["$http"];
-
-/***/ },
-/* 36 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = authDirective;
-	function authDirective() {
-	    return {
-	        restrict: "E",
-	        scope: {},
-	        transclude: true,
-	        template: __webpack_require__(37),
-	        controller: "AuthController",
-	        controllerAs: "auth"
-	    };
-	}
-
-/***/ },
-/* 37 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"auth\" >\r\n    <!-- create a swap for login/sign and forgot password  -->\r\n    <div class=\"swap\" data-ng-init=\"forgot = false\">\r\n        <div class=\"swap__section swap__section--up\" data-ng-class=\"{'active': !forgot}\" data-ng-init=\"wants = 'login'\">\r\n\r\n            <div class=\"auth__tabs\">\r\n                <div class=\"auth__tab\" data-ng-click=\"wants = 'login'; success=undefined\" data-ng-class=\"{'active': wants == 'login'}\">Login</div>\r\n                <div class=\"auth__tab\" data-ng-click=\"wants = 'signup'; success=undefined\" data-ng-class=\"{'active': wants == 'signup'}\">Signup</div>\r\n            </div>\r\n            <!-- create swap section for login and signup -->\r\n            <div class=\"swap\" data-ng-init=\"success = false\">\r\n                <div class=\"swap__section swap__section--left\" data-ng-class=\"{'active': wants == 'login' && !success}\">\r\n                    <tpb-login></tpb-login>\r\n                </div>\r\n                \r\n                <div class=\"swap__section swap__section--right\" data-ng-class=\"{'active': wants == 'signup' && !success}\">\r\n                    <tpb-signup></tpb-signup>\r\n                </div>\r\n\r\n                <div class=\"swap__section swap__section--bottom\" data-ng-class=\"{'active': success}\">\r\n                    <div class=\"auth__success\">\r\n                        <h1>Success !!!</h1>\r\n                        <p>{{success}}</p>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            \r\n        </div>\r\n        <div class=\"swap__section swap__section--down\" data-ng-class=\"{'active': forgot}\">\r\n            <tpb-forgotpass></tpb-forgotpass>\r\n        </div>\r\n    </div>\r\n\r\n</div>"
-
-/***/ },
-/* 38 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _angular = __webpack_require__(1);
-
-	var _angular2 = _interopRequireDefault(_angular);
-
-	var _footer = __webpack_require__(39);
-
-	var _footer2 = _interopRequireDefault(_footer);
-
-	var _menu = __webpack_require__(42);
-
-	var _menu2 = _interopRequireDefault(_menu);
-
-	var _subscribe = __webpack_require__(45);
-
-	var _subscribe2 = _interopRequireDefault(_subscribe);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _angular2.default.module("TourepediaBlog.Templates", [_footer2.default, _menu2.default, _subscribe2.default]).name;
 
 /***/ },
 /* 39 */
@@ -38910,51 +39111,46 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-
-	var _angular = __webpack_require__(1);
-
-	var _angular2 = _interopRequireDefault(_angular);
-
-	var _footer = __webpack_require__(40);
-
-	var _footer2 = _interopRequireDefault(_footer);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _angular2.default.module("Templates.Footer", []).directive("tpbFooter", _footer2.default).name;
+	exports["default"] = authDirective;
+	function authDirective() {
+	    return {
+	        restrict: "E",
+	        transclude: true,
+	        template: __webpack_require__(40),
+	        controller: "AuthController",
+	        controllerAs: "auth"
+	    };
+	}
 
 /***/ },
 /* 40 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"auth\" >\r\n    <!-- create a swap for login/sign and forgot password  -->\r\n    <div class=\"swap\" data-ng-init=\"forgot = false\">\r\n        <div class=\"swap__section swap__section--up\" data-ng-class=\"{'active': !forgot}\" data-ng-init=\"wants = 'login'\">\r\n\r\n            <div class=\"auth__tabs\">\r\n                <div class=\"auth__tab\" data-ng-click=\"wants = 'login'; success=undefined\" data-ng-class=\"{'active': wants == 'login'}\">Login</div>\r\n                <div class=\"auth__tab\" data-ng-click=\"wants = 'signup'; success=undefined\" data-ng-class=\"{'active': wants == 'signup'}\">Signup</div>\r\n            </div>\r\n            <!-- create swap section for login and signup -->\r\n            <div class=\"swap\" data-ng-init=\"success = false\">\r\n                <div class=\"swap__section swap__section--left\" data-ng-class=\"{'active': wants == 'login' && !success}\">\r\n                    <tpb-login></tpb-login>\r\n                </div>\r\n                \r\n                <div class=\"swap__section swap__section--right\" data-ng-class=\"{'active': wants == 'signup' && !success}\">\r\n                    <tpb-signup></tpb-signup>\r\n                </div>\r\n\r\n                <div class=\"swap__section swap__section--bottom\" data-ng-class=\"{'active': success}\">\r\n                    <div class=\"auth__success\">\r\n                        <h1>Success !!!</h1>\r\n                        <p>{{success}}</p>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            \r\n        </div>\r\n        <div class=\"swap__section swap__section--down\" data-ng-class=\"{'active': forgot}\">\r\n            <tpb-forgotpass></tpb-forgotpass>\r\n        </div>\r\n    </div>\r\n\r\n</div>"
+
+/***/ },
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	exports.default = footerDirective;
 
 	var _angular = __webpack_require__(1);
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _authmodal = __webpack_require__(42);
 
-	function footerDirective() {
-	  return {
-	    restrict: "E",
-	    scopr: {},
-	    template: __webpack_require__(41)
-	  };
-	}
+	var _authmodal2 = _interopRequireDefault(_authmodal);
 
-/***/ },
-/* 41 */
-/***/ function(module, exports) {
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	module.exports = "<footer class=\"main-footer\">\r\n    <p class=\"main-footer__copyright\">&copy; 2015 @ Tourepedia.com. All right reserved.</p>\r\n    <div class=\"main-footer__menu\">\r\n        <a ui-sref=\".home\">Home</a>\r\n        <a ui-sref=\".about\">About</a>\r\n        <a ui-sref=\".sitemap\">Sitemap</a>\r\n        <a ui-sref=\".tc\">Terms &amp; Conditions</a>\r\n        <a ui-sref=\".faqs\">FAQs</a>\r\n        <a ui-sref=\".contactUs\">Contact Us</a>\r\n    </div>\r\n</footer>\r\n"
+	exports["default"] = _angular2["default"].module("Shared.Authmodal", []).directive("tpbAuthmodal", _authmodal2["default"]).name;
 
 /***/ },
 /* 42 */
@@ -38965,21 +39161,65 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports["default"] = modalDirective;
+	modalDirective.$inject = ["$rootScope", "ModalService"];
 
-	var _angular = __webpack_require__(1);
+	function modalDirective(rootScope, modalService) {
+	    return {
+	        restrict: "E",
+	        template: __webpack_require__(43),
+	        link: function link(scope, elem, attrs) {
 
-	var _angular2 = _interopRequireDefault(_angular);
+	            // listen the modal open/close event from rootScope
+	            rootScope.$on("modal.open", function (e, params) {
+	                // make the modal active
+	                open();
+	            });
 
-	var _menu = __webpack_require__(43);
+	            rootScope.$on("modal.close", function (e, params) {
+	                // make the modal inactive
+	                close();
+	            });
 
-	var _menu2 = _interopRequireDefault(_menu);
+	            // add the click listener to modal__window to prevent further propogation.
+	            // this is required for auto close of modal
+	            var modal__window = elem[0].getElementsByClassName("modal__window")[0];
+	            angular.element(modal__window).on("click", function (e) {
+	                e.stopPropagation();
+	            });
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	            // check for click outside the main view.
+	            // and ask for closing the view
+	            elem.on("click", function (e) {
+	                // stop the propogation
+	                e.stopPropagation();
+	                reject();
+	            });
 
-	exports.default = _angular2.default.module("Templates.Menu", []).directive("tpbMenu", _menu2.default).name;
+	            var open = function open() {
+	                elem.children().addClass("active");
+	            };
+
+	            var close = function close() {
+	                elem.children().removeClass("active");
+	            };
+
+	            var reject = function reject() {
+	                modalService.reject("User not interested");
+	            };
+	            scope.reject = reject;
+	        }
+	    };
+	}
 
 /***/ },
 /* 43 */
+/***/ function(module, exports) {
+
+	module.exports = "<!-- modal view for authentication -->\r\n<div class=\"modal\">\r\n    <div class=\"modal__container\">\r\n        <div class=\"modal__window sm\">\r\n            <!-- placeholder for views inside the modal -->\r\n            <button class=\"modal__close\"data-ng-click=\"reject()\">X</button>\r\n            <tpb-auth></tpb-auth>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+
+/***/ },
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38987,20 +39227,26 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = menuDirective;
-	function menuDirective() {
-	    return {
-	        restrict: "E",
-	        scope: {},
-	        template: __webpack_require__(44)
-	    };
-	}
 
-/***/ },
-/* 44 */
-/***/ function(module, exports) {
+	var _angular = __webpack_require__(1);
 
-	module.exports = "<nav class=\"menu\">\r\n    <div class=\"menu__logo\">\r\n        <a href=\"#\"><img src=\"./assets/img/logo.png\"></a>\r\n    </div>\r\n    <div class=\"menu__items\">\r\n        <a class=\"menu__item\" ui-sref-active=\"active\" ui-sref=\"home\">Home</a>\r\n        <a class=\"menu__item\" ui-sref-active=\"active\" ui-sref=\"about\">About</a>\r\n        <a class=\"menu__item\" ui-sref-active=\"active\" ui-sref=\"auth\">Account</a>\r\n    </div>\r\n</nav>"
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _footer = __webpack_require__(45);
+
+	var _footer2 = _interopRequireDefault(_footer);
+
+	var _menu = __webpack_require__(48);
+
+	var _menu2 = _interopRequireDefault(_menu);
+
+	var _subscribe = __webpack_require__(51);
+
+	var _subscribe2 = _interopRequireDefault(_subscribe);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	exports["default"] = _angular2["default"].module("TourepediaBlog.Templates", [_footer2["default"], _menu2["default"], _subscribe2["default"]]).name;
 
 /***/ },
 /* 45 */
@@ -39009,6 +39255,59 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _footer = __webpack_require__(46);
+
+	var _footer2 = _interopRequireDefault(_footer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	exports["default"] = _angular2["default"].module("Templates.Footer", []).directive("tpbFooter", _footer2["default"]).name;
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports["default"] = footerDirective;
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	function footerDirective() {
+	  return {
+	    restrict: "E",
+	    scopr: {},
+	    template: __webpack_require__(47)
+	  };
+	}
+
+/***/ },
+/* 47 */
+/***/ function(module, exports) {
+
+	module.exports = "<footer class=\"main-footer\">\r\n    <p class=\"main-footer__copyright\">&copy; 2015 @ Tourepedia.com. All right reserved.</p>\r\n    <div class=\"main-footer__menu\">\r\n        <a ui-sref=\".home\">Home</a>\r\n        <a ui-sref=\".about\">About</a>\r\n        <a ui-sref=\".sitemap\">Sitemap</a>\r\n        <a ui-sref=\".tc\">Terms &amp; Conditions</a>\r\n        <a ui-sref=\".faqs\">FAQs</a>\r\n        <a ui-sref=\".contactUs\">Contact Us</a>\r\n    </div>\r\n</footer>\r\n"
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
@@ -39016,20 +39315,79 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _subscribe = __webpack_require__(46);
+	var _menu = __webpack_require__(49);
+
+	var _menu2 = _interopRequireDefault(_menu);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	exports["default"] = _angular2["default"].module("Templates.Menu", []).directive("tpbMenu", _menu2["default"]).name;
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports["default"] = menuDirective;
+	menuDirective.$inject = ["ModalService"];
+
+	function menuDirective(modal) {
+	    return {
+	        restrict: "E",
+	        scope: {},
+	        template: __webpack_require__(50),
+	        link: function link(scope, elem, attrs) {
+
+	            // open the auth modal
+	            scope.login = function () {
+	                modal.open({ id: "auth" }).then(function (response) {
+	                    console.log("Success: ", response);
+	                }, function (reason) {
+	                    console.error("Failure: ", reason);
+	                });
+	            };
+	        }
+	    };
+	}
+
+/***/ },
+/* 50 */
+/***/ function(module, exports) {
+
+	module.exports = "<nav class=\"menu\">\r\n    <div class=\"menu__logo\">\r\n        <a href=\"#\"><img src=\"./assets/img/logo.png\"></a>\r\n    </div>\r\n    <div class=\"menu__items\">\r\n        <a class=\"menu__item\" ui-sref-active=\"active\" ui-sref=\"home\">Home</a>\r\n        <a class=\"menu__item\" ui-sref-active=\"active\" ui-sref=\"about\">About</a>\r\n        <button class=\"menu__item\" data-ng-click=\"login()\">Account</button>\r\n    </div>\r\n</nav>"
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _subscribe = __webpack_require__(52);
 
 	var _subscribe2 = _interopRequireDefault(_subscribe);
 
-	var _subscribe3 = __webpack_require__(47);
+	var _subscribe3 = __webpack_require__(53);
 
 	var _subscribe4 = _interopRequireDefault(_subscribe3);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports.default = _angular2.default.module("Template.Subscribe", []).directive("tpbSubscribe", _subscribe4.default).service("SubscribeService", _subscribe2.default).name;
+	exports["default"] = _angular2["default"].module("Template.Subscribe", []).directive("tpbSubscribe", _subscribe4["default"]).service("SubscribeService", _subscribe2["default"]).name;
 
 /***/ },
-/* 46 */
+/* 52 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39062,13 +39420,13 @@
 	    return SubscribeService;
 	}();
 
-	exports.default = SubscribeService;
+	exports["default"] = SubscribeService;
 
 
 	SubscribeService.$inject = ["$http"];
 
 /***/ },
-/* 47 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39076,7 +39434,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = subscribeDirective;
+	exports["default"] = subscribeDirective;
 
 	subscribeDirective.$inject = ["SubscribeService"];
 
@@ -39084,7 +39442,7 @@
 	    return {
 	        restrict: "E",
 	        scope: {},
-	        template: __webpack_require__(48),
+	        template: __webpack_require__(54),
 	        link: function link(scope, elem, attrs) {
 	            scope.user = { name: "", email: "" };
 	            scope.subscribe = function subscribe() {
@@ -39096,13 +39454,13 @@
 	}
 
 /***/ },
-/* 48 */
+/* 54 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"subscribe\">\r\n    <h1 class=\"subscribe__title\">Subscribe</h1>\r\n    <p class=\"subscribe__description\">Get notified on every new blog upload, right into your inbox.</p>\r\n    <form class=\"subscribe__form\" name=\"subscribeForm\" data-ng-submit=\"subscribe()\" novalidate>\r\n        <input type=\"text\" placeholder=\"Your Name\" data-ng-model=\"user.name\" required >\r\n        <input type=\"email\" placeholder=\"Your Email...\" data-ng-model=\"user.email\" required>\r\n        <button class=\"subscribe__btn\" >Notify Me</button>\r\n    </form>\r\n</div>"
 
 /***/ },
-/* 49 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39115,34 +39473,34 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _home = __webpack_require__(50);
+	var _home = __webpack_require__(56);
 
 	var _home2 = _interopRequireDefault(_home);
 
-	var _about = __webpack_require__(54);
+	var _about = __webpack_require__(60);
 
 	var _about2 = _interopRequireDefault(_about);
 
-	var _author = __webpack_require__(57);
+	var _author = __webpack_require__(63);
 
 	var _author2 = _interopRequireDefault(_author);
 
-	var _post = __webpack_require__(80);
+	var _post = __webpack_require__(86);
 
 	var _post2 = _interopRequireDefault(_post);
 
-	var _auth = __webpack_require__(85);
+	var _auth = __webpack_require__(90);
 
 	var _auth2 = _interopRequireDefault(_auth);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports.default = _angular2.default.module("TourepediaBlog.Components", [_home2.default, _about2.default, _author2.default, _auth2.default, _post2.default]).name;
+	exports["default"] = _angular2["default"].module("TourepediaBlog.Components", [_home2["default"], _about2["default"], _author2["default"], _auth2["default"], _post2["default"]]).name;
 
 	// import the components
 
 /***/ },
-/* 50 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39159,20 +39517,20 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _home = __webpack_require__(51);
+	var _home = __webpack_require__(57);
 
 	var _home2 = _interopRequireDefault(_home);
 
-	var _home3 = __webpack_require__(52);
+	var _home3 = __webpack_require__(58);
 
 	var _home4 = _interopRequireDefault(_home3);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports.default = _angular2.default.module("Components.Home", [_angularUiRouter2.default]).config(_home4.default).controller("HomeController", _home2.default).name;
+	exports["default"] = _angular2["default"].module("Components.Home", [_angularUiRouter2["default"]]).config(_home4["default"]).controller("HomeController", _home2["default"]).name;
 
 /***/ },
-/* 51 */
+/* 57 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39190,138 +39548,10 @@
 	  this.posts = db.posts;
 	};
 
-	exports.default = HomeController;
+	exports["default"] = HomeController;
 
 
 	HomeController.$inject = ["DB"];
-
-/***/ },
-/* 52 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = routes;
-	routes.$inject = ["$stateProvider"];
-
-	function routes($stateProvider) {
-	  $stateProvider.state('home', {
-	    url: "/",
-	    views: {
-	      "homeView": {
-	        template: __webpack_require__(53),
-	        controller: "HomeController",
-	        controllerAs: "home"
-	      }
-	    }
-	  });
-	}
-
-/***/ },
-/* 53 */
-/***/ function(module, exports) {
-
-	module.exports = "<header class=\"main-header\">\r\n    <h1>Tag line of blog</h1>\r\n    <p>Something that the blogs that are here and something about tourepedia blog.</p>\r\n    <button class=\"main-header__explore\">Explore</button>\r\n</header>\r\n\r\n<div class=\"postcards-container\">\r\n    <tpb-postcard data-ng-repeat=\"post in home.posts\" post=\"post\"></tpb-postcard>\r\n</div>\r\n"
-
-/***/ },
-/* 54 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _angular = __webpack_require__(1);
-
-	var _angular2 = _interopRequireDefault(_angular);
-
-	var _angularUiRouter = __webpack_require__(3);
-
-	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
-
-	var _about = __webpack_require__(55);
-
-	var _about2 = _interopRequireDefault(_about);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _angular2.default.module("Components.About", [_angularUiRouter2.default]).config(_about2.default).name;
-
-/***/ },
-/* 55 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = routes;
-	routes.$inject = ["$stateProvider"];
-
-	function routes($stateProvider) {
-	  $stateProvider.state("about", {
-	    url: "/about",
-	    views: {
-	      "aboutView": {
-	        template: __webpack_require__(56)
-	      }
-	    }
-	  });
-	};
-
-/***/ },
-/* 56 */
-/***/ function(module, exports) {
-
-	module.exports = "<section class=\"about\">\r\n    <h1 class=\"about__title\">About Tourepedia</h1>\r\n    <p class=\"about__info\">Tourepedia is a full process trip planner which provides the following services:</p>\r\n    <div class=\"about__services\">\r\n        <div class=\"about__service about__service--first\">\r\n            <p>All booking of hotels, travel (including local transport), and amenities for trip.</p>\r\n        </div>\r\n        <div class=\"about__service about__service--last\">\r\n            <p>Day-wise scheduling of trip with a full customer care service for the full trip time.</p>\r\n        </div>\r\n    </div>\r\n    <button class=\"about__btn\">\r\n        Plan your trip\r\n    </button>\r\n\r\n</section>\r\n"
-
-/***/ },
-/* 57 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _angular = __webpack_require__(1);
-
-	var _angular2 = _interopRequireDefault(_angular);
-
-	var _angularUiRouter = __webpack_require__(3);
-
-	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
-
-	var _author = __webpack_require__(58);
-
-	var _author2 = _interopRequireDefault(_author);
-
-	var _profile = __webpack_require__(62);
-
-	var _profile2 = _interopRequireDefault(_profile);
-
-	var _posts = __webpack_require__(67);
-
-	var _posts2 = _interopRequireDefault(_posts);
-
-	var _author3 = __webpack_require__(79);
-
-	var _author4 = _interopRequireDefault(_author3);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// import authorService from "./author.service";
-
-	exports.default = _angular2.default.module("Components.Author", [_angularUiRouter2.default, _profile2.default, _posts2.default]).config(_author2.default).controller("AuthorController", _author4.default)
-	// .service("AuthorService", authorService)
-	.name;
 
 /***/ },
 /* 58 */
@@ -39332,27 +39562,17 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = routes;
+	exports["default"] = routes;
 	routes.$inject = ["$stateProvider"];
 
 	function routes($stateProvider) {
-	  $stateProvider.state("author", {
-	    url: "/author/{authorId}",
+	  $stateProvider.state('home', {
+	    url: "/",
 	    views: {
-	      "authorView": {
+	      "homeView": {
 	        template: __webpack_require__(59),
-	        controller: "AuthorController",
-	        controllerAs: "author"
-	      },
-	      "authorProfileView@author": {
-	        template: __webpack_require__(60),
-	        controller: "AuthorProfileController",
-	        controllerAs: "profile"
-	      },
-	      "authorPostsView@author": {
-	        template: __webpack_require__(61),
-	        controller: "AuthorPostsController",
-	        controllerAs: "posts"
+	        controller: "HomeController",
+	        controllerAs: "home"
 	      }
 	    }
 	  });
@@ -39362,22 +39582,10 @@
 /* 59 */
 /***/ function(module, exports) {
 
-	module.exports = "<section>\r\n  <ui-view name=\"authorProfileView\" id=\"authorProfileView\"></ui-view>\r\n  <ui-view name=\"authorPostsView\" id=\"authorPostsView\"></ui-view>\r\n</section>\r\n"
+	module.exports = "<header class=\"main-header\">\r\n    <h1>Tag line of blog</h1>\r\n    <p>Something that the blogs that are here and something about tourepedia blog.</p>\r\n    <button class=\"main-header__explore\">Explore</button>\r\n</header>\r\n\r\n<div class=\"postcards-container\">\r\n    <tpb-postcard data-ng-repeat=\"post in home.posts\" post=\"post\"></tpb-postcard>\r\n</div>\r\n"
 
 /***/ },
 /* 60 */
-/***/ function(module, exports) {
-
-	module.exports = "<section class=\"author-profile\">\r\n    <div class=\"media\">\r\n        <a ui-sref=\".editProfile\" class=\"author-profile__edit-btn\" >Edit</a>\r\n        <div class=\"media__img author-profile__img\">\r\n            <img src=\"./assets/img/authors/{{profile.author.img}}\" alt=\"Profie Image\">\r\n        </div>\r\n        <div class=\"media__content author-profile__content\">\r\n            <h2 class=\"author-profile__name\">{{profile.author.name}}</h2>\r\n            <p class=\"author-profile__tagline\">A blogger, traveler and nature lover.</p>\r\n            <p class=\"author-profile__followers\">\r\n                <span>10 Followers</span>\r\n                <button>Follow</button>\r\n            </p>\r\n            <p class=\"author-profile__social-links\">\r\n                <a href=\"{{profile.author.fb}}\">fb</a>\r\n                <a href=\"{{profile.author.fb}}\">g+</a>\r\n                <a href=\"{{profile.author.fb}}\">in</a>\r\n                <a href=\"{{profile.author.fb}}\">tr</a>\r\n            </p>\r\n        </div>\r\n    </div>\r\n    <p class=\"author-profile__bio\">{{profile.author.bio}}</p>\r\n</section>\r\n"
-
-/***/ },
-/* 61 */
-/***/ function(module, exports) {
-
-	module.exports = "<a ui-sref=\".posts.new\">New Blog</a>\r\n<div >\r\n  <ui-view name=\"authorPostsNewView\" id=\"authorPostsNewView\"></ui-view>\r\n  <ui-view name=\"authorPostsEditView\" id=\"authorPostsNewView\"></ui-view>\r\n</div>\r\n\r\n<div class=\"postcards-container\">\r\n    <tpb-postcard data-ng-repeat=\"post in posts.posts\" post=\"post\" can-edit=\"{{true}}\"><tpb-postcard>\r\n</div>\r\n"
-
-/***/ },
-/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39394,21 +39602,42 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _authorProfile = __webpack_require__(63);
+	var _about = __webpack_require__(61);
 
-	var _authorProfile2 = _interopRequireDefault(_authorProfile);
+	var _about2 = _interopRequireDefault(_about);
 
-	var _authorProfile3 = __webpack_require__(65);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _authorProfile4 = _interopRequireDefault(_authorProfile3);
+	exports["default"] = _angular2["default"].module("Components.About", [_angularUiRouter2["default"]]).config(_about2["default"]).name;
 
-	var _authorProfile5 = __webpack_require__(66);
+/***/ },
+/* 61 */
+/***/ function(module, exports, __webpack_require__) {
 
-	var _authorProfile6 = _interopRequireDefault(_authorProfile5);
+	"use strict";
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports["default"] = routes;
+	routes.$inject = ["$stateProvider"];
 
-	exports.default = _angular2.default.module("Author.Profile", [_angularUiRouter2.default]).config(_authorProfile2.default).controller("AuthorProfileController", _authorProfile4.default).service("AuthorProfileService", _authorProfile6.default).name;
+	function routes($stateProvider) {
+	  $stateProvider.state("about", {
+	    url: "/about",
+	    views: {
+	      "aboutView": {
+	        template: __webpack_require__(62)
+	      }
+	    }
+	  });
+	};
+
+/***/ },
+/* 62 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"about\">\r\n    <h1 class=\"about__title\">About Tourepedia</h1>\r\n    <p class=\"about__info\">Tourepedia is a full process trip planner which provides the following services:</p>\r\n    <div class=\"about__services\">\r\n        <div class=\"about__service about__service--first\">\r\n            <p>All booking of hotels, travel (including local transport), and amenities for trip.</p>\r\n        </div>\r\n        <div class=\"about__service about__service--last\">\r\n            <p>Day-wise scheduling of trip with a full customer care service for the full trip time.</p>\r\n        </div>\r\n    </div>\r\n    <button class=\"about__btn\">\r\n        Plan your trip\r\n    </button>\r\n\r\n</section>\r\n"
 
 /***/ },
 /* 63 */
@@ -39419,7 +39648,136 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = routes;
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _angularUiRouter = __webpack_require__(3);
+
+	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
+
+	var _author = __webpack_require__(64);
+
+	var _author2 = _interopRequireDefault(_author);
+
+	var _profile = __webpack_require__(68);
+
+	var _profile2 = _interopRequireDefault(_profile);
+
+	var _posts = __webpack_require__(73);
+
+	var _posts2 = _interopRequireDefault(_posts);
+
+	var _author3 = __webpack_require__(85);
+
+	var _author4 = _interopRequireDefault(_author3);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	// import authorService from "./author.service";
+
+	exports["default"] = _angular2["default"].module("Components.Author", [_angularUiRouter2["default"], _profile2["default"], _posts2["default"]]).config(_author2["default"]).controller("AuthorController", _author4["default"])
+	// .service("AuthorService", authorService)
+	.name;
+
+/***/ },
+/* 64 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports["default"] = routes;
+	routes.$inject = ["$stateProvider"];
+
+	function routes($stateProvider) {
+	  $stateProvider.state("author", {
+	    url: "/author/{authorId}",
+	    views: {
+	      "authorView": {
+	        template: __webpack_require__(65),
+	        controller: "AuthorController",
+	        controllerAs: "author"
+	      },
+	      "authorProfileView@author": {
+	        template: __webpack_require__(66),
+	        controller: "AuthorProfileController",
+	        controllerAs: "profile"
+	      },
+	      "authorPostsView@author": {
+	        template: __webpack_require__(67),
+	        controller: "AuthorPostsController",
+	        controllerAs: "posts"
+	      }
+	    }
+	  });
+	}
+
+/***/ },
+/* 65 */
+/***/ function(module, exports) {
+
+	module.exports = "<section>\r\n  <ui-view name=\"authorProfileView\" id=\"authorProfileView\"></ui-view>\r\n  <ui-view name=\"authorPostsView\" id=\"authorPostsView\"></ui-view>\r\n</section>\r\n"
+
+/***/ },
+/* 66 */
+/***/ function(module, exports) {
+
+	module.exports = "<section class=\"author-profile\">\r\n    <div class=\"media\">\r\n        <a ui-sref=\".editProfile\" class=\"author-profile__edit-btn\" >Edit</a>\r\n        <div class=\"media__img author-profile__img\">\r\n            <img src=\"./assets/img/authors/{{profile.author.img}}\" alt=\"Profie Image\">\r\n        </div>\r\n        <div class=\"media__content author-profile__content\">\r\n            <h2 class=\"author-profile__name\">{{profile.author.name}}</h2>\r\n            <p class=\"author-profile__tagline\">A blogger, traveler and nature lover.</p>\r\n            <p class=\"author-profile__followers\">\r\n                <span>10 Followers</span>\r\n                <button>Follow</button>\r\n            </p>\r\n            <p class=\"author-profile__social-links\">\r\n                <a href=\"{{profile.author.fb}}\">fb</a>\r\n                <a href=\"{{profile.author.fb}}\">g+</a>\r\n                <a href=\"{{profile.author.fb}}\">in</a>\r\n                <a href=\"{{profile.author.fb}}\">tr</a>\r\n            </p>\r\n        </div>\r\n    </div>\r\n    <p class=\"author-profile__bio\">{{profile.author.bio}}</p>\r\n</section>\r\n"
+
+/***/ },
+/* 67 */
+/***/ function(module, exports) {
+
+	module.exports = "<a ui-sref=\".posts.new\">New Blog</a>\r\n<div >\r\n  <ui-view name=\"authorPostsNewView\" id=\"authorPostsNewView\"></ui-view>\r\n  <ui-view name=\"authorPostsEditView\" id=\"authorPostsNewView\"></ui-view>\r\n</div>\r\n\r\n<div class=\"postcards-container\">\r\n    <tpb-postcard data-ng-repeat=\"post in posts.posts\" post=\"post\" can-edit=\"{{true}}\"><tpb-postcard>\r\n</div>\r\n"
+
+/***/ },
+/* 68 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _angular = __webpack_require__(1);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _angularUiRouter = __webpack_require__(3);
+
+	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
+
+	var _authorProfile = __webpack_require__(69);
+
+	var _authorProfile2 = _interopRequireDefault(_authorProfile);
+
+	var _authorProfile3 = __webpack_require__(71);
+
+	var _authorProfile4 = _interopRequireDefault(_authorProfile3);
+
+	var _authorProfile5 = __webpack_require__(72);
+
+	var _authorProfile6 = _interopRequireDefault(_authorProfile5);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	exports["default"] = _angular2["default"].module("Author.Profile", [_angularUiRouter2["default"]]).config(_authorProfile2["default"]).controller("AuthorProfileController", _authorProfile4["default"]).service("AuthorProfileService", _authorProfile6["default"]).name;
+
+/***/ },
+/* 69 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports["default"] = routes;
 	routes.$inject = ["$stateProvider"];
 
 	function routes($stateProvider) {
@@ -39427,7 +39785,7 @@
 	    url: "/editProfile",
 	    views: {
 	      "authorProfileView": {
-	        template: __webpack_require__(64),
+	        template: __webpack_require__(70),
 	        controller: "AuthorProfileController",
 	        controllerAs: "profile"
 	      }
@@ -39436,13 +39794,13 @@
 	}
 
 /***/ },
-/* 64 */
+/* 70 */
 /***/ function(module, exports) {
 
 	module.exports = "<section class=\"author-profile\">\r\n    <div class=\"media\">\r\n        <a ui-sref=\"author\" class=\"author-profile__edit-btn\" >Done</a>\r\n        <div class=\"media__img author-profile__img\">\r\n            <img src=\"./assets/img/authors/{{profile.author.img}}\" alt=\"Profie Image\">\r\n        </div>\r\n        <div class=\"media__content author-profile__content\">\r\n            <input type=\"text\" id=\"authorName\" data-ng-model=\"profile.author.name\">\r\n            <input type=\"text\" id=\"authorTagline\" data-ng-model=\"profile.author.tagline\">\r\n            <p class=\"author-profile__followers\">\r\n                <span>10 Followers</span>\r\n                <button>Follow</button>\r\n            </p>\r\n            <p class=\"author-profile__social-links\">\r\n                <a href=\"{{profile.author.fb}}\">fb</a>\r\n                <a href=\"{{profile.author.fb}}\">g+</a>\r\n                <a href=\"{{profile.author.fb}}\">in</a>\r\n                <a href=\"{{profile.author.fb}}\">tr</a>\r\n            </p>\r\n        </div>\r\n    </div>\r\n    <p class=\"author-profile__bio\">{{profile.author.bio}}</p>\r\n</section>\r\n\r\n"
 
 /***/ },
-/* 65 */
+/* 71 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39488,11 +39846,11 @@
 	// inject the dependencies
 
 
-	exports.default = AuthorProfileController;
+	exports["default"] = AuthorProfileController;
 	AuthorProfileController.$inject = ["AuthorProfileService", "$stateParams"];
 
 /***/ },
-/* 66 */
+/* 72 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39540,13 +39898,13 @@
 	  return AuthorProfileService;
 	}();
 
-	exports.default = AuthorProfileService;
+	exports["default"] = AuthorProfileService;
 
 
 	AuthorProfileService.$inject = ["$http", "DB"];
 
 /***/ },
-/* 67 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39563,33 +39921,33 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _authorPosts = __webpack_require__(68);
+	var _authorPosts = __webpack_require__(74);
 
 	var _authorPosts2 = _interopRequireDefault(_authorPosts);
 
-	var _authorPosts3 = __webpack_require__(69);
+	var _authorPosts3 = __webpack_require__(75);
 
 	var _authorPosts4 = _interopRequireDefault(_authorPosts3);
 
-	var _authorPosts5 = __webpack_require__(70);
+	var _authorPosts5 = __webpack_require__(76);
 
 	var _authorPosts6 = _interopRequireDefault(_authorPosts5);
 
-	var _edit = __webpack_require__(71);
+	var _edit = __webpack_require__(77);
 
 	var _edit2 = _interopRequireDefault(_edit);
 
-	var _new = __webpack_require__(75);
+	var _new = __webpack_require__(81);
 
 	var _new2 = _interopRequireDefault(_new);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 	// import the components of author posts
-	exports.default = _angular2.default.module("Author.Posts", [_angularUiRouter2.default, _new2.default, _edit2.default]).config(_authorPosts2.default).controller("AuthorPostsController", _authorPosts4.default).service("AuthorPostsService", _authorPosts6.default).name;
+	exports["default"] = _angular2["default"].module("Author.Posts", [_angularUiRouter2["default"], _new2["default"], _edit2["default"]]).config(_authorPosts2["default"]).controller("AuthorPostsController", _authorPosts4["default"]).service("AuthorPostsService", _authorPosts6["default"]).name;
 
 /***/ },
-/* 68 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39597,7 +39955,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = routes;
+	exports["default"] = routes;
 	routes.$inject = ["$stateProvider"];
 
 	function routes($stateProvider) {
@@ -39606,7 +39964,7 @@
 	    views: {
 	      "authorProfileView": {},
 	      "authorPostsView": {
-	        template: __webpack_require__(61),
+	        template: __webpack_require__(67),
 	        controller: "AuthorPostsController",
 	        controllerAs: "posts"
 	      }
@@ -39615,7 +39973,7 @@
 	}
 
 /***/ },
-/* 69 */
+/* 75 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39672,7 +40030,7 @@
 	  }, {
 	    key: "delete",
 	    value: function _delete(postId) {
-	      this._service.delete(postId);
+	      this._service["delete"](postId);
 	    }
 	  }]);
 
@@ -39681,11 +40039,11 @@
 	// inject the dependencies
 
 
-	exports.default = AuthorPostsController;
+	exports["default"] = AuthorPostsController;
 	AuthorPostsController.$inject = ["AuthorPostsService", "$stateParams"];
 
 /***/ },
-/* 70 */
+/* 76 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39778,13 +40136,13 @@
 	  return AuthorPostsService;
 	}();
 
-	exports.default = AuthorPostsService;
+	exports["default"] = AuthorPostsService;
 
 
 	AuthorPostsService.$inject = ["$http", "DB"];
 
 /***/ },
-/* 71 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39797,20 +40155,20 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _authorPostsEdit = __webpack_require__(72);
+	var _authorPostsEdit = __webpack_require__(78);
 
 	var _authorPostsEdit2 = _interopRequireDefault(_authorPostsEdit);
 
-	var _authorPostsEdit3 = __webpack_require__(74);
+	var _authorPostsEdit3 = __webpack_require__(80);
 
 	var _authorPostsEdit4 = _interopRequireDefault(_authorPostsEdit3);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports.default = _angular2.default.module("Author.Posts.Edit", []).config(_authorPostsEdit2.default).controller("AuthorPostsEditContoller", _authorPostsEdit4.default).name;
+	exports["default"] = _angular2["default"].module("Author.Posts.Edit", []).config(_authorPostsEdit2["default"]).controller("AuthorPostsEditContoller", _authorPostsEdit4["default"]).name;
 
 /***/ },
-/* 72 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39818,7 +40176,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = routes;
+	exports["default"] = routes;
 	routes.$inject = ["$stateProvider"];
 
 	function routes($stateProvider) {
@@ -39826,7 +40184,7 @@
 	    url: "/edit/{postToken}",
 	    views: {
 	      "authorPostsView@author": {
-	        template: __webpack_require__(73),
+	        template: __webpack_require__(79),
 	        controller: "AuthorPostsEditContoller",
 	        controllerAs: "edit"
 	      }
@@ -39835,13 +40193,13 @@
 	}
 
 /***/ },
-/* 73 */
+/* 79 */
 /***/ function(module, exports) {
 
 	module.exports = "<section class=\"new-post\">\r\n  <form class=\"new-post-form\" name=\"newPostForm\">\r\n    <fieldset>\r\n      <label for=\"newPostTitle\">Title:</label>\r\n      <input type=\"text\" name=\"newPostTitle\" id=\"newPostTitle\" data-ng-model=\"edit.post.title\">\r\n    </fieldset>\r\n    <fieldset>\r\n      <label for=\"newPostInfo\">Short Description:</label>\r\n      <textarea  name=\"newPostInfo\" id=\"newPostInfo\" rows=\"4\" data-ng-model=\"edit.post.info\"></textarea>\r\n    </fieldset>\r\n\r\n    <fieldset>\r\n      <label for=\"newPostContent\">Content</label>\r\n      <tpb-mdeditor md=\"edit.post.content\"></tpb-mdeditor>\r\n    </fieldset>\r\n    <fieldset>\r\n      <input type=\"submit\" value=\"Submit\">\r\n    </fieldset>\r\n  </form>\r\n  <div id=\"preview\" ></div>\r\n</section>\r\n"
 
 /***/ },
-/* 74 */
+/* 80 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39880,13 +40238,13 @@
 	    return AuthorPostsEditController;
 	}();
 
-	exports.default = AuthorPostsEditController;
+	exports["default"] = AuthorPostsEditController;
 
 
 	AuthorPostsEditController.$inject = ["AuthorPostsService", "$stateParams"];
 
 /***/ },
-/* 75 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39899,20 +40257,20 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _authorPostsNew = __webpack_require__(76);
+	var _authorPostsNew = __webpack_require__(82);
 
 	var _authorPostsNew2 = _interopRequireDefault(_authorPostsNew);
 
-	var _authorPostsNew3 = __webpack_require__(77);
+	var _authorPostsNew3 = __webpack_require__(83);
 
 	var _authorPostsNew4 = _interopRequireDefault(_authorPostsNew3);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports.default = _angular2.default.module("Author.Posts.New", []).config(_authorPostsNew4.default).controller("AuthorPostsNewContoller", _authorPostsNew2.default).name;
+	exports["default"] = _angular2["default"].module("Author.Posts.New", []).config(_authorPostsNew4["default"]).controller("AuthorPostsNewContoller", _authorPostsNew2["default"]).name;
 
 /***/ },
-/* 76 */
+/* 82 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39943,13 +40301,13 @@
 	    return AuthorPostsNewController;
 	}();
 
-	exports.default = AuthorPostsNewController;
+	exports["default"] = AuthorPostsNewController;
 	;
 
 	AuthorPostsNewController.$inject = ["AuthorPostsService"];
 
 /***/ },
-/* 77 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -39957,7 +40315,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = routes;
+	exports["default"] = routes;
 	routes.$inject = ["$stateProvider"];
 
 	function routes($stateProvider) {
@@ -39965,7 +40323,7 @@
 	    url: "/new",
 	    views: {
 	      "authorPostsView@author": {
-	        template: __webpack_require__(78),
+	        template: __webpack_require__(84),
 	        controller: "AuthorPostsNewContoller",
 	        controllerAs: "new"
 	      }
@@ -39974,13 +40332,13 @@
 	}
 
 /***/ },
-/* 78 */
+/* 84 */
 /***/ function(module, exports) {
 
 	module.exports = "<section class=\"new-post\">\r\n  <form class=\"new-post-form\" name=\"newPostForm\">\r\n    <fieldset>\r\n      <label for=\"newPostTitle\">Title:</label>\r\n      <input type=\"text\" name=\"newPostTitle\" id=\"newPostTitle\" data-ng-model=\"posts.newPost.title\">\r\n    </fieldset>\r\n    <fieldset>\r\n      <label for=\"newPostInfo\">Short Description:</label>\r\n      <textarea  name=\"newPostInfo\" id=\"newPostInfo\" rows=\"5\" data-ng-model=\"posts.newPost.info\"></textarea>\r\n    </fieldset>\r\n\r\n    \r\n\r\n    <fieldset>\r\n      <label for=\"newPostContent\">Content</label>\r\n      <tpb-mdeditor md=\"posts.newPost.content\"></tpb-mdeditor>\r\n    </fieldset>\r\n    <fieldset>\r\n      <input type=\"submit\" value=\"Submit\">\r\n    </fieldset>\r\n  </form>\r\n</section>\r\n"
 
 /***/ },
-/* 79 */
+/* 85 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -39997,10 +40355,10 @@
 	  this.message = "Author Controller";
 	};
 
-	exports.default = AuthorController;
+	exports["default"] = AuthorController;
 
 /***/ },
-/* 80 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40017,24 +40375,20 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _post = __webpack_require__(81);
+	var _post = __webpack_require__(87);
 
 	var _post2 = _interopRequireDefault(_post);
 
-	var _post3 = __webpack_require__(83);
+	var _post3 = __webpack_require__(89);
 
 	var _post4 = _interopRequireDefault(_post3);
 
-	var _post5 = __webpack_require__(84);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _post6 = _interopRequireDefault(_post5);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _angular2.default.module("Components.Post", [_angularUiRouter2.default]).config(_post2.default).controller("PostController", _post4.default).service("PostService", _post6.default).name;
+	exports["default"] = _angular2["default"].module("Components.Post", [_angularUiRouter2["default"]]).config(_post2["default"]).controller("PostController", _post4["default"]).name;
 
 /***/ },
-/* 81 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40042,7 +40396,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = routes;
+	exports["default"] = routes;
 	routes.$inject = ["$stateProvider"];
 
 	function routes($stateProvider) {
@@ -40050,7 +40404,7 @@
 	    url: "/{postId}",
 	    views: {
 	      "postView": {
-	        template: __webpack_require__(82),
+	        template: __webpack_require__(88),
 	        controller: "PostController",
 	        controllerAs: "post"
 	      }
@@ -40059,13 +40413,13 @@
 	}
 
 /***/ },
-/* 82 */
+/* 88 */
 /***/ function(module, exports) {
 
 	module.exports = "<section class=\"main-post\">\r\n    <header class=\"main-post__header\" style=\" background-image: url('./assets/img/posts/{{post.post.img}}');\">\r\n        <h1 class=\"main-post__title\">{{post.post.title}}</h1>\r\n        <a class=\"main-post__author\" ui-sref=\"author({'authorId': post.post.authorId})\">\r\n            <tpb-authorinfo class=\"authorinfo--white\" author=\"{'name': post.post.authorName, 'publishedDate': post.post.publishedDate, 'img': post.post.authorImg}\"></tpb-authorinfo>\r\n        </a>\r\n    </header>\r\n    <div class=\"main-post__content\" data-ng-bind-html=\"post.post.html\" >\r\n        \r\n    </div>\r\n</section>\r\n"
 
 /***/ },
-/* 83 */
+/* 89 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -40110,76 +40464,13 @@
 	  return PostController;
 	}();
 
-	exports.default = PostController;
+	exports["default"] = PostController;
 	;
 
 	PostController.$inject = ["PostService", "$stateParams", "MDEditorService"];
 
 /***/ },
-/* 84 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var PostService = function () {
-	    function PostService(http, db) {
-	        _classCallCheck(this, PostService);
-
-	        this._http = http;
-	        this._posts = db.posts;
-	    }
-
-	    // get a blog
-
-
-	    _createClass(PostService, [{
-	        key: "get",
-	        value: function get(postHandle) {
-	            console.log("Get post with handle:", postHandle);
-	            var post;
-	            for (var i = this._posts.length - 1; i >= 0; i--) {
-	                post = this._posts[i];
-	                if (post.handle == postHandle) {
-	                    return post;
-	                }
-	            }
-	        }
-
-	        // like
-
-	    }, {
-	        key: "like",
-	        value: function like(post) {
-	            console.log("Like this post:", post);
-	        }
-
-	        // share
-
-	    }, {
-	        key: "share",
-	        value: function share(post) {
-	            console.log("Share this post:", post);
-	        }
-	    }]);
-
-	    return PostService;
-	}();
-
-	exports.default = PostService;
-
-
-	PostService.$inject = ["$http", "DB"];
-
-/***/ },
-/* 85 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40196,16 +40487,16 @@
 
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 
-	var _auth = __webpack_require__(86);
+	var _auth = __webpack_require__(91);
 
 	var _auth2 = _interopRequireDefault(_auth);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports.default = _angular2.default.module("Components.Auth", [_angularUiRouter2.default]).config(_auth2.default).name;
+	exports["default"] = _angular2["default"].module("Components.Auth", [_angularUiRouter2["default"]]).config(_auth2["default"]).name;
 
 /***/ },
-/* 86 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40213,7 +40504,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = routes;
+	exports["default"] = routes;
 	routes.$inject = ["$stateProvider"];
 
 	function routes($stateProvider) {
@@ -40221,20 +40512,20 @@
 	        url: "/auth",
 	        views: {
 	            "authView": {
-	                template: __webpack_require__(87)
+	                template: __webpack_require__(92)
 	            }
 	        }
 	    });
 	};
 
 /***/ },
-/* 87 */
+/* 92 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"auth-view\">\r\n    <tpb-auth></tpb-auth>\r\n</div>"
 
 /***/ },
-/* 88 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40247,20 +40538,20 @@
 
 	var _angular2 = _interopRequireDefault(_angular);
 
-	var _posts = __webpack_require__(89);
+	var _posts = __webpack_require__(94);
 
 	var _posts2 = _interopRequireDefault(_posts);
 
-	var _authors = __webpack_require__(90);
+	var _authors = __webpack_require__(95);
 
 	var _authors2 = _interopRequireDefault(_authors);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	exports.default = _angular2.default.module("Tourepedia.DB", []).constant("DB", { posts: _posts2.default, authors: _authors2.default }).name;
+	exports["default"] = _angular2["default"].module("Tourepedia.DB", []).constant("DB", { posts: _posts2["default"], authors: _authors2["default"] }).name;
 
 /***/ },
-/* 89 */
+/* 94 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -40268,7 +40559,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = [{
+	exports["default"] = [{
 	    id: 1,
 	    token: "834jabfaifakdnfad2874rjahdfkafki234wykafkadfadaf",
 	    title: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid ab blanditiis alias expedita omnis, illo.",
@@ -40327,7 +40618,7 @@
 	}];
 
 /***/ },
-/* 90 */
+/* 95 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -40335,7 +40626,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = [{
+	exports["default"] = [{
 	    id: 1,
 	    username: "sudkumar",
 	    name: "Sudhir Mitharwal",

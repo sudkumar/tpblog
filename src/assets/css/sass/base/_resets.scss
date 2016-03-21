@@ -5,6 +5,7 @@ body {
   @include rem("font-size", $font-regular-size);
   font-family:$roboto;
   line-height:1.3;
+  background: whitesmoke;
 }
 
 ul {

@@ -1,11 +1,13 @@
 export default class AuthController{
 
-    constructor(authService){
+    constructor(authService, modalService){
         this._service = authService;
+        this._modal = modalService;
     }
 
     login(credentials){
         this._service.login(credentials);
+        this._modal.resolve("Login Success");
     }
 
     logout(){
@@ -21,4 +23,4 @@ export default class AuthController{
     }
 }
 
-AuthController.$inject = ["AuthService"];
+AuthController.$inject = ["AuthService", "ModalService"];
