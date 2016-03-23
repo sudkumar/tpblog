@@ -3,20 +3,20 @@ import uirouter from 'angular-ui-router';
 
 
 
-// import the configuration 
+// import the configuration
 import config from "./app.config";
 
 // import the services
 import services from "./services";
 
 // import all the modules
-import shared from "./shared";
-import templates from "./templates";
-import components from "./components";
+import includes from "./includes";
+import core from "./core";
+import states from "./states";
 
 import db from "./db";
 
 
-angular.module("TourepediaBlog", 
-    [services, uirouter, templates, shared, components, db]).
+angular.module("TourepediaBlog",
+    [services, uirouter, includes, core, states, db]).
     config(config);
